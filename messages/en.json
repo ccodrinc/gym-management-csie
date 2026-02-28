@@ -1,0 +1,54 @@
+{
+	"Metadata": {
+		"title": "Reps",
+		"description": "24/7 gym downtown. Full weights, turf, group classes."
+	},
+	"Header": {
+		"brand": "Reps",
+		"classes": "Classes",
+		"memberships": "Memberships",
+		"logIn": "Log in"
+	},
+	"Hero": {
+		"badge": "Downtown • Open 24/7",
+		"headline": "Train hard. Recover harder.",
+		"subheadline": "Full weights floor, turf zone, and group classes. No contract. Walk in anytime.",
+		"getDayPass": "Get a day pass",
+		"viewSchedule": "View class schedule"
+	},
+	"Amenities": {
+		"title": "What we've got",
+		"access24": {
+			"title": "24/7 access",
+			"description": "Early morning, late night, doesn't matter. Swipe in whenever. Members get key fob access round the clock."
+		},
+		"weightsFloor": {
+			"title": "Full weights floor",
+			"description": "Squat racks, benches, dumbbells up to 120. Deadlift platform. Turf for sled work and carries."
+		},
+		"groupClasses": {
+			"title": "Group classes",
+			"description": "HIIT, strength, mobility. Included in membership. Book your spot in the app."
+		}
+	},
+	"CTA": {
+		"title": "First visit free.",
+		"description": "Drop by for a tour. No pressure. We'll get you set up if you want to join.",
+		"button": "Book a visit"
+	},
+	"Footer": {
+		"copyright": "© Reps",
+		"privacy": "Privacy",
+		"terms": "Terms"
+	},
+	"ThemeToggle": {
+		"label": "Toggle theme",
+		"light": "Light",
+		"dark": "Dark",
+		"system": "System"
+	},
+	"LanguageSelect": {
+		"label": "Select language",
+		"english": "English"
+	}
+}
