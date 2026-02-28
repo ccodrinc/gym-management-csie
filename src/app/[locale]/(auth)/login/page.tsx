@@ -1,8 +1,8 @@
+import { Dumbbell } from 'lucide-react'
 import { setRequestLocale } from 'next-intl/server'
 
 import { LoginForm } from '@/components/auth/login-form'
 import { Link } from '@/i18n/navigation'
-import { Dumbbell } from 'lucide-react'
 
 type Props = {
 	params: Promise<{ locale: string }>

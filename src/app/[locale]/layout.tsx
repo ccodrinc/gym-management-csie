@@ -4,7 +4,6 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
-import { Footer } from '@/components/footer'
 import { routing } from '@/i18n/routing'
 
 type Props = {
@@ -42,12 +41,5 @@ export default async function LocaleLayout({ children, params }: Props) {
 
 	const messages = await getMessages()
 
-	return (
-		<NextIntlClientProvider messages={messages}>
-			<div className='flex min-h-screen flex-col'>
-				<main className='flex-1'>{children}</main>
-				<Footer />
-			</div>
-		</NextIntlClientProvider>
-	)
+	return <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
 }
