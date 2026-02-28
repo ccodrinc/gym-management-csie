@@ -1,9 +1,13 @@
 import { setRequestLocale } from 'next-intl/server'
-
-import { getCurrentMember } from '@/lib/data'
 import { getTranslations } from 'next-intl/server'
+
+import { MemberActivityChart } from '@/components/admin/dashboard-charts'
+import { PageHeader } from '@/components/ui/page-header'
+import { StatCard } from '@/components/ui/stat-card'
+import { ListRow } from '@/components/ui/list-row'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { getCurrentMember } from '@/lib/data'
 import { FadeIn } from '@/components/motion'
 
 type Props = {
@@ -14,87 +18,89 @@ export default async function MemberDashboardPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
-	const [member, t] = await Promise.all([getCurrentMember(), getTranslations('Member.dashboard')])
+	const [member, t] = await Promise.all([
+		getCurrentMember(),
+		getTranslations('Member.dashboard')
+	])
+	const visitsData = member.visitsLast7Days ?? [
+		{ day: 'Mon', count: 0 },
+		{ day: 'Tue', count: 0 },
+		{ day: 'Wed', count: 1 },
+		{ day: 'Thu', count: 0 },
+		{ day: 'Fri', count: 1 },
+		{ day: 'Sat', count: 1 },
+		{ day: 'Sun', count: 1 }
+	]
 
 	return (
 		<FadeIn className='space-y-8'>
-			<div>
-				<h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-					{t('welcomeBack', { name: member.name.split(' ')[0] })}
-				</h1>
-				<p className='text-muted-foreground text-sm'>{t('activityAtGlance')}</p>
-			</div>
+			<PageHeader
+				title={t('welcomeBack', { name: member.name.split(' ')[0] })}
+				description={t('activityAtGlance')}
+			/>
 
 			<div className='grid gap-4 md:grid-cols-3'>
-				<Card>
-					<CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-						<CardTitle className='text-sm font-medium'>Membership</CardTitle>
-						<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>
-					</CardHeader>
-					<CardContent>
-						<div className='text-xl font-bold'>{member.membershipType}</div>
-						<p className='text-muted-foreground text-xs'>Valid until {member.expiryDate}</p>
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-						<CardTitle className='text-sm font-medium'>Gym Visits</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className='text-2xl font-bold'>{member.gymVisits}</div>
-						<p className='text-muted-foreground text-xs'>Total this membership period</p>
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-						<CardTitle className='text-sm font-medium'>Upcoming Classes</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<div className='text-2xl font-bold'>{member.upcomingClasses.length}</div>
-						<p className='text-muted-foreground text-xs'>Booked for this week</p>
-					</CardContent>
-				</Card>
+				<StatCard
+					title={t('membership')}
+					value={member.membershipType}
+					subtitle={t('validUntil', { date: member.expiryDate })}
+					badge={<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>}
+				/>
+				<StatCard
+					title={t('gymVisits')}
+					value={member.gymVisits}
+					subtitle={t('totalThisPeriod')}
+				/>
+				<StatCard
+					title={t('upcomingClasses')}
+					value={member.upcomingClasses.length}
+					subtitle={t('bookedThisWeek')}
+				/>
 			</div>
 
 			<div className='grid gap-6 lg:grid-cols-2'>
 				<Card>
 					<CardHeader>
-						<CardTitle>Recent Visits</CardTitle>
-						<CardDescription>Your last 5 check-ins</CardDescription>
+						<CardTitle>{t('activityChart')}</CardTitle>
+						<CardDescription>{t('visitsThisWeek')}</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className='space-y-3'>
-							{member.recentVisits.map((visit) => (
-								<li
-									key={`${visit.date}-${visit.time}`}
-									className='flex items-center justify-between rounded-md border px-4 py-2 text-sm'
-								>
-									<span>{visit.date}</span>
-									<span className='text-muted-foreground'>{visit.time}</span>
-								</li>
-							))}
-						</ul>
+						<MemberActivityChart data={visitsData} />
 					</CardContent>
 				</Card>
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Upcoming Classes</CardTitle>
-						<CardDescription>Your booked sessions</CardDescription>
+						<CardTitle>{t('recentVisits')}</CardTitle>
+						<CardDescription>{t('lastFive')}</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className='space-y-3'>
+						<ul className='space-y-2'>
+							{member.recentVisits.map((visit) => (
+								<ListRow key={`${visit.date}-${visit.time}`}>
+									<span>{visit.date}</span>
+									<span className='text-muted-foreground'>{visit.time}</span>
+								</ListRow>
+							))}
+						</ul>
+					</CardContent>
+				</Card>
+
+				<Card className='lg:col-span-2'>
+					<CardHeader>
+						<CardTitle>{t('upcomingClasses')}</CardTitle>
+						<CardDescription>{t('yourBookedSessions')}</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<ul className='space-y-2'>
 							{member.upcomingClasses.map((cls) => (
-								<li
-									key={`${cls.name}-${cls.date}-${cls.time}`}
-									className='flex items-center justify-between rounded-md border px-4 py-2 text-sm'
-								>
+								<ListRow key={`${cls.name}-${cls.date}-${cls.time}`}>
 									<div>
 										<span className='font-medium'>{cls.name}</span>
 										<span className='text-muted-foreground ml-2'>{cls.date}</span>
 									</div>
 									<span className='text-muted-foreground'>{cls.time}</span>
-								</li>
+								</ListRow>
 							))}
 						</ul>
 					</CardContent>

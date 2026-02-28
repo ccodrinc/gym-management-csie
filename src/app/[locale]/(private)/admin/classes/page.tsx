@@ -1,23 +1,22 @@
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
-import { ClassBookButton } from '@/components/class-book-button'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FadeIn } from '@/components/motion'
 import { getClasses } from '@/lib/data'
+import { FadeIn } from '@/components/motion'
 
 type Props = {
 	params: Promise<{ locale: string }>
 }
 
-export default async function MemberClassesPage({ params }: Props) {
+export default async function AdminClassesPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
 	const [classes, t] = await Promise.all([
 		getClasses(),
-		getTranslations('Member.classes')
+		getTranslations('Admin.classes')
 	])
 
 	return (
@@ -27,7 +26,9 @@ export default async function MemberClassesPage({ params }: Props) {
 			<Card>
 				<CardHeader>
 					<CardTitle>{t('schedule')}</CardTitle>
-					<CardDescription>{t('dropIn')}</CardDescription>
+					<CardDescription>
+						{t('capacity')}: {classes.reduce((sum, c) => sum + c.spots, 0)} / {classes.reduce((sum, c) => sum + c.maxSpots, 0)} {t('spots')}
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className='space-y-3'>
@@ -46,7 +47,6 @@ export default async function MemberClassesPage({ params }: Props) {
 									<p className='text-sm'>
 										{cls.spots}/{cls.maxSpots} {t('spots')}
 									</p>
-									<ClassBookButton />
 								</div>
 							</div>
 						))}

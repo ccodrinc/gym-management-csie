@@ -2,7 +2,6 @@ import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { PageHeader } from '@/components/ui/page-header'
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCurrentMember } from '@/lib/data'
 import { FadeIn } from '@/components/motion'
@@ -11,13 +10,13 @@ type Props = {
 	params: Promise<{ locale: string }>
 }
 
-export default async function MemberMembershipPage({ params }: Props) {
+export default async function MemberProfilePage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
 	const [member, t] = await Promise.all([
 		getCurrentMember(),
-		getTranslations('Member.membership')
+		getTranslations('Member.profile')
 	])
 
 	return (
@@ -26,25 +25,22 @@ export default async function MemberMembershipPage({ params }: Props) {
 
 			<Card>
 				<CardHeader>
-					<div className='flex items-center justify-between'>
-						<CardTitle>{t('plan', { type: member.membershipType })}</CardTitle>
-						<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>
-					</div>
-					<CardDescription>{t('fullAccess')}</CardDescription>
+					<CardTitle>{t('contactDetails')}</CardTitle>
+					<CardDescription>Update your details in the gym app settings</CardDescription>
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					<div className='grid gap-4 sm:grid-cols-2'>
 						<div>
-							<p className='text-muted-foreground text-sm'>{t('startDate')}</p>
-							<p className='font-medium'>{member.startDate}</p>
+							<p className='text-muted-foreground text-sm'>{t('name')}</p>
+							<p className='font-medium'>{member.name}</p>
 						</div>
 						<div>
-							<p className='text-muted-foreground text-sm'>{t('expiryDate')}</p>
-							<p className='font-medium'>{member.expiryDate}</p>
+							<p className='text-muted-foreground text-sm'>{t('email')}</p>
+							<p className='font-medium'>{member.email}</p>
 						</div>
 						<div>
-							<p className='text-muted-foreground text-sm'>{t('totalGymVisits')}</p>
-							<p className='font-medium'>{member.gymVisits}</p>
+							<p className='text-muted-foreground text-sm'>{t('phone')}</p>
+							<p className='font-medium'>{(member as { phone?: string }).phone ?? '—'}</p>
 						</div>
 					</div>
 				</CardContent>

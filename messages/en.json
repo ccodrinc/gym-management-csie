@@ -8,7 +8,8 @@
 		"home": "Home",
 		"memberships": "Memberships",
 		"logIn": "Log in",
-		"dashboard": "Dashboard"
+		"dashboard": "Dashboard",
+		"admin": "Admin"
 	},
 	"Hero": {
 		"badge": "Downtown • Open 24/7",
@@ -88,14 +89,118 @@
 			"email": "name@example.com"
 		}
 	},
-	"Member": {
+	"Admin": {
+		"nav": {
+			"dashboard": "Dashboard",
+			"users": "Users",
+			"classes": "Classes",
+			"checkIns": "Check-ins"
+		},
 		"dashboard": {
-			"welcomeBack": "Welcome back, {name}",
-			"activityAtGlance": "Here's your gym activity at a glance"
+			"title": "Dashboard",
+			"description": "Overview of gym activity and members",
+			"totalMembers": "Total Members",
+			"allTime": "All-time registered",
+			"activeToday": "Active Today",
+			"checkIns24h": "Check-ins in the last 24h",
+			"newThisMonth": "New This Month",
+			"newMemberships": "New memberships",
+			"avgCheckinsPerDay": "Avg Check-ins/Day",
+			"sevenDayAvg": "7-day rolling average",
+			"weeklyVisits": "Weekly Visits",
+			"checkInsPerDay": "Check-ins per day (last 7 days)",
+			"membershipDistribution": "Membership Distribution",
+			"byPlanType": "By plan type"
+		},
+		"users": {
+			"title": "Users",
+			"description": "Manage members, view membership status and gym activity",
+			"allMembers": "All Members",
+			"activeTotal": "{active} active · {total} total",
+			"active": "Active",
+			"expired": "Expired",
+			"searchPlaceholder": "Search by name or email...",
+			"name": "Name",
+			"email": "Email",
+			"membership": "Membership",
+			"status": "Status",
+			"start": "Start",
+			"expiry": "Expiry",
+			"gymVisits": "Gym Visits"
 		},
 		"classes": {
+			"title": "Classes",
+			"description": "Manage group class schedule and capacity",
+			"schedule": "This Week's Schedule",
+			"capacity": "Capacity",
+			"day": "Day",
+			"time": "Time",
+			"spots": "spots"
+		},
+		"checkIns": {
+			"title": "Check-ins",
+			"description": "Today's check-ins and peak hours",
+			"todayCheckIns": "Today's Check-ins",
+			"peakHours": "Peak Hours",
+			"member": "Member",
+			"checkIns": "Check-ins"
+		}
+	},
+	"Member": {
+		"nav": {
+			"dashboard": "Dashboard",
+			"membership": "Membership",
+			"classes": "Classes",
+			"visits": "Visits",
+			"profile": "Profile"
+		},
+		"dashboard": {
+			"welcomeBack": "Welcome back, {name}",
+			"activityAtGlance": "Here's your gym activity at a glance",
+			"membership": "Membership",
+			"validUntil": "Valid until {date}",
+			"gymVisits": "Gym Visits",
+			"totalThisPeriod": "Total this membership period",
+			"upcomingClasses": "Upcoming Classes",
+			"bookedThisWeek": "Booked for this week",
+			"recentVisits": "Recent Visits",
+			"lastFive": "Your last 5 check-ins",
+			"yourBookedSessions": "Your booked sessions",
+			"activityChart": "Your Activity",
+			"visitsThisWeek": "Visits this week"
+		},
+		"membership": {
+			"title": "Membership",
+			"description": "Your plan and membership details",
+			"plan": "{type} Plan",
+			"fullAccess": "Full access to weights floor, turf zone, and group classes",
+			"startDate": "Start date",
+			"expiryDate": "Expiry date",
+			"totalGymVisits": "Total gym visits"
+		},
+		"classes": {
+			"title": "Classes",
+			"description": "View and book group classes",
+			"schedule": "This Week's Schedule",
+			"dropIn": "Drop-in classes included with your membership",
 			"book": "Book",
-			"bookToast": "Class booking coming soon."
+			"bookToast": "Class booking coming soon.",
+			"spots": "spots"
+		},
+		"visits": {
+			"title": "Visits",
+			"description": "Your visit history and check-in times",
+			"visitHistory": "Visit History",
+			"date": "Date",
+			"time": "Time"
+		},
+		"profile": {
+			"title": "Profile",
+			"description": "Your account and contact details",
+			"contactDetails": "Contact Details",
+			"name": "Name",
+			"email": "Email",
+			"phone": "Phone"
 		}
 	},
 	"Error": {

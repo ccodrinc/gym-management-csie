@@ -6,9 +6,11 @@ import { AnimatedNavLink, LogoLink, Pressable } from '@/components/motion'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
+import { isDemoMode } from '@/lib/auth'
 
 export async function Header() {
 	const t = await getTranslations('Header')
+	const demoMode = isDemoMode
 
 	return (
 		<header className='border-border bg-background/80 sticky top-0 z-50 w-full border-b backdrop-blur-xl'>
@@ -28,6 +30,9 @@ export async function Header() {
 					<ThemeToggle />
 					<LanguageSelect />
 					<AnimatedNavLink href='/member'>{t('dashboard')}</AnimatedNavLink>
+					{demoMode && (
+						<AnimatedNavLink href='/admin'>{t('admin')}</AnimatedNavLink>
+					)}
 					<Pressable>
 						<Button
 							asChild

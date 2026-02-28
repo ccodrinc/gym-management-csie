@@ -1,15 +1,19 @@
 'use client'
 
-import { LayoutDashboard, Users } from 'lucide-react'
+import { Calendar, LayoutDashboard, LogIn, Users } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 import { AppSidebar } from '@/components/layouts/app-sidebar'
 
-const navItems = [
-	{ href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-	{ href: '/admin/users', label: 'Users', icon: Users }
-]
-
 export function AdminSidebar() {
+	const t = useTranslations('Admin.nav')
+	const navItems = [
+		{ href: '/admin', label: t('dashboard'), icon: LayoutDashboard },
+		{ href: '/admin/users', label: t('users'), icon: Users },
+		{ href: '/admin/classes', label: t('classes'), icon: Calendar },
+		{ href: '/admin/check-ins', label: t('checkIns'), icon: LogIn }
+	]
+
 	return (
 		<AppSidebar
 			title='Reps Admin'
