@@ -32,12 +32,6 @@ export default async function HomePage({ params }: Props) {
 						{t('Header.brand')}
 					</Link>
 					<nav className='hidden gap-8 md:flex'>
-						<a
-							href='#amenities'
-							className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-						>
-							{t('Header.classes')}
-						</a>
 						<Link
 							href='/pricing'
 							className='text-muted-foreground hover:text-foreground text-sm transition-colors'
@@ -150,26 +144,6 @@ export default async function HomePage({ params }: Props) {
 					</div>
 				</section>
 			</main>
-
-			<footer className='border-border border-t py-8'>
-				<div className='mx-auto flex max-w-6xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between'>
-					<p className='text-muted-foreground text-sm'>{t('Footer.copyright')}</p>
-					<div className='flex gap-6'>
-						<a
-							href='#'
-							className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-						>
-							{t('Footer.privacy')}
-						</a>
-						<a
-							href='#'
-							className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-						>
-							{t('Footer.terms')}
-						</a>
-					</div>
-				</div>
-			</footer>
 		</div>
 	)
 }
