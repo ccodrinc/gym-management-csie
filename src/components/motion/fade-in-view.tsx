@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 
+import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 type FadeInViewProps = {
@@ -23,7 +24,7 @@ export function FadeInView({ children, className, delay = 0, as: Tag = 'div', id
 			transition={{
 				duration: 0.55,
 				delay,
-				ease: [0.22, 1, 0.36, 1] as const
+				ease: EASE
 			}}
 			className={cn(className)}
 			id={id}

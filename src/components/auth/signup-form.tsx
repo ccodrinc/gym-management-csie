@@ -3,14 +3,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { EASE } from '@/lib/motion'
 import { Pressable } from '@/components/motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { demoLogin } from '@/app/actions/auth'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
@@ -46,8 +47,9 @@ type SignupFormProps = {
 
 export function SignupForm({ selectedPlan }: SignupFormProps) {
 	const t = useTranslations('Auth.signup')
+	const tAuth = useTranslations('Auth')
 	const tValidation = useTranslations('Auth.validation')
-	const tToast = useTranslations('Auth')
+	const tHeader = useTranslations('Header')
 
 	const schema = createSignupSchema(tValidation)
 	type FormValues = z.infer<typeof schema>
@@ -62,15 +64,16 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 		}
 	})
 
-	function onSubmit() {
-		toast.info(tToast('featureToast'))
+	async function onSubmit() {
+		// Demo: set auth cookie and redirect. Replace with real auth.
+		await demoLogin('/member')
 	}
 
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
+			transition={{ duration: 0.45, ease: EASE }}
 		>
 			<Card className='w-full max-w-lg'>
 				<CardHeader className='space-y-1'>
@@ -80,7 +83,9 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 						transition={{ delay: 0.1, duration: 0.4 }}
 					>
 						<CardTitle className='text-2xl'>{t('title')}</CardTitle>
-						<CardDescription>{selectedPlan ? `Join Reps with ${selectedPlan}` : t('subtitle')}</CardDescription>
+						<CardDescription>
+							{selectedPlan ? t('subtitleWithPlan', { brand: tHeader('brand'), plan: selectedPlan }) : t('subtitle')}
+						</CardDescription>
 					</motion.div>
 				</CardHeader>
 				<CardContent>
@@ -130,7 +135,7 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 								<Input
 									id={id}
 									type={type}
-									placeholder={type === 'email' ? 'name@example.com' : undefined}
+									placeholder={type === 'email' ? tAuth('placeholder.email') : undefined}
 									autoComplete={autoComplete}
 									{...form.register(field)}
 								/>

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 
+import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 const containerVariants = {
@@ -20,7 +21,7 @@ const itemVariants = {
 	visible: {
 		opacity: 1,
 		y: 0,
-		transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] as const }
+		transition: { duration: 0.5, ease: EASE }
 	}
 }
 

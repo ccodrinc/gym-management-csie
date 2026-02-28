@@ -6,7 +6,6 @@
 	"Header": {
 		"brand": "Reps",
 		"home": "Home",
-		"classes": "Classes",
 		"memberships": "Memberships",
 		"logIn": "Log in",
 		"dashboard": "Dashboard"
@@ -67,6 +66,7 @@
 		"signup": {
 			"title": "Create account",
 			"subtitle": "Join Reps",
+			"subtitleWithPlan": "Join {brand} with {plan}",
 			"name": "Name",
 			"email": "Email",
 			"password": "Password",
@@ -84,7 +84,25 @@
 			"passwordMismatch": "Passwords do not match",
 			"nameRequired": "Name is required"
 		},
-		"featureToast": "This feature is currently being worked on."
+		"placeholder": {
+			"email": "name@example.com"
+		}
+	},
+	"Member": {
+		"dashboard": {
+			"welcomeBack": "Welcome back, {name}",
+			"activityAtGlance": "Here's your gym activity at a glance"
+		},
+		"classes": {
+			"book": "Book",
+			"bookToast": "Class booking coming soon."
+		}
+	},
+	"Error": {
+		"title": "Something went wrong",
+		"description": "We couldn't complete your request. Please try again.",
+		"tryAgain": "Try again",
+		"goHome": "Go home"
 	},
 	"Pricing": {
 		"title": "Memberships",

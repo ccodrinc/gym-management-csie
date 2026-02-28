@@ -1,7 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 
 import { MembershipChart, WeeklyVisitsChart } from '@/components/admin/dashboard-charts'
-import { MOCK_ANALYTICS } from '@/lib/mock-data'
+import { getAnalytics } from '@/lib/data'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn } from '@/components/motion'
 
@@ -14,7 +14,7 @@ export default async function AdminDashboardPage({ params }: Props) {
 	setRequestLocale(locale)
 
 	const { totalMembers, activeToday, newThisMonth, avgCheckinsPerDay, visitsPerDay, membershipBreakdown } =
-		MOCK_ANALYTICS
+		await getAnalytics()
 
 	return (
 		<FadeIn className='space-y-8'>

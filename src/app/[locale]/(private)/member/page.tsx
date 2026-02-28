@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 
-import { MOCK_CURRENT_MEMBER } from '@/lib/mock-data'
+import { getCurrentMember } from '@/lib/data'
+import { getTranslations } from 'next-intl/server'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn } from '@/components/motion'
@@ -13,15 +14,15 @@ export default async function MemberDashboardPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
-	const member = MOCK_CURRENT_MEMBER
+	const [member, t] = await Promise.all([getCurrentMember(), getTranslations('Member.dashboard')])
 
 	return (
 		<FadeIn className='space-y-8'>
 			<div>
 				<h1 className='text-foreground text-2xl font-semibold tracking-tight'>
-					Welcome back, {member.name.split(' ')[0]}
+					{t('welcomeBack', { name: member.name.split(' ')[0] })}
 				</h1>
-				<p className='text-muted-foreground text-sm'>Here's your gym activity at a glance</p>
+				<p className='text-muted-foreground text-sm'>{t('activityAtGlance')}</p>
 			</div>
 
 			<div className='grid gap-4 md:grid-cols-3'>
@@ -63,9 +64,9 @@ export default async function MemberDashboardPage({ params }: Props) {
 					</CardHeader>
 					<CardContent>
 						<ul className='space-y-3'>
-							{member.recentVisits.map((visit, i) => (
+							{member.recentVisits.map((visit) => (
 								<li
-									key={i}
+									key={`${visit.date}-${visit.time}`}
 									className='flex items-center justify-between rounded-md border px-4 py-2 text-sm'
 								>
 									<span>{visit.date}</span>
@@ -83,9 +84,9 @@ export default async function MemberDashboardPage({ params }: Props) {
 					</CardHeader>
 					<CardContent>
 						<ul className='space-y-3'>
-							{member.upcomingClasses.map((cls, i) => (
+							{member.upcomingClasses.map((cls) => (
 								<li
-									key={i}
+									key={`${cls.name}-${cls.date}-${cls.time}`}
 									className='flex items-center justify-between rounded-md border px-4 py-2 text-sm'
 								>
 									<div>

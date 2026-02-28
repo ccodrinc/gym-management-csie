@@ -105,3 +105,11 @@ export const MOCK_USERS = [
 		gymVisits: 18
 	}
 ]
+
+export const MOCK_CLASSES = [
+	{ id: '1', name: 'HIIT', day: 'Mon', time: '08:00', spots: 12, maxSpots: 20 },
+	{ id: '2', name: 'Strength', day: 'Tue', time: '09:30', spots: 5, maxSpots: 16 },
+	{ id: '3', name: 'Mobility', day: 'Wed', time: '18:00', spots: 18, maxSpots: 20 },
+	{ id: '4', name: 'HIIT', day: 'Thu', time: '08:00', spots: 8, maxSpots: 20 },
+	{ id: '5', name: 'Strength', day: 'Fri', time: '17:30', spots: 3, maxSpots: 16 }
+]

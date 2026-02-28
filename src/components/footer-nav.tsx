@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 
-const ease = [0.22, 1, 0.36, 1] as const
+import { EASE } from '@/lib/motion'
 
 function AnimatedLink({
 	href,
@@ -24,7 +24,7 @@ function AnimatedLink({
 			target={target}
 			rel={rel}
 			whileHover={{ y: -1 }}
-			transition={{ duration: 0.2, ease }}
+			transition={{ duration: 0.2, ease: EASE }}
 		>
 			{children}
 		</motion.a>

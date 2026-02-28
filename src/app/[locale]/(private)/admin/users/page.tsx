@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 
-import { MOCK_USERS } from '@/lib/mock-data'
+import { getMembers } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -13,6 +13,7 @@ type Props = {
 export default async function AdminUsersPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
+	const users = await getMembers()
 
 	return (
 		<FadeIn className='space-y-6'>
@@ -25,7 +26,7 @@ export default async function AdminUsersPage({ params }: Props) {
 				<CardHeader>
 					<CardTitle>All Members</CardTitle>
 					<CardDescription>
-						{MOCK_USERS.filter((u) => u.isActive).length} active · {MOCK_USERS.length} total
+						{users.filter((u) => u.isActive).length} active · {users.length} total
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -42,7 +43,7 @@ export default async function AdminUsersPage({ params }: Props) {
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							{MOCK_USERS.map((user) => (
+							{users.map((user) => (
 								<TableRow key={user.id}>
 									<TableCell className='font-medium'>{user.name}</TableCell>
 									<TableCell className='text-muted-foreground'>{user.email}</TableCell>

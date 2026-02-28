@@ -3,9 +3,8 @@
 import { motion } from 'framer-motion'
 
 import { Link } from '@/i18n/navigation'
+import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
-
-const ease = [0.22, 1, 0.36, 1] as const
 
 type LogoLinkProps = {
 	href: string
@@ -18,7 +17,7 @@ export function LogoLink({ href, children, className }: LogoLinkProps) {
 		<motion.div
 			whileHover={{ scale: 1.03 }}
 			whileTap={{ scale: 0.98 }}
-			transition={{ duration: 0.2, ease }}
+			transition={{ duration: 0.2, ease: EASE }}
 			className='inline-flex'
 		>
 			<Link

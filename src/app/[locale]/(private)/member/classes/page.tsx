@@ -1,15 +1,9 @@
 import { setRequestLocale } from 'next-intl/server'
 
+import { ClassBookButton } from '@/components/class-book-button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn } from '@/components/motion'
-
-const MOCK_CLASSES = [
-	{ id: '1', name: 'HIIT', day: 'Mon', time: '08:00', spots: 12, maxSpots: 20 },
-	{ id: '2', name: 'Strength', day: 'Tue', time: '09:30', spots: 5, maxSpots: 16 },
-	{ id: '3', name: 'Mobility', day: 'Wed', time: '18:00', spots: 18, maxSpots: 20 },
-	{ id: '4', name: 'HIIT', day: 'Thu', time: '08:00', spots: 8, maxSpots: 20 },
-	{ id: '5', name: 'Strength', day: 'Fri', time: '17:30', spots: 3, maxSpots: 16 }
-]
+import { getClasses } from '@/lib/data'
 
 type Props = {
 	params: Promise<{ locale: string }>
@@ -18,6 +12,7 @@ type Props = {
 export default async function MemberClassesPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
+	const classes = await getClasses()
 
 	return (
 		<FadeIn className='space-y-6'>
@@ -33,7 +28,7 @@ export default async function MemberClassesPage({ params }: Props) {
 				</CardHeader>
 				<CardContent>
 					<div className='space-y-3'>
-						{MOCK_CLASSES.map((cls) => (
+						{classes.map((cls) => (
 							<div
 								key={cls.id}
 								className='flex items-center justify-between rounded-md border px-4 py-3'
@@ -48,12 +43,7 @@ export default async function MemberClassesPage({ params }: Props) {
 									<p className='text-sm'>
 										{cls.spots}/{cls.maxSpots} spots
 									</p>
-									<button
-										type='button'
-										className='text-primary mt-1 text-sm font-medium hover:underline'
-									>
-										Book
-									</button>
+									<ClassBookButton />
 								</div>
 							</div>
 						))}

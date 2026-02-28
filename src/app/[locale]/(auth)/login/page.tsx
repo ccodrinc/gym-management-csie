@@ -1,5 +1,5 @@
 import { Dumbbell } from 'lucide-react'
-import { setRequestLocale } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { LoginForm } from '@/components/auth/login-form'
 import { FadeIn, LogoLink } from '@/components/motion'
@@ -11,6 +11,7 @@ type Props = {
 export default async function LoginPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
+	const t = await getTranslations('Header')
 
 	return (
 		<FadeIn className='flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-12'>
@@ -19,7 +20,7 @@ export default async function LoginPage({ params }: Props) {
 					className='size-5'
 					strokeWidth={2}
 				/>
-				Reps
+				{t('brand')}
 			</LogoLink>
 			<LoginForm />
 		</FadeIn>

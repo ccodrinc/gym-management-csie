@@ -1,6 +1,6 @@
 import { setRequestLocale } from 'next-intl/server'
 
-import { MOCK_CURRENT_MEMBER } from '@/lib/mock-data'
+import { getCurrentMember } from '@/lib/data'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn } from '@/components/motion'
@@ -13,7 +13,7 @@ export default async function MemberMembershipPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
-	const member = MOCK_CURRENT_MEMBER
+	const member = await getCurrentMember()
 
 	return (
 		<FadeIn className='space-y-6'>

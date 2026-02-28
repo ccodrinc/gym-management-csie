@@ -3,14 +3,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { EASE } from '@/lib/motion'
 import { Pressable } from '@/components/motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useSearchParams } from 'next/navigation'
+
+import { demoLogin } from '@/app/actions/auth'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
@@ -35,8 +38,10 @@ const createLoginSchema = (t: (key: string) => string) =>
 
 export function LoginForm() {
 	const t = useTranslations('Auth.login')
+	const tAuth = useTranslations('Auth')
 	const tValidation = useTranslations('Auth.validation')
-	const tToast = useTranslations('Auth')
+	const searchParams = useSearchParams()
+	const from = searchParams.get('from')
 
 	const schema = createLoginSchema(tValidation)
 	type FormValues = z.infer<typeof schema>
@@ -49,15 +54,16 @@ export function LoginForm() {
 		}
 	})
 
-	function onSubmit() {
-		toast.info(tToast('featureToast'))
+	async function onSubmit() {
+		// Demo: set auth cookie and redirect. Replace with real auth.
+		await demoLogin(from ?? undefined)
 	}
 
 	return (
 		<motion.div
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] as const }}
+			transition={{ duration: 0.45, ease: EASE }}
 		>
 			<Card className='w-full max-w-lg'>
 				<CardHeader className='space-y-1'>
@@ -86,7 +92,7 @@ export function LoginForm() {
 							<Input
 								id='login-email'
 								type='email'
-								placeholder='name@example.com'
+								placeholder={tAuth('placeholder.email')}
 								autoComplete='email'
 								{...form.register('email')}
 							/>

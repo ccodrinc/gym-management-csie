@@ -3,9 +3,8 @@
 import { motion } from 'framer-motion'
 
 import { Link, usePathname } from '@/i18n/navigation'
+import { EASE } from '@/lib/motion'
 import { cn } from '@/lib/utils'
-
-const ease = [0.22, 1, 0.36, 1] as const
 
 type NavLinkProps = {
 	href: string
@@ -20,7 +19,7 @@ export function AnimatedNavLink({ href, children, className }: NavLinkProps) {
 	return (
 		<motion.div
 			whileHover={{ y: -1 }}
-			transition={{ duration: 0.2, ease }}
+			transition={{ duration: 0.2, ease: EASE }}
 			className='inline-block'
 		>
 			<Link
@@ -36,7 +35,7 @@ export function AnimatedNavLink({ href, children, className }: NavLinkProps) {
 					<motion.span
 						className='bg-primary absolute -bottom-1 left-0 h-px w-full'
 						layoutId='nav-underline'
-						transition={{ duration: 0.25, ease }}
+						transition={{ duration: 0.25, ease: EASE }}
 					/>
 				)}
 			</Link>
