@@ -38,12 +38,12 @@ export default async function HomePage({ params }: Props) {
 						>
 							{t('Header.classes')}
 						</a>
-						<a
-							href='#cta'
+						<Link
+							href='/pricing'
 							className='text-muted-foreground hover:text-foreground text-sm transition-colors'
 						>
 							{t('Header.memberships')}
-						</a>
+						</Link>
 					</nav>
 					<div className='flex items-center gap-2'>
 						<ThemeToggle />

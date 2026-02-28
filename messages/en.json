@@ -5,6 +5,7 @@
 	},
 	"Header": {
 		"brand": "Reps",
+		"home": "Home",
 		"classes": "Classes",
 		"memberships": "Memberships",
 		"logIn": "Log in"
@@ -82,5 +83,34 @@
 			"nameRequired": "Name is required"
 		},
 		"featureToast": "This feature is currently being worked on."
+	},
+	"Pricing": {
+		"title": "Memberships",
+		"subtitle": "Pick the plan that fits. No hidden fees.",
+		"dayPass": {
+			"name": "Day pass",
+			"price": "15",
+			"period": "per visit",
+			"description": "Try the gym. Full access, one day.",
+			"features": ["24/7 access", "Weights floor", "Turf zone", "Group classes"],
+			"cta": "Get day pass"
+		},
+		"monthly": {
+			"name": "Monthly",
+			"price": "65",
+			"period": "per month",
+			"description": "Flexible. Cancel anytime.",
+			"features": ["Everything in Day pass", "Key fob access", "Bring a guest 2x/month", "Lockers"],
+			"cta": "Get monthly",
+			"popular": "Most popular"
+		},
+		"annual": {
+			"name": "Annual",
+			"price": "650",
+			"period": "per year",
+			"description": "Best value. Save 2 months.",
+			"features": ["Everything in Monthly", "~$54/month", "No contract", "Free shirt"],
+			"cta": "Get annual"
+		}
 	}
 }
