@@ -1,12 +1,17 @@
 import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
+import { FadeIn } from '@/components/motion'
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<div className='flex min-h-screen flex-col'>
-			<Header />
+			<FadeIn>
+				<Header />
+			</FadeIn>
 			<main className='flex-1'>{children}</main>
-			<Footer />
+			<FadeIn>
+				<Footer />
+			</FadeIn>
 		</div>
 	)
 }

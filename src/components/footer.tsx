@@ -1,5 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 
+import { FooterNavGitHubLink, FooterNavLink } from '@/components/footer-nav'
+
 const GITHUB_REPO_URL = 'https://github.com/ccodrinc/gym-management-csie'
 
 export async function Footer() {
@@ -10,28 +12,11 @@ export async function Footer() {
 			<div className='mx-auto flex max-w-6xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between'>
 				<p className='text-muted-foreground text-sm'>
 					{t('copyright')} · {t('madeBy')}{' '}
-					<a
-						href={GITHUB_REPO_URL}
-						target='_blank'
-						rel='noopener noreferrer'
-						className='text-primary hover:underline'
-					>
-						Codrin Caraba
-					</a>
+					<FooterNavGitHubLink href={GITHUB_REPO_URL}>Codrin Caraba</FooterNavGitHubLink>
 				</p>
 				<nav className='flex gap-6'>
-					<a
-						href='#'
-						className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-					>
-						{t('privacy')}
-					</a>
-					<a
-						href='#'
-						className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-					>
-						{t('terms')}
-					</a>
+					<FooterNavLink href='#'>{t('privacy')}</FooterNavLink>
+					<FooterNavLink href='#'>{t('terms')}</FooterNavLink>
 				</nav>
 			</div>
 		</footer>
