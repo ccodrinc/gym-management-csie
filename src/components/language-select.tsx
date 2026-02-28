@@ -3,7 +3,6 @@
 import { Languages } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
-import { Pressable } from '@/components/motion'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { routing } from '@/i18n/routing'
@@ -25,25 +24,20 @@ export function LanguageSelect() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Pressable
-					scale={1.05}
-					tapScale={0.95}
+				<Button
+					variant='outline'
+					size='icon-sm'
+					className='border-foreground/20 text-foreground hover:border-primary hover:bg-primary/5 relative'
 				>
-					<Button
-						variant='outline'
-						size='icon-sm'
-						className='border-foreground/20 text-foreground hover:border-primary hover:bg-primary/5 relative'
-					>
-						<Languages className='size-4' />
-						<span className='sr-only'>{t('label')}</span>
-					</Button>
-				</Pressable>
+					<Languages className='size-4' />
+					<span className='sr-only'>{t('label')}</span>
+				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end'>
 				{routing.locales.map((loc) => (
 					<DropdownMenuItem
 						key={loc}
-						onClick={() => handleLocaleChange(loc)}
+						onSelect={() => handleLocaleChange(loc)}
 					>
 						{localeLabels[loc] ?? loc}
 					</DropdownMenuItem>
