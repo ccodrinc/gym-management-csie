@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google'
+
+import { ThemeProvider } from '@/components/theme-provider'
 import './globals.css'
 
 const bricolage = Bricolage_Grotesque({
@@ -21,9 +23,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 	return (
 		<html
 			lang='en'
-			className='dark'
+			suppressHydrationWarning
 		>
-			<body className={`${bricolage.variable} ${jetbrains.variable} antialiased`}>{children}</body>
+			<body className={`${bricolage.variable} ${jetbrains.variable} antialiased`}>
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='dark'
+					enableSystem
+					disableTransitionOnChange
+				>
+					{children}
+				</ThemeProvider>
+			</body>
 		</html>
 	)
 }
