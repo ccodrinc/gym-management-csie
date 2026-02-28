@@ -2,6 +2,7 @@ import { Bricolage_Grotesque, JetBrains_Mono } from 'next/font/google'
 import { getLocale } from 'next-intl/server'
 
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 const bricolage = Bricolage_Grotesque({
@@ -30,6 +31,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 					disableTransitionOnChange
 				>
 					{children}
+					<Toaster />
 				</ThemeProvider>
 			</body>
 		</html>

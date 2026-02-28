@@ -49,11 +49,12 @@ export default async function HomePage({ params }: Props) {
 						<ThemeToggle />
 						<LanguageSelect />
 						<Button
+							asChild
 							size='sm'
 							variant='outline'
 							className='border-foreground/20 text-foreground hover:border-primary hover:bg-primary/5'
 						>
-							{t('Header.logIn')}
+							<Link href='/login'>{t('Header.logIn')}</Link>
 						</Button>
 					</div>
 				</div>
