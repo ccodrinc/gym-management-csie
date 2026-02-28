@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { FadeIn, FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
 import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 type Props = {
@@ -39,8 +40,9 @@ export default async function HomePage({ params }: Props) {
 									<Button
 										size='lg'
 										className='px-8'
+										asChild
 									>
-										{t('Hero.getDayPass')}
+										<Link href='/pricing'>{t('Hero.getDayPass')}</Link>
 									</Button>
 								</Pressable>
 								<Pressable>
@@ -48,8 +50,9 @@ export default async function HomePage({ params }: Props) {
 										size='lg'
 										variant='ghost'
 										className='text-muted-foreground hover:text-foreground'
+										asChild
 									>
-										{t('Hero.viewSchedule')}
+										<Link href='/member/classes'>{t('Hero.viewSchedule')}</Link>
 									</Button>
 								</Pressable>
 							</div>
@@ -133,8 +136,9 @@ export default async function HomePage({ params }: Props) {
 								<Button
 									size='lg'
 									className='shrink-0 px-8'
+									asChild
 								>
-									{t('CTA.button')}
+									<Link href='/signup'>{t('CTA.button')}</Link>
 								</Button>
 							</Pressable>
 						</FadeInView>

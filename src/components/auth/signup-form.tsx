@@ -40,7 +40,11 @@ const createSignupSchema = (t: (key: string) => string) =>
 			path: ['confirmPassword']
 		})
 
-export function SignupForm() {
+type SignupFormProps = {
+	selectedPlan?: string
+}
+
+export function SignupForm({ selectedPlan }: SignupFormProps) {
 	const t = useTranslations('Auth.signup')
 	const tValidation = useTranslations('Auth.validation')
 	const tToast = useTranslations('Auth')
@@ -76,7 +80,7 @@ export function SignupForm() {
 						transition={{ delay: 0.1, duration: 0.4 }}
 					>
 						<CardTitle className='text-2xl'>{t('title')}</CardTitle>
-						<CardDescription>{t('subtitle')}</CardDescription>
+						<CardDescription>{selectedPlan ? `Join Reps with ${selectedPlan}` : t('subtitle')}</CardDescription>
 					</motion.div>
 				</CardHeader>
 				<CardContent>

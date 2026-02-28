@@ -4,12 +4,20 @@ import { setRequestLocale } from 'next-intl/server'
 import { SignupForm } from '@/components/auth/signup-form'
 import { FadeIn, LogoLink } from '@/components/motion'
 
-type Props = {
-	params: Promise<{ locale: string }>
+const planLabels: Record<string, string> = {
+	dayPass: 'Day pass',
+	monthly: 'Monthly',
+	annual: 'Annual'
 }
 
-export default async function SignupPage({ params }: Props) {
+type Props = {
+	params: Promise<{ locale: string }>
+	searchParams: Promise<{ plan?: string }>
+}
+
+export default async function SignupPage({ params, searchParams }: Props) {
 	const { locale } = await params
+	const { plan } = await searchParams
 	setRequestLocale(locale)
 
 	return (
@@ -21,7 +29,7 @@ export default async function SignupPage({ params }: Props) {
 				/>
 				Reps
 			</LogoLink>
-			<SignupForm />
+			<SignupForm selectedPlan={plan ? (planLabels[plan] ?? plan) : undefined} />
 		</FadeIn>
 	)
 }

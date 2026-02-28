@@ -27,6 +27,7 @@ export async function Header() {
 				<div className='flex items-center gap-2'>
 					<ThemeToggle />
 					<LanguageSelect />
+					<AnimatedNavLink href='/member'>{t('dashboard')}</AnimatedNavLink>
 					<Pressable>
 						<Button
 							asChild

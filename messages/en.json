@@ -8,7 +8,8 @@
 		"home": "Home",
 		"classes": "Classes",
 		"memberships": "Memberships",
-		"logIn": "Log in"
+		"logIn": "Log in",
+		"dashboard": "Dashboard"
 	},
 	"Hero": {
 		"badge": "Downtown • Open 24/7",

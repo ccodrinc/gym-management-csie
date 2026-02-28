@@ -16,13 +16,16 @@ export function MemberSidebar() {
 
 	return (
 		<aside className='border-border bg-card flex h-full w-56 flex-col border-r'>
-			<div className='flex h-16 items-center gap-2 border-b px-6'>
+			<Link
+				href='/'
+				className='hover:bg-muted/50 flex h-16 items-center gap-2 border-b px-6'
+			>
 				<Dumbbell
 					className='text-primary size-5'
 					strokeWidth={2}
 				/>
 				<span className='font-semibold tracking-tight'>Reps</span>
-			</div>
+			</Link>
 			<nav className='flex-1 space-y-1 p-2'>
 				{navItems.map((item) => {
 					const isActive = item.href === '/member' ? pathname === '/member' : pathname.startsWith(item.href)

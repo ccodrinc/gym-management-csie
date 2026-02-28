@@ -2,6 +2,7 @@ import { Check } from 'lucide-react'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
+import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -69,8 +70,9 @@ export default async function PricingPage({ params }: Props) {
 											<Button
 												className='w-full'
 												variant={isPopular ? 'default' : 'outline'}
+												asChild
 											>
-												{t(`${plan}.cta`)}
+												<Link href={`/signup?plan=${plan}`}>{t(`${plan}.cta`)}</Link>
 											</Button>
 										</Pressable>
 									</CardFooter>
