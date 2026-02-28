@@ -21,6 +21,28 @@ export const MOCK_ANALYTICS = {
 
 export type MembershipType = 'Monthly' | 'Annual' | 'Day Pass'
 
+export const MOCK_CURRENT_MEMBER = {
+	id: '1',
+	name: 'Alex Johnson',
+	email: 'alex.johnson@example.com',
+	membershipType: 'Monthly' as const,
+	isActive: true,
+	startDate: '2025-01-15',
+	expiryDate: '2025-02-15',
+	gymVisits: 24,
+	recentVisits: [
+		{ date: '2025-02-28', time: '07:15' },
+		{ date: '2025-02-26', time: '18:30' },
+		{ date: '2025-02-24', time: '09:00' },
+		{ date: '2025-02-22', time: '12:45' },
+		{ date: '2025-02-20', time: '17:00' }
+	],
+	upcomingClasses: [
+		{ name: 'HIIT', date: '2025-03-01', time: '08:00' },
+		{ name: 'Strength', date: '2025-03-03', time: '09:30' }
+	]
+}
+
 export const MOCK_USERS = [
 	{
 		id: '1',
