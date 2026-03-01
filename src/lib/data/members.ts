@@ -1,6 +1,5 @@
-import { auth } from '@/auth'
+import { getSession } from '@/auth'
 import { prisma } from '@/lib/db'
-import { isDemoMode } from '@/lib/auth'
 import { formatMembershipType } from '@/lib/format'
 import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { Role } from '@prisma/client'
@@ -38,14 +37,8 @@ function isActive(expiryDate: string | null): boolean {
 }
 
 export async function getCurrentMember(): Promise<CurrentMember> {
-	const session = await auth()
-	const demoMode = isDemoMode
-
-	let userId: string | null = session?.user?.id ?? null
-	if (demoMode && !userId) {
-		const demoUser = await prisma.user.findFirst({ where: { username: 'alexandrupopescu', role: Role.MEMBER } })
-		userId = demoUser?.id ?? null
-	}
+	const session = await getSession()
+	const userId = session?.user?.id ?? null
 	if (!userId) throw new Error('Unauthorized')
 
 	const user = await prisma.user.findUnique({

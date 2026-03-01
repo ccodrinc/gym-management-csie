@@ -3,7 +3,6 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 
-import { isDemoMode } from '@/lib/auth'
 import { routing } from '@/i18n/routing'
 
 const intlMiddleware = createIntlMiddleware(routing)
@@ -24,7 +23,7 @@ function getLocale(pathname: string): string {
 export default async function middleware(req: NextRequest) {
 	const { pathname } = req.nextUrl
 
-	if (!isDemoMode && isPrivatePath(pathname)) {
+	if (isPrivatePath(pathname)) {
 		const token = await getToken({
 			req,
 			secret: process.env.AUTH_SECRET

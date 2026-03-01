@@ -69,8 +69,8 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.45, ease: EASE }}
 		>
-			<Card className='w-full max-w-lg'>
-				<CardHeader className='space-y-1'>
+			<Card className='w-full max-w-lg md:max-w-2xl px-8 md:px-10 py-8'>
+				<CardHeader className='space-y-1 px-0'>
 					<motion.div
 						initial={{ opacity: 0, y: 8 }}
 						animate={{ opacity: 1, y: 0 }}
@@ -82,13 +82,13 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 						</CardDescription>
 					</motion.div>
 				</CardHeader>
-				<CardContent>
+				<CardContent className='px-0 pt-2'>
 					{form.formState.errors.root && (
 						<p className='text-destructive mb-4 text-sm'>{form.formState.errors.root.message}</p>
 					)}
 					<motion.form
 						onSubmit={form.handleSubmit(onSubmit)}
-						className='space-y-4'
+						className='space-y-5'
 						variants={authFormVariants}
 						initial='hidden'
 						animate='visible'

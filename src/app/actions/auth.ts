@@ -41,7 +41,10 @@ export async function loginAction(
 
 		const redirectTo = isAllowedRedirect(from ?? '') ? from! : '/member'
 		return { ok: true, redirectTo }
-	} catch {
+	} catch (err) {
+		if (process.env.NODE_ENV === 'development') {
+			console.error('[loginAction]', err)
+		}
 		return { ok: false, error: 'Something went wrong' }
 	}
 }

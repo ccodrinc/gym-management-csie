@@ -1,4 +1,4 @@
-import { hash } from 'bcryptjs'
+import { compare, hash } from 'bcryptjs'
 import { MembershipType, PrismaClient, Role } from '@prisma/client'
 
 import { getTodayString } from '../src/lib/date'
@@ -13,7 +13,7 @@ async function main() {
 
 	const admin = await prisma.user.upsert({
 		where: { username: adminUsername },
-		update: {},
+		update: { password: adminPasswordHash },
 		create: {
 			name: 'Administrator',
 			username: adminUsername,
@@ -21,9 +21,11 @@ async function main() {
 			role: Role.ADMIN
 		}
 	})
-	console.log('Admin:', admin.username)
+	const adminPasswordOk = admin.password && (await compare(adminPassword, admin.password))
+	if (!adminPasswordOk) throw new Error('Admin password verification failed after seed')
+	console.log('Admin:', admin.username, '(login: admin / Admin123!)')
 
-	// Member users (alexandrupopescu has password for demo login)
+	// Member users (all can log in with password Member123!)
 	const memberPasswordHash = await hash('Member123!', 12)
 	const members = [
 		{
@@ -33,8 +35,7 @@ async function main() {
 			membershipType: MembershipType.Monthly,
 			startDate: '2025-01-15',
 			expiryDate: '2025-02-15',
-			gymVisits: 24,
-			hasPassword: true
+			gymVisits: 24
 		},
 		{
 			username: 'stefanmarin',
@@ -42,8 +43,7 @@ async function main() {
 			membershipType: MembershipType.Annual,
 			startDate: '2024-03-01',
 			expiryDate: '2025-03-01',
-			gymVisits: 156,
-			hasPassword: false
+			gymVisits: 156
 		},
 		{
 			username: 'andreitanase',
@@ -51,8 +51,7 @@ async function main() {
 			membershipType: MembershipType.Day_Pass,
 			startDate: '2025-02-20',
 			expiryDate: '2025-02-20',
-			gymVisits: 1,
-			hasPassword: false
+			gymVisits: 1
 		},
 		{
 			username: 'mariaionescu',
@@ -60,8 +59,7 @@ async function main() {
 			membershipType: MembershipType.Monthly,
 			startDate: '2025-02-01',
 			expiryDate: '2025-03-01',
-			gymVisits: 12,
-			hasPassword: false
+			gymVisits: 12
 		},
 		{
 			username: 'catalinradu',
@@ -69,8 +67,7 @@ async function main() {
 			membershipType: MembershipType.Annual,
 			startDate: '2023-06-15',
 			expiryDate: '2024-06-15',
-			gymVisits: 89,
-			hasPassword: false
+			gymVisits: 89
 		},
 		{
 			username: 'raducojocaru',
@@ -78,8 +75,7 @@ async function main() {
 			membershipType: MembershipType.Monthly,
 			startDate: '2025-01-20',
 			expiryDate: '2025-02-20',
-			gymVisits: 18,
-			hasPassword: false
+			gymVisits: 18
 		}
 	]
 
@@ -94,7 +90,7 @@ async function main() {
 				startDate: m.startDate,
 				expiryDate: m.expiryDate,
 				gymVisits: m.gymVisits,
-				password: m.hasPassword ? memberPasswordHash : null
+				password: memberPasswordHash
 			},
 			create: {
 				username: m.username,
@@ -104,7 +100,7 @@ async function main() {
 				startDate: m.startDate,
 				expiryDate: m.expiryDate,
 				gymVisits: m.gymVisits,
-				password: m.hasPassword ? memberPasswordHash : null,
+				password: memberPasswordHash,
 				role: Role.MEMBER
 			}
 		})

@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { compare } from 'bcryptjs'
+import { cookies } from 'next/headers'
 
 import { prisma } from '@/lib/db'
 import { Role } from '@prisma/client'
@@ -39,7 +40,7 @@ if (!authSecret) {
 	)
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const authConfig = NextAuth({
 	secret: authSecret,
 	adapter: PrismaAdapter(prisma),
 	session: {
@@ -97,3 +98,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		}
 	}
 })
+
+export const { handlers, signIn, signOut, auth } = authConfig
+
+const SESSION_COOKIE_NAMES = ['authjs.session-token', '__Secure-authjs.session-token']
+
+async function clearSessionCookies() {
+	const cookieStore = await cookies()
+	for (const name of SESSION_COOKIE_NAMES) {
+		cookieStore.delete(name)
+	}
+}
+
+/** Returns session or null. Handles stale/invalid JWT (e.g. after AUTH_SECRET change) without throwing. */
+export async function getSession() {
+	try {
+		return await auth().catch(async () => {
+			await clearSessionCookies()
+			return null
+		})
+	} catch {
+		await clearSessionCookies()
+		return null
+	}
+}
