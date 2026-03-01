@@ -29,7 +29,18 @@ declare module '@auth/core/jwt' {
 	}
 }
 
+const authSecret =
+	process.env.AUTH_SECRET ||
+	(process.env.NODE_ENV === 'development' ? 'dev-secret-min-32-chars-for-local' : undefined)
+
+if (!authSecret) {
+	throw new Error(
+		'AUTH_SECRET is required. Add it to .env or run: npx auth secret'
+	)
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
+	secret: authSecret,
 	adapter: PrismaAdapter(prisma),
 	session: {
 		strategy: 'jwt',
