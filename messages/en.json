@@ -8,6 +8,7 @@
 		"home": "Home",
 		"memberships": "Memberships",
 		"logIn": "Log in",
+		"logOut": "Log out",
 		"dashboard": "Dashboard",
 		"admin": "Admin"
 	},
@@ -58,7 +59,7 @@
 		"login": {
 			"title": "Log in",
 			"subtitle": "Welcome back",
-			"email": "Email",
+			"username": "Username",
 			"password": "Password",
 			"submit": "Log in",
 			"noAccount": "Don't have an account?",
@@ -69,7 +70,7 @@
 			"subtitle": "Join Reps",
 			"subtitleWithPlan": "Join {brand} with {plan}",
 			"name": "Name",
-			"email": "Email",
+			"username": "Username",
 			"password": "Password",
 			"confirmPassword": "Confirm password",
 			"submit": "Create account",
@@ -77,8 +78,9 @@
 			"logIn": "Log in"
 		},
 		"validation": {
-			"emailRequired": "Email is required",
-			"emailInvalid": "Please enter a valid email",
+			"usernameRequired": "Username is required",
+			"usernameMin": "Username must be at least 2 characters",
+			"usernameInvalid": "Username can only contain letters, numbers, underscores and hyphens",
 			"passwordRequired": "Password is required",
 			"passwordMin": "Password must be at least 8 characters",
 			"confirmPasswordRequired": "Please confirm your password",
@@ -86,7 +88,7 @@
 			"nameRequired": "Name is required"
 		},
 		"placeholder": {
-			"email": "name@example.com"
+			"username": "johndoe"
 		}
 	},
 	"Admin": {
@@ -119,9 +121,9 @@
 			"activeTotal": "{active} active · {total} total",
 			"active": "Active",
 			"expired": "Expired",
-			"searchPlaceholder": "Search by name or email...",
+			"searchPlaceholder": "Search by name or username...",
 			"name": "Name",
-			"email": "Email",
+			"username": "Username",
 			"membership": "Membership",
 			"status": "Status",
 			"start": "Start",
@@ -139,9 +141,8 @@
 		},
 		"checkIns": {
 			"title": "Check-ins",
-			"description": "Today's check-ins and peak hours",
+			"description": "Today's check-ins",
 			"todayCheckIns": "Today's Check-ins",
-			"peakHours": "Peak Hours",
 			"member": "Member",
 			"checkIns": "Check-ins"
 		}
@@ -196,10 +197,10 @@
 		},
 		"profile": {
 			"title": "Profile",
-			"description": "Your account and contact details",
-			"contactDetails": "Contact Details",
+			"description": "Your account details",
+			"accountDetails": "Account Details",
 			"name": "Name",
-			"email": "Email",
+			"username": "Username",
 			"phone": "Phone"
 		}
 	},

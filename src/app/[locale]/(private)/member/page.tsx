@@ -35,7 +35,7 @@ export default async function MemberDashboardPage({ params }: Props) {
 	return (
 		<FadeIn className='space-y-8'>
 			<PageHeader
-				title={t('welcomeBack', { name: member.name.split(' ')[0] })}
+				title={t('welcomeBack', { name: member.name?.split(' ')[0] ?? 'Member' })}
 				description={t('activityAtGlance')}
 			/>
 
@@ -43,7 +43,7 @@ export default async function MemberDashboardPage({ params }: Props) {
 				<StatCard
 					title={t('membership')}
 					value={member.membershipType}
-					subtitle={t('validUntil', { date: member.expiryDate })}
+					subtitle={t('validUntil', { date: member.expiryDate ?? '—' })}
 					badge={<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>}
 				/>
 				<StatCard

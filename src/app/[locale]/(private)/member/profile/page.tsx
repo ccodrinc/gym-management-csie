@@ -25,7 +25,7 @@ export default async function MemberProfilePage({ params }: Props) {
 
 			<Card>
 				<CardHeader>
-					<CardTitle>{t('contactDetails')}</CardTitle>
+					<CardTitle>{t('accountDetails')}</CardTitle>
 					<CardDescription>Update your details in the gym app settings</CardDescription>
 				</CardHeader>
 				<CardContent className='space-y-4'>
@@ -35,12 +35,12 @@ export default async function MemberProfilePage({ params }: Props) {
 							<p className='font-medium'>{member.name}</p>
 						</div>
 						<div>
-							<p className='text-muted-foreground text-sm'>{t('email')}</p>
-							<p className='font-medium'>{member.email}</p>
+							<p className='text-muted-foreground text-sm'>{t('username')}</p>
+							<p className='font-medium'>{member.username ?? '—'}</p>
 						</div>
 						<div>
 							<p className='text-muted-foreground text-sm'>{t('phone')}</p>
-							<p className='font-medium'>{(member as { phone?: string }).phone ?? '—'}</p>
+							<p className='font-medium'>{member.phone ?? '—'}</p>
 						</div>
 					</div>
 				</CardContent>

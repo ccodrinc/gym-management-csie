@@ -5,34 +5,23 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { EASE } from '@/lib/motion'
+import { authFieldVariants, authFormVariants } from '@/components/auth/form-variants'
 import { Pressable } from '@/components/motion'
+import { EASE } from '@/lib/motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { demoLogin } from '@/app/actions/auth'
+import { useRouter } from '@/i18n/navigation'
+import { signupAction } from '@/app/actions/auth'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
-
-const formVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.07, delayChildren: 0.1 }
-	}
-}
-
-const fieldVariants = {
-	hidden: { opacity: 0, y: 12 },
-	visible: { opacity: 1, y: 0 }
-}
 
 const createSignupSchema = (t: (key: string) => string) =>
 	z
 		.object({
 			name: z.string().min(1, t('nameRequired')),
-			email: z.string().min(1, t('emailRequired')).email(t('emailInvalid')),
+			username: z.string().min(2, t('usernameMin')).regex(/^[a-zA-Z0-9_-]+$/, t('usernameInvalid')),
 			password: z.string().min(8, t('passwordMin')),
 			confirmPassword: z.string().min(1, t('confirmPasswordRequired'))
 		})
@@ -50,6 +39,7 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 	const tAuth = useTranslations('Auth')
 	const tValidation = useTranslations('Auth.validation')
 	const tHeader = useTranslations('Header')
+	const router = useRouter()
 
 	const schema = createSignupSchema(tValidation)
 	type FormValues = z.infer<typeof schema>
@@ -58,15 +48,19 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 		resolver: zodResolver(schema),
 		defaultValues: {
 			name: '',
-			email: '',
+			username: '',
 			password: '',
 			confirmPassword: ''
 		}
 	})
 
-	async function onSubmit() {
-		// Demo: set auth cookie and redirect. Replace with real auth.
-		await demoLogin('/member')
+	async function onSubmit(values: FormValues) {
+		const result = await signupAction(values.name, values.username, values.password)
+		if (result.ok) {
+			router.push(result.redirectTo)
+		} else {
+			form.setError('root', { message: result.error })
+		}
 	}
 
 	return (
@@ -89,10 +83,13 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 					</motion.div>
 				</CardHeader>
 				<CardContent>
+					{form.formState.errors.root && (
+						<p className='text-destructive mb-4 text-sm'>{form.formState.errors.root.message}</p>
+					)}
 					<motion.form
 						onSubmit={form.handleSubmit(onSubmit)}
 						className='space-y-4'
-						variants={formVariants}
+						variants={authFormVariants}
 						initial='hidden'
 						animate='visible'
 					>
@@ -105,11 +102,11 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 								field: 'name' as const
 							},
 							{
-								id: 'signup-email',
-								label: t('email'),
-								type: 'email' as const,
-								autoComplete: 'email' as const,
-								field: 'email' as const
+								id: 'signup-username',
+								label: t('username'),
+								type: 'text' as const,
+								autoComplete: 'username' as const,
+								field: 'username' as const
 							},
 							{
 								id: 'signup-password',
@@ -129,13 +126,13 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 							<motion.div
 								key={id}
 								className='space-y-2'
-								variants={fieldVariants}
+								variants={authFieldVariants}
 							>
 								<Label htmlFor={id}>{label}</Label>
 								<Input
 									id={id}
 									type={type}
-									placeholder={type === 'email' ? tAuth('placeholder.email') : undefined}
+									placeholder={field === 'username' ? tAuth('placeholder.username') : undefined}
 									autoComplete={autoComplete}
 									{...form.register(field)}
 								/>
@@ -144,7 +141,7 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 								)}
 							</motion.div>
 						))}
-						<motion.div variants={fieldVariants}>
+						<motion.div variants={authFieldVariants}>
 							<Pressable className='w-full'>
 								<Button
 									type='submit'
@@ -156,7 +153,7 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 						</motion.div>
 						<motion.p
 							className='text-muted-foreground text-center text-sm'
-							variants={fieldVariants}
+							variants={authFieldVariants}
 						>
 							{t('hasAccount')}{' '}
 							<motion.span

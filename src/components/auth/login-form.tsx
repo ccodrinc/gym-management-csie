@@ -4,35 +4,23 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useRouter } from '@/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 
-import { EASE } from '@/lib/motion'
+import { loginAction } from '@/app/actions/auth'
+import { authFieldVariants, authFormVariants } from '@/components/auth/form-variants'
 import { Pressable } from '@/components/motion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useSearchParams } from 'next/navigation'
-
-import { demoLogin } from '@/app/actions/auth'
+import { EASE } from '@/lib/motion'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
-const formVariants = {
-	hidden: { opacity: 0 },
-	visible: {
-		opacity: 1,
-		transition: { staggerChildren: 0.08, delayChildren: 0.1 }
-	}
-}
-
-const fieldVariants = {
-	hidden: { opacity: 0, y: 12 },
-	visible: { opacity: 1, y: 0 }
-}
-
 const createLoginSchema = (t: (key: string) => string) =>
 	z.object({
-		email: z.string().min(1, t('emailRequired')).email(t('emailInvalid')),
+		username: z.string().min(1, t('usernameRequired')),
 		password: z.string().min(1, t('passwordRequired'))
 	})
 
@@ -41,6 +29,7 @@ export function LoginForm() {
 	const tAuth = useTranslations('Auth')
 	const tValidation = useTranslations('Auth.validation')
 	const searchParams = useSearchParams()
+	const router = useRouter()
 	const from = searchParams.get('from')
 
 	const schema = createLoginSchema(tValidation)
@@ -49,14 +38,18 @@ export function LoginForm() {
 	const form = useForm<FormValues>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			email: '',
+			username: '',
 			password: ''
 		}
 	})
 
-	async function onSubmit() {
-		// Demo: set auth cookie and redirect. Replace with real auth.
-		await demoLogin(from ?? undefined)
+	async function onSubmit(values: FormValues) {
+		const result = await loginAction(values.username, values.password, from ?? undefined)
+		if (result.ok) {
+			router.push(result.redirectTo)
+		} else {
+			form.setError('root', { message: result.error })
+		}
 	}
 
 	return (
@@ -80,29 +73,32 @@ export function LoginForm() {
 					<motion.form
 						onSubmit={form.handleSubmit(onSubmit)}
 						className='space-y-4'
-						variants={formVariants}
+						variants={authFormVariants}
 						initial='hidden'
 						animate='visible'
 					>
 						<motion.div
 							className='space-y-2'
-							variants={fieldVariants}
+							variants={authFieldVariants}
 						>
-							<Label htmlFor='login-email'>{t('email')}</Label>
+							<Label htmlFor='login-username'>{t('username')}</Label>
 							<Input
-								id='login-email'
-								type='email'
-								placeholder={tAuth('placeholder.email')}
-								autoComplete='email'
-								{...form.register('email')}
+								id='login-username'
+								type='text'
+								placeholder={tAuth('placeholder.username')}
+								autoComplete='username'
+								{...form.register('username')}
 							/>
-							{form.formState.errors.email && (
-								<p className='text-destructive text-sm'>{form.formState.errors.email.message}</p>
+							{form.formState.errors.username && (
+								<p className='text-destructive text-sm'>{form.formState.errors.username.message}</p>
 							)}
 						</motion.div>
+						{form.formState.errors.root && (
+							<p className='text-destructive text-sm'>{form.formState.errors.root.message}</p>
+						)}
 						<motion.div
 							className='space-y-2'
-							variants={fieldVariants}
+							variants={authFieldVariants}
 						>
 							<Label htmlFor='login-password'>{t('password')}</Label>
 							<Input
@@ -115,7 +111,7 @@ export function LoginForm() {
 								<p className='text-destructive text-sm'>{form.formState.errors.password.message}</p>
 							)}
 						</motion.div>
-						<motion.div variants={fieldVariants}>
+						<motion.div variants={authFieldVariants}>
 							<Pressable className='w-full'>
 								<Button
 									type='submit'
@@ -127,7 +123,7 @@ export function LoginForm() {
 						</motion.div>
 						<motion.p
 							className='text-muted-foreground text-center text-sm'
-							variants={fieldVariants}
+							variants={authFieldVariants}
 						>
 							{t('noAccount')}{' '}
 							<motion.span

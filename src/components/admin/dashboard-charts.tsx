@@ -2,6 +2,12 @@
 
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
+const chartTooltipStyle = {
+	backgroundColor: 'hsl(var(--card))',
+	border: '1px solid hsl(var(--border))',
+	borderRadius: 'var(--radius)'
+} as const
+
 type WeeklyVisitsChartProps = {
 	data: { day: string; visits: number }[]
 }
@@ -28,13 +34,7 @@ export function WeeklyVisitsChart({ data }: WeeklyVisitsChartProps) {
 						tickLine={false}
 						axisLine={false}
 					/>
-					<Tooltip
-						contentStyle={{
-							backgroundColor: 'hsl(var(--card))',
-							border: '1px solid hsl(var(--border))',
-							borderRadius: 'var(--radius)'
-						}}
-					/>
+					<Tooltip contentStyle={chartTooltipStyle} />
 					<Bar
 						dataKey='visits'
 						fill='hsl(var(--chart-1))'
@@ -57,52 +57,8 @@ export function MemberActivityChart({ data }: MemberActivityChartProps) {
 				<BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
 					<XAxis dataKey='day' tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
 					<YAxis tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
-					<Tooltip
-						contentStyle={{
-							backgroundColor: 'hsl(var(--card))',
-							border: '1px solid hsl(var(--border))',
-							borderRadius: 'var(--radius)'
-						}}
-					/>
+					<Tooltip contentStyle={chartTooltipStyle} />
 					<Bar dataKey='count' fill='hsl(var(--chart-1))' radius={[4, 4, 0, 0]} />
-				</BarChart>
-			</ResponsiveContainer>
-		</div>
-	)
-}
-
-type PeakHoursChartProps = {
-	data: { hour: string; checkIns: number }[]
-}
-
-export function PeakHoursChart({ data }: PeakHoursChartProps) {
-	return (
-		<div className='h-[280px]'>
-			<ResponsiveContainer width='100%' height='100%'>
-				<BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-					<XAxis
-						dataKey='hour'
-						tick={{ fontSize: 12 }}
-						tickLine={false}
-						axisLine={false}
-					/>
-					<YAxis
-						tick={{ fontSize: 12 }}
-						tickLine={false}
-						axisLine={false}
-					/>
-					<Tooltip
-						contentStyle={{
-							backgroundColor: 'hsl(var(--card))',
-							border: '1px solid hsl(var(--border))',
-							borderRadius: 'var(--radius)'
-						}}
-					/>
-					<Bar
-						dataKey='checkIns'
-						fill='hsl(var(--chart-1))'
-						radius={[4, 4, 0, 0]}
-					/>
 				</BarChart>
 			</ResponsiveContainer>
 		</div>
@@ -135,13 +91,7 @@ export function MembershipChart({ data }: MembershipChartProps) {
 						tickLine={false}
 						axisLine={false}
 					/>
-					<Tooltip
-						contentStyle={{
-							backgroundColor: 'hsl(var(--card))',
-							border: '1px solid hsl(var(--border))',
-							borderRadius: 'var(--radius)'
-						}}
-					/>
+					<Tooltip contentStyle={chartTooltipStyle} />
 					<Area
 						type='monotone'
 						dataKey='count'

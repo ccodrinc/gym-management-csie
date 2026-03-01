@@ -1,14 +1,21 @@
-import { MOCK_CHECK_INS, MOCK_PEAK_HOURS } from '../mock-data'
+import { prisma } from '@/lib/db'
+import { getTodayString } from '@/lib/date'
 
-export type CheckIn = (typeof MOCK_CHECK_INS)[number]
-export type PeakHour = (typeof MOCK_PEAK_HOURS)[number]
-
-export async function getCheckIns(): Promise<CheckIn[]> {
-	// TODO: Replace with API/DB call
-	return MOCK_CHECK_INS
+export type CheckIn = {
+	id: string
+	memberName: string
+	time: string
 }
 
-export async function getPeakHours(): Promise<PeakHour[]> {
-	// TODO: Replace with API/DB call
-	return MOCK_PEAK_HOURS
+export async function getCheckIns(): Promise<CheckIn[]> {
+	const today = getTodayString()
+	const visits = await prisma.visit.findMany({
+		where: { date: today },
+		include: { user: true }
+	})
+	return visits.map((v) => ({
+		id: v.id,
+		memberName: v.user.name ?? v.user.username,
+		time: v.time
+	}))
 }

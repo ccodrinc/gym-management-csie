@@ -28,7 +28,7 @@ export function UsersTable({ users }: UsersTableProps) {
 		const q = query.toLowerCase().trim()
 		return users.filter(
 			(u) =>
-				u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+				(u.name?.toLowerCase().includes(q) ?? false) || u.username.toLowerCase().includes(q)
 		)
 	}, [users, query])
 
@@ -40,12 +40,13 @@ export function UsersTable({ users }: UsersTableProps) {
 				value={query}
 				onChange={(e) => setQuery(e.target.value)}
 				className='max-w-sm'
+				aria-label={t('searchPlaceholder')}
 			/>
 			<Table>
 				<TableHeader>
 					<TableRow>
 						<TableHead>{t('name')}</TableHead>
-						<TableHead>{t('email')}</TableHead>
+						<TableHead>{t('username')}</TableHead>
 						<TableHead>{t('membership')}</TableHead>
 						<TableHead>{t('status')}</TableHead>
 						<TableHead>{t('start')}</TableHead>
@@ -57,7 +58,7 @@ export function UsersTable({ users }: UsersTableProps) {
 					{filtered.map((user) => (
 						<TableRow key={user.id}>
 							<TableCell className='font-medium'>{user.name}</TableCell>
-							<TableCell className='text-muted-foreground'>{user.email}</TableCell>
+							<TableCell className='text-muted-foreground'>{user.username}</TableCell>
 							<TableCell>{user.membershipType}</TableCell>
 							<TableCell>
 								<Badge variant={user.isActive ? 'default' : 'secondary'}>

@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 
-import { AUTH_COOKIE, isDemoMode } from './src/lib/auth'
-import { routing } from './src/i18n/routing'
+import { auth } from '@/auth'
+import { isDemoMode } from '@/lib/auth'
+import { routing } from '@/i18n/routing'
+import { Role } from '@prisma/client'
 
 const intlMiddleware = createIntlMiddleware(routing)
 
@@ -11,21 +12,34 @@ function isPrivatePath(pathname: string): boolean {
 	return /^\/([a-z]{2}\/)?(member|admin)(\/|$)/.test(pathname)
 }
 
-export default function middleware(request: NextRequest) {
-	const pathname = request.nextUrl.pathname
+function isAdminPath(pathname: string): boolean {
+	return /^\/([a-z]{2}\/)?admin(\/|$)/.test(pathname)
+}
+
+function getLocale(pathname: string): string {
+	const match = pathname.match(/^\/([a-z]{2})(\/|$)/)
+	return match ? match[1] : routing.defaultLocale
+}
+
+export default auth((req) => {
+	const pathname = req.nextUrl.pathname
 
 	if (!isDemoMode && isPrivatePath(pathname)) {
-		const hasAuth = request.cookies.get(AUTH_COOKIE)?.value === '1'
-		if (!hasAuth) {
-			const loginUrl = new URL('/login', request.url)
+		if (!req.auth) {
+			const locale = getLocale(pathname)
+			const loginUrl = new URL(`/${locale}/login`, req.url)
 			loginUrl.searchParams.set('from', pathname)
 			return NextResponse.redirect(loginUrl)
 		}
+		if (isAdminPath(pathname) && req.auth.user?.role !== Role.ADMIN) {
+			const locale = getLocale(pathname)
+			return NextResponse.redirect(new URL(`/${locale}/member`, req.url))
+		}
 	}
 
-	return intlMiddleware(request)
-}
+	return intlMiddleware(req)
+})
 
 export const config = {
-	matcher: ['/((?!api|trpc|_next|_vercel|.*\\..*).*)']
+	matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 }
