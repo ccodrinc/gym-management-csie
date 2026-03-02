@@ -27,7 +27,7 @@ export type CurrentMember = {
 	gymVisits: number
 	recentVisits: { date: string; time: string }[]
 	visitHistory: { date: string; time: string }[]
-	visitsLast7Days: { day: string; count: number }[]
+	visitsThisWeek: { day: string; count: number }[]
 	upcomingClasses: { name: string; date: string; time: string }[]
 }
 
@@ -42,7 +42,7 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 	if (!userId) throw new Error('Unauthorized')
 
 	const user = await prisma.user.findUnique({
-		where: { id: userId, role: Role.MEMBER },
+		where: { id: userId },
 		include: {
 			visits: { orderBy: [{ date: 'desc' }, { time: 'desc' }], take: 50 },
 			classBookings: {
@@ -62,7 +62,7 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 	const weekStart = new Date(today)
 	weekStart.setDate(today.getDate() + monOffset)
 
-	const visitsLast7Days = WEEKDAYS.map((day, i) => {
+	const visitsThisWeek = WEEKDAYS.map((day, i) => {
 		const d = new Date(weekStart)
 		d.setDate(weekStart.getDate() + i)
 		const dateStr = toDateString(d)
@@ -88,7 +88,7 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 		gymVisits: user.gymVisits,
 		recentVisits,
 		visitHistory,
-		visitsLast7Days,
+		visitsThisWeek,
 		upcomingClasses
 	}
 }

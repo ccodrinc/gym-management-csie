@@ -22,15 +22,7 @@ export default async function MemberDashboardPage({ params }: Props) {
 		getCurrentMember(),
 		getTranslations('Member.dashboard')
 	])
-	const visitsData = member.visitsLast7Days ?? [
-		{ day: 'Mon', count: 0 },
-		{ day: 'Tue', count: 0 },
-		{ day: 'Wed', count: 1 },
-		{ day: 'Thu', count: 0 },
-		{ day: 'Fri', count: 1 },
-		{ day: 'Sat', count: 1 },
-		{ day: 'Sun', count: 1 }
-	]
+	const visitsData = member.visitsThisWeek
 
 	return (
 		<FadeIn className='space-y-8'>

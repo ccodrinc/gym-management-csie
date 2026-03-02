@@ -1,10 +1,11 @@
 'use server'
 
 import { hash } from 'bcryptjs'
-import { Prisma } from '@prisma/client'
+import { AuthError } from 'next-auth'
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { Prisma, Role } from '@prisma/client'
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/db'
-import { Role } from '@prisma/client'
 
 const ALLOWED_REDIRECT_PATTERNS = [
 	/^\/member(\/|$)/,
@@ -26,22 +27,19 @@ export async function loginAction(
 	from?: string
 ): Promise<LoginResult> {
 	try {
-		const result = await signIn('credentials', {
+		await signIn('credentials', {
 			username: username.trim().toLowerCase(),
 			password,
 			redirect: false
 		})
 
-		if (result?.error) {
-			return { ok: false, error: 'Invalid username or password' }
-		}
-		if (!result?.ok) {
-			return { ok: false, error: 'Invalid username or password' }
-		}
-
-		const redirectTo = isAllowedRedirect(from ?? '') ? from! : '/member'
+		const redirectTo = isAllowedRedirect(from ?? '') ? (from ?? '/member') : '/member'
 		return { ok: true, redirectTo }
 	} catch (err) {
+		if (isRedirectError(err)) throw err
+		if (err instanceof AuthError) {
+			return { ok: false, error: 'Invalid username or password' }
+		}
 		if (process.env.NODE_ENV === 'development') {
 			console.error('[loginAction]', err)
 		}
@@ -58,45 +56,52 @@ export async function signupAction(
 	username: string,
 	password: string
 ): Promise<SignupResult> {
-	const usernameNorm = username.trim().toLowerCase()
-
-	if (!/^[a-z0-9_-]+$/.test(usernameNorm)) {
-		return { ok: false, error: 'Username can only contain letters, numbers, underscores and hyphens' }
-	}
-
-	const existing = await prisma.user.findUnique({
-		where: { username: usernameNorm }
-	})
-	if (existing) {
-		return { ok: false, error: 'This username is already taken' }
-	}
-
-	const hashedPassword = await hash(password, 12)
 	try {
-		await prisma.user.create({
-			data: {
-				name: name.trim(),
-				username: usernameNorm,
-				password: hashedPassword,
-				role: Role.MEMBER
-			}
+		const usernameNorm = username.trim().toLowerCase()
+
+		if (!/^[a-z0-9_-]+$/.test(usernameNorm)) {
+			return { ok: false, error: 'Username can only contain letters, numbers, underscores and hyphens' }
+		}
+
+		const existing = await prisma.user.findUnique({
+			where: { username: usernameNorm }
 		})
-	} catch (error) {
-		if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+		if (existing) {
 			return { ok: false, error: 'This username is already taken' }
 		}
-		throw error
+
+		const hashedPassword = await hash(password, 12)
+		try {
+			await prisma.user.create({
+				data: {
+					name: name.trim(),
+					username: usernameNorm,
+					password: hashedPassword,
+					role: Role.MEMBER
+				}
+			})
+		} catch (error) {
+			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+				return { ok: false, error: 'This username is already taken' }
+			}
+			throw error
+		}
+
+		await signIn('credentials', {
+			username: usernameNorm,
+			password,
+			redirect: false
+		})
+
+		return { ok: true, redirectTo: '/member' }
+	} catch (err) {
+		if (isRedirectError(err)) throw err
+		if (err instanceof AuthError) {
+			return { ok: false, error: 'Account created but sign in failed. Please try logging in.' }
+		}
+		if (process.env.NODE_ENV === 'development') {
+			console.error('[signupAction]', err)
+		}
+		return { ok: false, error: 'Something went wrong. Please try again.' }
 	}
-
-	const result = await signIn('credentials', {
-		username: usernameNorm,
-		password,
-		redirect: false
-	})
-
-	if (result?.error || !result?.ok) {
-		return { ok: false, error: 'Account created but sign in failed. Please try logging in.' }
-	}
-
-	return { ok: true, redirectTo: '/member' }
 }

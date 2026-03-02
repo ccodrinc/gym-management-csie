@@ -45,7 +45,7 @@ const authConfig = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	session: {
 		strategy: 'jwt',
-		maxAge: 30 * 24 * 60 * 60 // 30 days
+		maxAge: 30 * 24 * 60 * 60
 	},
 	pages: {
 		signIn: '/login'
@@ -104,13 +104,17 @@ export const { handlers, signIn, signOut, auth } = authConfig
 const SESSION_COOKIE_NAMES = ['authjs.session-token', '__Secure-authjs.session-token']
 
 async function clearSessionCookies() {
-	const cookieStore = await cookies()
-	for (const name of SESSION_COOKIE_NAMES) {
-		cookieStore.delete(name)
+	try {
+		const cookieStore = await cookies()
+		for (const name of SESSION_COOKIE_NAMES) {
+			cookieStore.delete(name)
+		}
+	} catch {
+		// cookies() unavailable outside request context
 	}
 }
 
-/** Returns session or null. Handles stale/invalid JWT (e.g. after AUTH_SECRET change) without throwing. */
+/** Returns session or null. Handles stale/invalid JWT without throwing. */
 export async function getSession() {
 	try {
 		return await auth().catch(async () => {

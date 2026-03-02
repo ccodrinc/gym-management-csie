@@ -1,7 +1,7 @@
 import { compare, hash } from 'bcryptjs'
 import { MembershipType, PrismaClient, Role } from '@prisma/client'
 
-import { getTodayString } from '../src/lib/date'
+import { getTodayString, toDateString } from '../src/lib/date'
 
 const prisma = new PrismaClient()
 
@@ -165,13 +165,18 @@ async function main() {
 	}
 	console.log('Classes:', classIds.length)
 
-	// Class bookings for alexandrupopescu
+	// Class bookings for alexandrupopescu (always in the future)
 	const demoMemberId = userIds['alexandrupopescu']
 	if (demoMemberId) {
+		const tomorrow = new Date()
+		tomorrow.setDate(tomorrow.getDate() + 1)
+		const dayAfterTomorrow = new Date()
+		dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2)
+
 		await prisma.classBooking.createMany({
 			data: [
-				{ userId: demoMemberId, gymClassId: classIds[0], date: '2025-03-01', time: '08:00' },
-				{ userId: demoMemberId, gymClassId: classIds[1], date: '2025-03-03', time: '09:30' }
+				{ userId: demoMemberId, gymClassId: classIds[0], date: toDateString(tomorrow), time: '08:00' },
+				{ userId: demoMemberId, gymClassId: classIds[1], date: toDateString(dayAfterTomorrow), time: '09:30' }
 			]
 		})
 	}
