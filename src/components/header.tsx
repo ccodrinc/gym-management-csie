@@ -25,10 +25,10 @@ export async function Header() {
 					/>
 					{t('brand')}
 				</LogoLink>
-				<nav className='hidden gap-8 md:flex'>
-					<AnimatedNavLink href='/'>{t('home')}</AnimatedNavLink>
-					<AnimatedNavLink href='/pricing'>{t('memberships')}</AnimatedNavLink>
-				</nav>
+			<nav className='hidden gap-8 md:flex'>
+				<AnimatedNavLink href='/'>{t('home')}</AnimatedNavLink>
+				{!isAdmin && <AnimatedNavLink href='/pricing'>{t('memberships')}</AnimatedNavLink>}
+			</nav>
 				<div className='flex items-center gap-2'>
 					<ThemeToggle />
 					<LanguageSelect />

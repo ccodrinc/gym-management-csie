@@ -15,6 +15,10 @@ function isAdminPath(pathname: string): boolean {
 	return /^\/([a-z]{2}\/)?admin(\/|$)/.test(pathname)
 }
 
+function isMemberPath(pathname: string): boolean {
+	return /^\/([a-z]{2}\/)?member(\/|$)/.test(pathname)
+}
+
 function getLocale(pathname: string): string {
 	const match = pathname.match(/^\/([a-z]{2})(\/|$)/)
 	return match ? match[1] : routing.defaultLocale
@@ -38,6 +42,10 @@ export default async function middleware(req: NextRequest) {
 		if (isAdminPath(pathname) && token.role !== 'ADMIN') {
 			const locale = getLocale(pathname)
 			return NextResponse.redirect(new URL(`/${locale}/member`, req.url))
+		}
+		if (isMemberPath(pathname) && token.role === 'ADMIN') {
+			const locale = getLocale(pathname)
+			return NextResponse.redirect(new URL(`/${locale}/admin`, req.url))
 		}
 	}
 

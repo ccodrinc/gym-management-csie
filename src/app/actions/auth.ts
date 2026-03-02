@@ -27,13 +27,20 @@ export async function loginAction(
 	from?: string
 ): Promise<LoginResult> {
 	try {
+		const usernameNorm = username.trim().toLowerCase()
+
 		await signIn('credentials', {
-			username: username.trim().toLowerCase(),
+			username: usernameNorm,
 			password,
 			redirect: false
 		})
 
-		const redirectTo = isAllowedRedirect(from ?? '') ? (from ?? '/member') : '/member'
+		const user = await prisma.user.findUnique({
+			where: { username: usernameNorm },
+			select: { role: true }
+		})
+		const defaultPath = user?.role === Role.ADMIN ? '/admin' : '/member'
+		const redirectTo = isAllowedRedirect(from ?? '') ? (from ?? defaultPath) : defaultPath
 		return { ok: true, redirectTo }
 	} catch (err) {
 		if (isRedirectError(err)) throw err
