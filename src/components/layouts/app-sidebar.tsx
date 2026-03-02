@@ -1,8 +1,13 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Dumbbell } from 'lucide-react'
+import { Dumbbell, LogOut } from 'lucide-react'
+import { signOut } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 
+import { LanguageSelect } from '@/components/language-select'
+import { ThemeToggle } from '@/components/theme-toggle'
+import { Button } from '@/components/ui/button'
 import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 
@@ -20,6 +25,7 @@ type AppSidebarProps = {
 
 export function AppSidebar({ title, navItems, basePath }: AppSidebarProps) {
 	const pathname = usePathname()
+	const t = useTranslations('Header')
 
 	return (
 		<aside className='border-border bg-card flex h-full w-56 flex-col border-r'>
@@ -52,6 +58,21 @@ export function AppSidebar({ title, navItems, basePath }: AppSidebarProps) {
 					)
 				})}
 			</nav>
+			<div className='border-border flex flex-col gap-2 border-t p-3'>
+				<div className='flex items-center justify-center gap-2'>
+					<ThemeToggle />
+					<LanguageSelect />
+				</div>
+				<Button
+					variant='outline'
+					size='sm'
+					className='border-foreground/20 text-foreground hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive w-full justify-start gap-2'
+					onClick={() => signOut({ callbackUrl: '/' })}
+				>
+					<LogOut className='size-4' />
+					{t('logOut')}
+				</Button>
+			</div>
 		</aside>
 	)
 }
