@@ -2,10 +2,9 @@ import { Dumbbell } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
 import { getSession } from '@/auth'
-import { HeaderSignOut } from '@/components/header-auth'
-import { LanguageSelect } from '@/components/language-select'
 import { AnimatedNavLink, LogoLink, Pressable } from '@/components/motion'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SignOutButton } from '@/components/sign-out-button'
+import { UserControlsBar } from '@/components/user-controls-bar'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { Role } from '@prisma/client'
@@ -29,27 +28,29 @@ export async function Header() {
 				<AnimatedNavLink href='/'>{t('home')}</AnimatedNavLink>
 				{!isAdmin && <AnimatedNavLink href='/pricing'>{t('memberships')}</AnimatedNavLink>}
 			</nav>
-				<div className='flex items-center gap-2'>
-					<ThemeToggle />
-					<LanguageSelect />
-					{isAdmin && (
-						<AnimatedNavLink href='/admin'>{t('admin')}</AnimatedNavLink>
-					)}
-					{session ? (
-						<HeaderSignOut />
-					) : (
-						<Pressable>
-							<Button
-								asChild
-								size='sm'
-								variant='outline'
-								className='border-foreground/20 text-foreground hover:border-primary hover:bg-primary/5'
-							>
-								<Link href='/login'>{t('logIn')}</Link>
-							</Button>
-						</Pressable>
-					)}
-				</div>
+				<UserControlsBar
+					layout='inline'
+					authSlot={
+						<>
+							{isAdmin && (
+								<AnimatedNavLink href='/admin'>{t('admin')}</AnimatedNavLink>
+							)}
+							{session ? (
+								<SignOutButton variant='header' />
+							) : (
+								<Pressable>
+									<Button
+										asChild
+										size='sm'
+										variant='header-ghost'
+									>
+										<Link href='/login'>{t('logIn')}</Link>
+									</Button>
+								</Pressable>
+							)}
+						</>
+					}
+				/>
 			</div>
 		</header>
 	)

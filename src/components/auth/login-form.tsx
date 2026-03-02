@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import { useSearchParams } from 'next/navigation'
 
 import { loginAction } from '@/app/actions/auth'
@@ -15,7 +15,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { EASE } from '@/lib/motion'
-import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 const createLoginSchema = (t: (key: string) => string) =>

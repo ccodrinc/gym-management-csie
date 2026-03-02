@@ -25,9 +25,8 @@ export function LanguageSelect() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Button
-					variant='outline'
+					variant='header-ghost'
 					size='icon-sm'
-					className='border-foreground/20 text-foreground hover:border-primary hover:bg-primary/5 relative'
 				>
 					<Languages className='size-4' />
 					<span className='sr-only'>{t('label')}</span>

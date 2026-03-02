@@ -12,9 +12,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useRouter } from '@/i18n/navigation'
+import { useRouter, Link } from '@/i18n/navigation'
 import { signupAction } from '@/app/actions/auth'
-import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 const createSignupSchema = (t: (key: string) => string) =>
