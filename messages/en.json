@@ -45,6 +45,10 @@
 		"privacy": "Privacy",
 		"terms": "Terms"
 	},
+	"Sidebar": {
+		"open": "Open sidebar",
+		"close": "Close sidebar"
+	},
 	"ThemeToggle": {
 		"label": "Toggle theme",
 		"light": "Light",

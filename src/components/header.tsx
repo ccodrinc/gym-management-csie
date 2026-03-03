@@ -31,24 +31,30 @@ export async function Header() {
 				<UserControlsBar
 					layout='inline'
 					authSlot={
-						<>
-							{isAdmin && (
-								<AnimatedNavLink href='/admin'>{t('admin')}</AnimatedNavLink>
-							)}
-							{session ? (
-								<SignOutButton variant='header' />
-							) : (
+						session ? (
+							<>
 								<Pressable>
 									<Button
 										asChild
 										size='sm'
 										variant='header-ghost'
 									>
-										<Link href='/login'>{t('logIn')}</Link>
+										<Link href={isAdmin ? '/admin' : '/member'}>{t('dashboard')}</Link>
 									</Button>
 								</Pressable>
-							)}
-						</>
+								<SignOutButton variant='header' />
+							</>
+						) : (
+							<Pressable>
+								<Button
+									asChild
+									size='sm'
+									variant='header-ghost'
+								>
+									<Link href='/login'>{t('logIn')}</Link>
+								</Button>
+							</Pressable>
+						)
 					}
 				/>
 			</div>

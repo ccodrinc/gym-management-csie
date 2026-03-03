@@ -54,9 +54,9 @@ export function AppSidebar({ title, navItems, basePath }: AppSidebarProps) {
 					)
 				})}
 			</nav>
-			<div className='border-border flex flex-col gap-2 border-t p-3'>
+			<div className='border-border flex shrink-0 flex-col border-t p-3'>
 				<UserControlsBar
-					layout='stacked'
+					layout='row'
 					authSlot={<SignOutButton variant='sidebar' />}
 				/>
 			</div>
