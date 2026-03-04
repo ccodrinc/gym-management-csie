@@ -1,7 +1,7 @@
 import { getSession } from '@/auth'
+import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
 import { formatMembershipType } from '@/lib/format'
-import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { Role } from '@prisma/client'
 
 export type Member = {
@@ -13,6 +13,7 @@ export type Member = {
 	startDate: string | null
 	expiryDate: string | null
 	gymVisits: number
+	visitHistory?: { date: string; time: string }[]
 }
 
 export type CurrentMember = {
@@ -96,7 +97,10 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 export async function getMembers(): Promise<Member[]> {
 	const users = await prisma.user.findMany({
 		where: { role: Role.MEMBER },
-		orderBy: { name: 'asc' }
+		orderBy: { name: 'asc' },
+		include: {
+			visits: { orderBy: [{ date: 'desc' }, { time: 'desc' }] }
+		}
 	})
 	return users.map((u) => ({
 		id: u.id,
@@ -106,6 +110,7 @@ export async function getMembers(): Promise<Member[]> {
 		isActive: isActive(u.expiryDate),
 		startDate: u.startDate,
 		expiryDate: u.expiryDate,
-		gymVisits: u.gymVisits
+		gymVisits: u.gymVisits,
+		visitHistory: u.visits.map((v) => ({ date: v.date, time: v.time }))
 	}))
 }

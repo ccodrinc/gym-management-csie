@@ -135,7 +135,10 @@
 			"status": "Status",
 			"start": "Start",
 			"expiry": "Expiry",
-			"gymVisits": "Gym Visits"
+			"gymVisits": "Gym Visits",
+			"history": "History",
+			"noHistory": "No check-ins yet.",
+			"viewHistory": "View history"
 		},
 		"classes": {
 			"title": "Classes",
