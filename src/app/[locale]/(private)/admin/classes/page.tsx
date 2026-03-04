@@ -1,9 +1,10 @@
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
+import { AdminClassesContent } from '@/components/admin/admin-classes-content'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getClasses } from '@/lib/data'
+import { getClasses, getMembers } from '@/lib/data'
 import { FadeIn } from '@/components/motion'
 
 type Props = {
@@ -14,8 +15,9 @@ export default async function AdminClassesPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
-	const [classes, t] = await Promise.all([
+	const [classes, members, t] = await Promise.all([
 		getClasses(),
+		getMembers(),
 		getTranslations('Admin.classes')
 	])
 
@@ -31,26 +33,7 @@ export default async function AdminClassesPage({ params }: Props) {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className='space-y-3'>
-						{classes.map((cls) => (
-							<div
-								key={cls.id}
-								className='flex items-center justify-between rounded-md border px-4 py-3'
-							>
-								<div>
-									<p className='font-medium'>{cls.name}</p>
-									<p className='text-muted-foreground text-sm'>
-										{cls.day} · {cls.time}
-									</p>
-								</div>
-								<div className='text-right'>
-									<p className='text-sm'>
-										{cls.spots}/{cls.maxSpots} {t('spots')}
-									</p>
-								</div>
-							</div>
-						))}
-					</div>
+					<AdminClassesContent classes={classes} members={members} />
 				</CardContent>
 			</Card>
 		</FadeIn>
