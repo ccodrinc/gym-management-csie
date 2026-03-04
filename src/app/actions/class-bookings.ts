@@ -1,17 +1,8 @@
 'use server'
 
-import { Role } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
-import { auth } from '@/auth'
 import { getClassWithBookings } from '@/lib/data'
 import { prisma } from '@/lib/db'
-
-async function requireAdmin() {
-	const session = await auth()
-	if (!session?.user || session.user.role !== Role.ADMIN) {
-		throw new Error('Unauthorized')
-	}
-}
+import { requireAdmin, revalidateClassesPath } from '@/lib/admin'
 
 export type GetClassBookingsResult =
 	| { ok: true; data: Awaited<ReturnType<typeof getClassWithBookings>> }
@@ -44,8 +35,7 @@ export async function removeClassBookingAction(bookingId: string): Promise<Remov
 				data: { spots: Math.max(0, booking.gymClass.spots - 1) }
 			})
 		])
-		revalidatePath('/admin/classes')
-		revalidatePath('/[locale]/admin/classes')
+		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
 		return { ok: false, error: err instanceof Error ? err.message : 'Failed to remove' }
@@ -78,8 +68,7 @@ export async function addClassBookingAction(
 				data: { spots: gymClass.spots + 1 }
 			})
 		])
-		revalidatePath('/admin/classes')
-		revalidatePath('/[locale]/admin/classes')
+		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
 		return { ok: false, error: err instanceof Error ? err.message : 'Failed to add' }

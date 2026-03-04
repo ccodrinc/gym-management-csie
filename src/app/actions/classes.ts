@@ -1,17 +1,8 @@
 'use server'
 
-import { Role } from '@prisma/client'
-import { revalidatePath } from 'next/cache'
-import { auth } from '@/auth'
 import { prisma } from '@/lib/db'
+import { requireAdmin, revalidateClassesPath } from '@/lib/admin'
 import { WEEKDAYS } from '@/lib/date'
-
-async function requireAdmin() {
-	const session = await auth()
-	if (!session?.user || session.user.role !== Role.ADMIN) {
-		throw new Error('Unauthorized')
-	}
-}
 
 export type CreateClassResult = { ok: true; id: string } | { ok: false; error: string }
 
@@ -34,8 +25,7 @@ export async function createGymClassAction(
 		const created = await prisma.gymClass.create({
 			data: { name: name.trim(), day: dayTrim, time: timeNorm, spots: 0, maxSpots }
 		})
-		revalidatePath('/admin/classes')
-		revalidatePath('/[locale]/admin/classes')
+		revalidateClassesPath()
 		return { ok: true, id: created.id }
 	} catch (err) {
 		return { ok: false, error: err instanceof Error ? err.message : 'Failed to create class' }
@@ -70,8 +60,7 @@ export async function updateGymClassAction(
 			where: { id },
 			data: { name: name.trim(), day: dayTrim, time: timeNorm, maxSpots }
 		})
-		revalidatePath('/admin/classes')
-		revalidatePath('/[locale]/admin/classes')
+		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
 		return { ok: false, error: err instanceof Error ? err.message : 'Failed to update class' }
@@ -84,8 +73,7 @@ export async function deleteGymClassAction(id: string): Promise<DeleteClassResul
 	try {
 		await requireAdmin()
 		await prisma.gymClass.delete({ where: { id } })
-		revalidatePath('/admin/classes')
-		revalidatePath('/[locale]/admin/classes')
+		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
 		return { ok: false, error: err instanceof Error ? err.message : 'Failed to delete class' }

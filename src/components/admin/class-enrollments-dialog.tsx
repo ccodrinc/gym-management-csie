@@ -59,31 +59,45 @@ export function ClassEnrollmentsDialog({
 
 	const fetchBookings = useCallback(async () => {
 		if (!gymClassId) return
-		setLoading(true)
 		const result = await getClassBookingsAction(gymClassId)
-		setLoading(false)
 		if (result.ok && result.data) setData(result.data)
 		else if (!result.ok) toast.error(result.error)
 	}, [gymClassId])
 
 	useEffect(() => {
-		if (open && gymClassId) {
-			fetchBookings()
+		if (!open || !gymClassId) return
+		let cancelled = false
+		queueMicrotask(() => {
+			if (!cancelled) setLoading(true)
+		})
+		void getClassBookingsAction(gymClassId).then((result) => {
+			if (cancelled) return
+			setLoading(false)
+			if (result.ok && result.data) setData(result.data)
+			else if (!result.ok) toast.error(result.error)
+		})
+		queueMicrotask(() => {
+			if (cancelled) return
 			const today = new Date()
 			const dayIndex = WEEKDAYS.indexOf(classDay as (typeof WEEKDAYS)[number])
-			if (dayIndex >= 0) {
-				const currentDay = today.getDay()
-				const targetDay = dayIndex === 6 ? 0 : dayIndex + 1
-				const daysUntil = (targetDay - currentDay + 7) % 7 || 7
-				const nextDate = new Date(today)
-				nextDate.setDate(today.getDate() + daysUntil)
-				setAddDate(toDateString(nextDate))
-			} else {
-				setAddDate(getTodayString())
-			}
+			const nextDateStr =
+				dayIndex >= 0
+					? (() => {
+							const currentDay = today.getDay()
+							const targetDay = dayIndex === 6 ? 0 : dayIndex + 1
+							const daysUntil = (targetDay - currentDay + 7) % 7 || 7
+							const nextDate = new Date(today)
+							nextDate.setDate(today.getDate() + daysUntil)
+							return toDateString(nextDate)
+						})()
+					: getTodayString()
+			setAddDate(nextDateStr)
 			setAddUserId('')
+		})
+		return () => {
+			cancelled = true
 		}
-	}, [open, gymClassId, fetchBookings, classDay])
+	}, [open, gymClassId, classDay])
 
 	async function handleRemove(bookingId: string) {
 		setRemovePendingId(bookingId)

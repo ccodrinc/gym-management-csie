@@ -234,6 +234,7 @@
 			"title": "Visits",
 			"description": "Your visit history and check-in times",
 			"visitHistory": "Visit History",
+			"totalCheckIns": "{count} total check-ins",
 			"date": "Date",
 			"time": "Time"
 		},

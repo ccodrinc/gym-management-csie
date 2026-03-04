@@ -29,7 +29,7 @@ export default async function MemberVisitsPage({ params }: Props) {
 				<CardHeader>
 					<CardTitle>{t('visitHistory')}</CardTitle>
 					<CardDescription>
-						{visits.length} total check-ins
+						{t('totalCheckIns', { count: visits.length })}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

@@ -5,6 +5,7 @@ import { compare } from 'bcryptjs'
 import { cookies } from 'next/headers'
 
 import { prisma } from '@/lib/db'
+import { SESSION_MAX_AGE_SECONDS } from '@/lib/constants'
 import { Role } from '@prisma/client'
 
 declare module 'next-auth' {
@@ -30,6 +31,7 @@ declare module '@auth/core/jwt' {
 	}
 }
 
+// Dev fallback only; AUTH_SECRET must be set in production
 const authSecret =
 	process.env.AUTH_SECRET ||
 	(process.env.NODE_ENV === 'development' ? 'dev-secret-min-32-chars-for-local' : undefined)
@@ -45,7 +47,7 @@ const authConfig = NextAuth({
 	adapter: PrismaAdapter(prisma),
 	session: {
 		strategy: 'jwt',
-		maxAge: 30 * 24 * 60 * 60
+		maxAge: SESSION_MAX_AGE_SECONDS
 	},
 	pages: {
 		signIn: '/login'

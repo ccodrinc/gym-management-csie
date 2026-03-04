@@ -9,6 +9,11 @@ import {
 	updateGymClassAction
 } from '@/app/actions/classes'
 import type { GymClass } from '@/lib/data'
+import {
+	DEFAULT_CLASS_DAY,
+	DEFAULT_CLASS_MAX_SPOTS,
+	DEFAULT_CLASS_TIME
+} from '@/lib/constants'
 import { WEEKDAYS } from '@/lib/date'
 import { Button } from '@/components/ui/button'
 import {
@@ -38,9 +43,9 @@ export function ClassFormDialog({
 }: ClassFormDialogProps) {
 	const t = useTranslations('Admin.classes')
 	const [name, setName] = useState('')
-	const [day, setDay] = useState('Mon')
-	const [time, setTime] = useState('08:00')
-	const [maxSpots, setMaxSpots] = useState(20)
+	const [day, setDay] = useState(DEFAULT_CLASS_DAY)
+	const [time, setTime] = useState(DEFAULT_CLASS_TIME)
+	const [maxSpots, setMaxSpots] = useState(DEFAULT_CLASS_MAX_SPOTS)
 	const [pending, setPending] = useState(false)
 
 	useEffect(() => {
@@ -52,9 +57,9 @@ export function ClassFormDialog({
 				setMaxSpots(initialClass.maxSpots)
 			} else {
 				setName('')
-				setDay('Mon')
-				setTime('08:00')
-				setMaxSpots(20)
+				setDay(DEFAULT_CLASS_DAY)
+				setTime(DEFAULT_CLASS_TIME)
+				setMaxSpots(DEFAULT_CLASS_MAX_SPOTS)
 			}
 		}
 	}, [open, mode, initialClass])
