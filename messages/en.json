@@ -116,7 +116,10 @@
 			"weeklyVisits": "Weekly Visits",
 			"checkInsPerDay": "Check-ins per day (last 7 days)",
 			"membershipDistribution": "Membership Distribution",
-			"byPlanType": "By plan type"
+			"byPlanType": "By plan type",
+			"seedData": "Seed data",
+			"seedPending": "Seeding…",
+			"seedSuccess": "Database seeded successfully"
 		},
 		"users": {
 			"title": "Users",

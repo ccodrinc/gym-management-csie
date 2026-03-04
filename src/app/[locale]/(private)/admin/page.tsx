@@ -1,6 +1,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
+import { SeedDataButton } from '@/components/admin/seed-data-button'
 import { MembershipChart, WeeklyVisitsChart } from '@/components/admin/dashboard-charts'
 import { PageHeader } from '@/components/ui/page-header'
 import { StatCard } from '@/components/ui/stat-card'
@@ -24,7 +25,10 @@ export default async function AdminDashboardPage({ params }: Props) {
 
 	return (
 		<FadeIn className='space-y-8'>
-			<PageHeader title={t('title')} description={t('description')} />
+			<div className='flex flex-wrap items-start justify-between gap-4'>
+				<PageHeader title={t('title')} description={t('description')} />
+				<SeedDataButton />
+			</div>
 
 			<div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
 				<StatCard title={t('totalMembers')} value={totalMembers.toLocaleString()} subtitle={t('allTime')} />
