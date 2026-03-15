@@ -13,3 +13,26 @@ export function getTodayString(): string {
 }
 
 export const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const
+
+export function getWeekdayIndex(day: (typeof WEEKDAYS)[number]): number {
+	return WEEKDAYS.indexOf(day)
+}
+
+export function getNextOccurrenceDate(day: (typeof WEEKDAYS)[number], from = new Date()): Date {
+	const weekdayIndex = getWeekdayIndex(day)
+	if (weekdayIndex < 0) {
+		throw new Error(`Unsupported weekday: ${day}`)
+	}
+
+	const currentDay = from.getDay()
+	const targetDay = weekdayIndex === 6 ? 0 : weekdayIndex + 1
+	const daysUntil = (targetDay - currentDay + 7) % 7 || 7
+	const nextDate = new Date(from)
+	nextDate.setHours(0, 0, 0, 0)
+	nextDate.setDate(from.getDate() + daysUntil)
+	return nextDate
+}
+
+export function getNextOccurrenceString(day: (typeof WEEKDAYS)[number], from = new Date()): string {
+	return toDateString(getNextOccurrenceDate(day, from))
+}

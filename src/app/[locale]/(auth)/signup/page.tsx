@@ -30,7 +30,10 @@ export default async function SignupPage({ params, searchParams }: Props) {
 				/>
 				{t('brand')}
 			</LogoLink>
-			<SignupForm selectedPlan={plan ? (planLabels[plan] ?? plan) : undefined} />
+			<SignupForm
+				selectedPlanLabel={plan ? (planLabels[plan] ?? plan) : undefined}
+				selectedPlanValue={plan}
+			/>
 		</FadeIn>
 	)
 }

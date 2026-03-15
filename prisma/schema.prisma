@@ -21,6 +21,12 @@ enum MembershipType {
   Day_Pass
 }
 
+enum MembershipStatus {
+  DEACTIVATED
+  ACTIVE
+  EXPIRED
+}
+
 model User {
   id             String         @id @default(cuid())
   name           String?
@@ -30,6 +36,7 @@ model User {
   role           Role           @default(MEMBER)
   phone          String?
   membershipType MembershipType?
+  membershipStatus MembershipStatus @default(DEACTIVATED)
   startDate      String?
   expiryDate     String?
   gymVisits      Int            @default(0)
@@ -56,7 +63,6 @@ model GymClass {
   name     String
   day      String
   time     String
-  spots    Int
   maxSpots Int
   bookings ClassBooking[]
 
@@ -73,6 +79,7 @@ model ClassBooking {
   gymClass  GymClass  @relation(fields: [gymClassId], references: [id], onDelete: Cascade)
 
   @@map("class_bookings")
+  @@unique([userId, gymClassId, date])
 }
 
 model Account {
@@ -114,4 +121,3 @@ model VerificationToken {
   @@unique([identifier, token])
   @@map("verification_tokens")
 }
-

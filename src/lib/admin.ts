@@ -9,7 +9,22 @@ export async function requireAdmin(): Promise<void> {
 	}
 }
 
+export async function requireMember(): Promise<string> {
+	const session = await auth()
+	if (!session?.user || session.user.role !== Role.MEMBER) {
+		throw new Error('Unauthorized')
+	}
+
+	return session.user.id
+}
+
+export function revalidateAppPaths(paths: string[]): void {
+	for (const path of paths) {
+		revalidatePath(path)
+		revalidatePath(`/en${path}`)
+	}
+}
+
 export function revalidateClassesPath(): void {
-	revalidatePath('/admin/classes')
-	revalidatePath('/[locale]/admin/classes')
+	revalidateAppPaths(['/admin/classes', '/member/classes', '/member'])
 }

@@ -1,14 +1,18 @@
 import { getSession } from '@/auth'
 import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
-import { formatMembershipType } from '@/lib/format'
-import { Role } from '@prisma/client'
+import { formatMembershipStatus, formatMembershipType } from '@/lib/format'
+import { getEffectiveMembershipStatus, isMembershipActive } from '@/lib/membership'
+import { MembershipStatus, MembershipType, Role } from '@prisma/client'
 
 export type Member = {
 	id: string
 	name: string | null
 	username: string
 	membershipType: string
+	membershipTypeKey: MembershipType | null
+	membershipStatus: string
+	membershipStatusKey: MembershipStatus
 	isActive: boolean
 	startDate: string | null
 	expiryDate: string | null
@@ -22,6 +26,9 @@ export type CurrentMember = {
 	username: string
 	phone: string | null
 	membershipType: string
+	membershipTypeKey: MembershipType | null
+	membershipStatus: string
+	membershipStatusKey: MembershipStatus
 	isActive: boolean
 	startDate: string | null
 	expiryDate: string | null
@@ -29,12 +36,14 @@ export type CurrentMember = {
 	recentVisits: { date: string; time: string }[]
 	visitHistory: { date: string; time: string }[]
 	visitsThisWeek: { day: string; count: number }[]
-	upcomingClasses: { name: string; date: string; time: string }[]
-}
-
-function isActive(expiryDate: string | null): boolean {
-	if (!expiryDate) return false
-	return new Date(expiryDate) >= new Date()
+	upcomingClasses: {
+		id: string
+		gymClassId: string
+		name: string
+		day: string
+		date: string
+		time: string
+	}[]
 }
 
 export async function getCurrentMember(): Promise<CurrentMember> {
@@ -48,7 +57,8 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 			visits: { orderBy: [{ date: 'desc' }, { time: 'desc' }], take: 50 },
 			classBookings: {
 				where: { date: { gte: getTodayString() } },
-				include: { gymClass: true }
+				include: { gymClass: true },
+				orderBy: [{ date: 'asc' }, { time: 'asc' }]
 			}
 		}
 	})
@@ -72,10 +82,14 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 	})
 
 	const upcomingClasses = user.classBookings.map((b) => ({
+		id: b.id,
+		gymClassId: b.gymClassId,
 		name: b.gymClass.name,
+		day: b.gymClass.day,
 		date: b.date,
 		time: b.time
 	}))
+	const membershipStatus = getEffectiveMembershipStatus(user.membershipStatus, user.expiryDate)
 
 	return {
 		id: user.id,
@@ -83,7 +97,10 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 		username: user.username,
 		phone: user.phone,
 		membershipType: formatMembershipType(user.membershipType),
-		isActive: isActive(user.expiryDate),
+		membershipTypeKey: user.membershipType,
+		membershipStatus: formatMembershipStatus(membershipStatus),
+		membershipStatusKey: membershipStatus,
+		isActive: isMembershipActive(user.membershipStatus, user.expiryDate),
 		startDate: user.startDate,
 		expiryDate: user.expiryDate,
 		gymVisits: user.gymVisits,
@@ -97,7 +114,7 @@ export async function getCurrentMember(): Promise<CurrentMember> {
 export async function getMembers(): Promise<Member[]> {
 	const users = await prisma.user.findMany({
 		where: { role: Role.MEMBER },
-		orderBy: { name: 'asc' },
+		orderBy: [{ name: 'asc' }, { username: 'asc' }],
 		include: {
 			visits: { orderBy: [{ date: 'desc' }, { time: 'desc' }] }
 		}
@@ -107,7 +124,12 @@ export async function getMembers(): Promise<Member[]> {
 		name: u.name,
 		username: u.username,
 		membershipType: formatMembershipType(u.membershipType),
-		isActive: isActive(u.expiryDate),
+		membershipTypeKey: u.membershipType,
+		membershipStatus: formatMembershipStatus(
+			getEffectiveMembershipStatus(u.membershipStatus, u.expiryDate)
+		),
+		membershipStatusKey: getEffectiveMembershipStatus(u.membershipStatus, u.expiryDate),
+		isActive: isMembershipActive(u.membershipStatus, u.expiryDate),
 		startDate: u.startDate,
 		expiryDate: u.expiryDate,
 		gymVisits: u.gymVisits,

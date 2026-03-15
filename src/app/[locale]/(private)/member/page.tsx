@@ -36,7 +36,7 @@ export default async function MemberDashboardPage({ params }: Props) {
 					title={t('membership')}
 					value={member.membershipType}
 					subtitle={t('validUntil', { date: member.expiryDate ?? '—' })}
-					badge={<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>}
+					badge={<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.membershipStatus}</Badge>}
 				/>
 				<StatCard
 					title={t('gymVisits')}
@@ -85,15 +85,19 @@ export default async function MemberDashboardPage({ params }: Props) {
 					</CardHeader>
 					<CardContent>
 						<ul className='space-y-2'>
-							{member.upcomingClasses.map((cls) => (
-								<ListRow key={`${cls.name}-${cls.date}-${cls.time}`}>
-									<div>
-										<span className='font-medium'>{cls.name}</span>
-										<span className='text-muted-foreground ml-2'>{cls.date}</span>
-									</div>
-									<span className='text-muted-foreground'>{cls.time}</span>
-								</ListRow>
-							))}
+							{member.upcomingClasses.length > 0 ? (
+								member.upcomingClasses.map((cls) => (
+									<ListRow key={cls.id}>
+										<div>
+											<span className='font-medium'>{cls.name}</span>
+											<span className='text-muted-foreground ml-2'>{cls.date}</span>
+										</div>
+										<span className='text-muted-foreground'>{cls.time}</span>
+									</ListRow>
+								))
+							) : (
+								<p className='text-muted-foreground text-sm'>{t('noUpcomingClasses')}</p>
+							)}
 						</ul>
 					</CardContent>
 				</Card>

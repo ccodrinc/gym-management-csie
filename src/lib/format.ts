@@ -1,5 +1,11 @@
-/** Map Prisma MembershipType enum to display string */
-export function formatMembershipType(t: string | null | undefined): string {
-	if (!t) return '—'
-	return t === 'Day_Pass' ? 'Day Pass' : t
+import { MembershipStatus, MembershipType } from '@prisma/client'
+
+import { getMembershipStatusLabel, getMembershipTypeLabel } from '@/lib/membership'
+
+export function formatMembershipType(type: MembershipType | null | undefined): string {
+	return getMembershipTypeLabel(type)
+}
+
+export function formatMembershipStatus(status: MembershipStatus): string {
+	return getMembershipStatusLabel(status)
 }

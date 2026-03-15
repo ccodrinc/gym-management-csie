@@ -117,7 +117,7 @@ export function ClassEnrollmentsDialog({
 			return
 		}
 		setAddPending(true)
-		const result = await addClassBookingAction(addUserId, gymClassId, addDate, classTime)
+		const result = await addClassBookingAction(addUserId, gymClassId, addDate)
 		setAddPending(false)
 		if (result.ok) {
 			toast.success(t('bookingAdded'))
@@ -128,8 +128,13 @@ export function ClassEnrollmentsDialog({
 		}
 	}
 
-	const enrolledIds = new Set((data?.bookings ?? []).map((b) => b.userId))
-	const availableMembers = members.filter((m) => !enrolledIds.has(m.id))
+	const sessionBookings = (data?.bookings ?? []).filter((booking) => booking.date === addDate)
+	const enrolledIdsForSelectedDate = new Set(sessionBookings.map((booking) => booking.userId))
+	const availableMembers = members.filter(
+		(member) => member.isActive && !enrolledIdsForSelectedDate.has(member.id)
+	)
+	const selectedDateBookings = sessionBookings.length
+	const selectedDateIsFull = selectedDateBookings >= (data?.maxSpots ?? 0)
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -192,12 +197,18 @@ export function ClassEnrollmentsDialog({
 						)}
 					</div>
 
-					{data && data.spots < data.maxSpots && (
+					{data && (
 						<div className='border-border rounded-md border p-3'>
 							<h4 className='text-foreground mb-2 flex items-center gap-2 text-sm font-medium'>
 								<UserPlus className='size-4' />
 								{t('addMember')}
 							</h4>
+							<p className='text-muted-foreground mb-3 text-xs'>
+								{t('capacityForDate', {
+									booked: selectedDateBookings,
+									total: data.maxSpots
+								})}
+							</p>
 							<div className='flex flex-wrap items-end gap-2'>
 								<div className='min-w-[180px]'>
 									<label className='text-muted-foreground mb-1 block text-xs'>
@@ -230,7 +241,7 @@ export function ClassEnrollmentsDialog({
 								<Button
 									size='sm'
 									onClick={handleAdd}
-									disabled={addPending || !addUserId || !addDate}
+									disabled={addPending || !addUserId || !addDate || selectedDateIsFull}
 								>
 									{addPending ? t('adding') : t('add')}
 								</Button>

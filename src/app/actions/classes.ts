@@ -1,10 +1,23 @@
 'use server'
 
+import { z } from 'zod'
+
 import { prisma } from '@/lib/db'
 import { requireAdmin, revalidateClassesPath } from '@/lib/admin'
-import { WEEKDAYS } from '@/lib/date'
+import { getTodayString, WEEKDAYS } from '@/lib/date'
 
 export type CreateClassResult = { ok: true; id: string } | { ok: false; error: string }
+
+const classSchema = z.object({
+	name: z.string().trim().min(2, 'Class name must be at least 2 characters'),
+	day: z.enum(WEEKDAYS),
+	time: z.string().regex(/^\d{2}:\d{2}$/, 'Time must use the HH:MM format'),
+	maxSpots: z
+		.number()
+		.int()
+		.min(1, 'Max spots must be between 1 and 999')
+		.max(999, 'Max spots must be between 1 and 999')
+})
 
 export async function createGymClassAction(
 	name: string,
@@ -14,16 +27,17 @@ export async function createGymClassAction(
 ): Promise<CreateClassResult> {
 	try {
 		await requireAdmin()
-		const dayTrim = day.trim()
-		if (!WEEKDAYS.includes(dayTrim as (typeof WEEKDAYS)[number])) {
-			return { ok: false, error: 'Invalid day' }
+		const payload = classSchema.safeParse({
+			name,
+			day: day.trim(),
+			time: time.trim().slice(0, 5),
+			maxSpots
+		})
+		if (!payload.success) {
+			return { ok: false, error: payload.error.issues[0]?.message ?? 'Invalid class data' }
 		}
-		if (maxSpots < 1 || maxSpots > 999) {
-			return { ok: false, error: 'Max spots must be between 1 and 999' }
-		}
-		const timeNorm = time.trim().slice(0, 5)
 		const created = await prisma.gymClass.create({
-			data: { name: name.trim(), day: dayTrim, time: timeNorm, spots: 0, maxSpots }
+			data: payload.data
 		})
 		revalidateClassesPath()
 		return { ok: true, id: created.id }
@@ -45,20 +59,24 @@ export async function updateGymClassAction(
 		await requireAdmin()
 		const existing = await prisma.gymClass.findUnique({ where: { id } })
 		if (!existing) return { ok: false, error: 'Class not found' }
-		const dayTrim = day.trim()
-		if (!WEEKDAYS.includes(dayTrim as (typeof WEEKDAYS)[number])) {
-			return { ok: false, error: 'Invalid day' }
+		const currentEnrollments = await prisma.classBooking.count({
+			where: { gymClassId: id, date: { gte: getTodayString() } }
+		})
+		const payload = classSchema.safeParse({
+			name,
+			day: day.trim(),
+			time: time.trim().slice(0, 5),
+			maxSpots
+		})
+		if (!payload.success) {
+			return { ok: false, error: payload.error.issues[0]?.message ?? 'Invalid class data' }
 		}
-		if (maxSpots < 1 || maxSpots > 999) {
-			return { ok: false, error: 'Max spots must be between 1 and 999' }
-		}
-		if (maxSpots < existing.spots) {
+		if (payload.data.maxSpots < currentEnrollments) {
 			return { ok: false, error: 'Max spots cannot be less than current enrollments' }
 		}
-		const timeNorm = time.trim().slice(0, 5)
 		await prisma.gymClass.update({
 			where: { id },
-			data: { name: name.trim(), day: dayTrim, time: timeNorm, maxSpots }
+			data: payload.data
 		})
 		revalidateClassesPath()
 		return { ok: true }
@@ -72,6 +90,8 @@ export type DeleteClassResult = { ok: true } | { ok: false; error: string }
 export async function deleteGymClassAction(id: string): Promise<DeleteClassResult> {
 	try {
 		await requireAdmin()
+		const gymClass = await prisma.gymClass.findUnique({ where: { id }, select: { id: true } })
+		if (!gymClass) return { ok: false, error: 'Class not found' }
 		await prisma.gymClass.delete({ where: { id } })
 		revalidateClassesPath()
 		return { ok: true }

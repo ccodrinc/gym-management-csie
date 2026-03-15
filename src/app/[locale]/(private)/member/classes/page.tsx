@@ -1,11 +1,12 @@
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
-import { ClassBookButton } from '@/components/class-book-button'
+import { MemberClassesContent } from '@/components/member/member-classes-content'
 import { PageHeader } from '@/components/ui/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeIn } from '@/components/motion'
-import { getClasses } from '@/lib/data'
+import { MAX_MEMBER_CLASS_ENROLLMENTS } from '@/lib/constants'
+import { getClasses, getCurrentMember } from '@/lib/data'
 
 type Props = {
 	params: Promise<{ locale: string }>
@@ -16,9 +17,17 @@ export default async function MemberClassesPage({ params }: Props) {
 	setRequestLocale(locale)
 
 	const [classes, t] = await Promise.all([
-		getClasses(),
+		Promise.all([getClasses(), getCurrentMember()]),
 		getTranslations('Member.classes')
 	])
+	const [schedule, member] = classes
+	const bookingMap = new Map(
+		member.upcomingClasses.map((booking) => [`${booking.gymClassId}:${booking.date}`, booking.id])
+	)
+	const classesWithBookings = schedule.map((gymClass) => ({
+		...gymClass,
+		bookingId: bookingMap.get(`${gymClass.id}:${gymClass.nextSessionDate}`) ?? null
+	}))
 
 	return (
 		<FadeIn className='space-y-6'>
@@ -30,27 +39,12 @@ export default async function MemberClassesPage({ params }: Props) {
 					<CardDescription>{t('dropIn')}</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className='space-y-3'>
-						{classes.map((cls) => (
-							<div
-								key={cls.id}
-								className='flex items-center justify-between rounded-md border px-4 py-3'
-							>
-								<div>
-									<p className='font-medium'>{cls.name}</p>
-									<p className='text-muted-foreground text-sm'>
-										{cls.day} · {cls.time}
-									</p>
-								</div>
-								<div className='text-right'>
-									<p className='text-sm'>
-										{cls.spots}/{cls.maxSpots} {t('spots')}
-									</p>
-									<ClassBookButton />
-								</div>
-							</div>
-						))}
-					</div>
+					<MemberClassesContent
+						classes={classesWithBookings}
+						hasActiveMembership={member.isActive}
+						upcomingBookingCount={member.upcomingClasses.length}
+						maxUpcomingBookings={MAX_MEMBER_CLASS_ENROLLMENTS}
+					/>
 				</CardContent>
 			</Card>
 		</FadeIn>

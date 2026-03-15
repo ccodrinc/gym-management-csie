@@ -29,7 +29,7 @@ export default async function AdminClassesPage({ params }: Props) {
 				<CardHeader>
 					<CardTitle>{t('schedule')}</CardTitle>
 					<CardDescription>
-						{t('capacity')}: {classes.reduce((sum, c) => sum + c.spots, 0)} / {classes.reduce((sum, c) => sum + c.maxSpots, 0)} {t('spots')}
+						{t('capacity')}: {classes.reduce((sum, c) => sum + c.nextSessionBookings, 0)} / {classes.reduce((sum, c) => sum + c.maxSpots, 0)} {t('spots')}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

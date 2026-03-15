@@ -3,9 +3,10 @@
 import { hash } from 'bcryptjs'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
-import { Prisma, Role } from '@prisma/client'
+import { Prisma, Role, MembershipStatus } from '@prisma/client'
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/db'
+import { getMembershipTypeFromQuery } from '@/lib/membership'
 
 const ALLOWED_REDIRECT_PATTERNS = [
 	/^\/member(\/|$)/,
@@ -61,7 +62,8 @@ export type SignupResult =
 export async function signupAction(
 	name: string,
 	username: string,
-	password: string
+	password: string,
+	selectedPlan?: string
 ): Promise<SignupResult> {
 	try {
 		const usernameNorm = username.trim().toLowerCase()
@@ -84,7 +86,8 @@ export async function signupAction(
 					name: name.trim(),
 					username: usernameNorm,
 					password: hashedPassword,
-					role: Role.MEMBER
+					role: Role.MEMBER,
+					membershipStatus: MembershipStatus.DEACTIVATED
 				}
 			})
 		} catch (error) {
@@ -100,7 +103,13 @@ export async function signupAction(
 			redirect: false
 		})
 
-		return { ok: true, redirectTo: '/member' }
+		const preferredPlan = getMembershipTypeFromQuery(selectedPlan)
+		return {
+			ok: true,
+			redirectTo: preferredPlan
+				? `/member/membership?plan=${selectedPlan}`
+				: '/member/membership'
+		}
 	} catch (err) {
 		if (isRedirectError(err)) throw err
 		if (err instanceof AuthError) {

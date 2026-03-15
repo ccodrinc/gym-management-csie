@@ -30,10 +30,11 @@ const createSignupSchema = (t: (key: string) => string) =>
 		})
 
 type SignupFormProps = {
-	selectedPlan?: string
+	selectedPlanLabel?: string
+	selectedPlanValue?: string
 }
 
-export function SignupForm({ selectedPlan }: SignupFormProps) {
+export function SignupForm({ selectedPlanLabel, selectedPlanValue }: SignupFormProps) {
 	const t = useTranslations('Auth.signup')
 	const tAuth = useTranslations('Auth')
 	const tValidation = useTranslations('Auth.validation')
@@ -54,7 +55,12 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 	})
 
 	async function onSubmit(values: FormValues) {
-		const result = await signupAction(values.name, values.username, values.password)
+		const result = await signupAction(
+			values.name,
+			values.username,
+			values.password,
+			selectedPlanValue
+		)
 		if (result.ok) {
 			router.push(result.redirectTo)
 		} else {
@@ -77,7 +83,9 @@ export function SignupForm({ selectedPlan }: SignupFormProps) {
 					>
 						<CardTitle className='text-2xl'>{t('title')}</CardTitle>
 						<CardDescription>
-							{selectedPlan ? t('subtitleWithPlan', { brand: tHeader('brand'), plan: selectedPlan }) : t('subtitle')}
+							{selectedPlanLabel
+								? t('subtitleWithPlan', { brand: tHeader('brand'), plan: selectedPlanLabel })
+								: t('subtitle')}
 						</CardDescription>
 					</motion.div>
 				</CardHeader>

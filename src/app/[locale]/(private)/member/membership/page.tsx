@@ -1,18 +1,20 @@
 import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
+import { MembershipManager } from '@/components/member/membership-manager'
 import { PageHeader } from '@/components/ui/page-header'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCurrentMember } from '@/lib/data'
 import { FadeIn } from '@/components/motion'
+import { getMembershipTypeFromQuery } from '@/lib/membership'
 
 type Props = {
 	params: Promise<{ locale: string }>
+	searchParams: Promise<{ plan?: string }>
 }
 
-export default async function MemberMembershipPage({ params }: Props) {
+export default async function MemberMembershipPage({ params, searchParams }: Props) {
 	const { locale } = await params
+	const { plan } = await searchParams
 	setRequestLocale(locale)
 
 	const [member, t] = await Promise.all([
@@ -23,32 +25,10 @@ export default async function MemberMembershipPage({ params }: Props) {
 	return (
 		<FadeIn className='space-y-6'>
 			<PageHeader title={t('title')} description={t('description')} />
-
-			<Card>
-				<CardHeader>
-					<div className='flex items-center justify-between'>
-						<CardTitle>{t('plan', { type: member.membershipType })}</CardTitle>
-						<Badge variant={member.isActive ? 'default' : 'secondary'}>{member.isActive ? 'Active' : 'Expired'}</Badge>
-					</div>
-					<CardDescription>{t('fullAccess')}</CardDescription>
-				</CardHeader>
-				<CardContent className='space-y-4'>
-					<div className='grid gap-4 sm:grid-cols-2'>
-						<div>
-							<p className='text-muted-foreground text-sm'>{t('startDate')}</p>
-							<p className='font-medium'>{member.startDate}</p>
-						</div>
-						<div>
-							<p className='text-muted-foreground text-sm'>{t('expiryDate')}</p>
-							<p className='font-medium'>{member.expiryDate}</p>
-						</div>
-						<div>
-							<p className='text-muted-foreground text-sm'>{t('totalGymVisits')}</p>
-							<p className='font-medium'>{member.gymVisits}</p>
-						</div>
-					</div>
-				</CardContent>
-			</Card>
+			<MembershipManager
+				member={member}
+				preferredPlan={getMembershipTypeFromQuery(plan)}
+			/>
 		</FadeIn>
 	)
 }

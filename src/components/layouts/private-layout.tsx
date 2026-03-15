@@ -20,30 +20,31 @@ export function PrivateLayout({ children, variant }: PrivateLayoutProps) {
 	const t = useTranslations('Sidebar')
 
 	return (
-		<div className='relative flex h-screen overflow-hidden'>
+		<div className='relative flex min-h-screen overflow-hidden'>
 			{sidebarOpen && (
 				<button
 					type='button'
 					aria-label={t('close')}
-					className='fixed inset-0 z-10 bg-black/20 backdrop-blur-[2px] transition-opacity'
+					className='fixed inset-0 z-10 bg-black/20 backdrop-blur-[2px] transition-opacity md:hidden'
 					onClick={() => setSidebarOpen(false)}
 				/>
 			)}
 			<aside
 				className={cn(
-					'border-border bg-card fixed inset-y-0 left-0 z-20 flex w-56 flex-col border-r shadow-lg transition-transform duration-200 ease-in-out',
+					'border-border bg-card fixed inset-y-0 left-0 z-20 flex w-56 flex-col border-r shadow-lg transition-transform duration-200 ease-in-out md:static md:z-0 md:translate-x-0 md:shadow-none',
 					sidebarOpen ? 'translate-x-0' : '-translate-x-full'
 				)}
 			>
 				<Sidebar />
 			</aside>
-			<div className='flex min-h-full w-full flex-col'>
+			<div className='flex min-h-screen min-w-0 flex-1 flex-col'>
 				<header className='bg-background/95 sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b px-4'>
 					<Button
 						variant='ghost'
 						size='icon-sm'
 						onClick={() => setSidebarOpen((o) => !o)}
 						aria-label={sidebarOpen ? t('close') : t('open')}
+						className='md:hidden'
 					>
 						{sidebarOpen ? (
 							<PanelLeftClose className='size-4' />

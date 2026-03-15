@@ -156,7 +156,7 @@ export function ClassFormDialog({
 						/>
 						{mode === 'edit' && initialClass && (
 							<p className='text-muted-foreground text-xs'>
-								{t('currentEnrolled')}: {initialClass.spots}
+								{t('currentEnrolled')}: {initialClass.totalUpcomingBookings}
 							</p>
 						)}
 					</div>

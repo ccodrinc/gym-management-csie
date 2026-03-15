@@ -73,10 +73,13 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 							<p className='text-muted-foreground text-sm'>
 								{cls.day} · {cls.time}
 							</p>
+							<p className='text-muted-foreground text-xs'>
+								{t('nextSession')}: {cls.nextSessionDate}
+							</p>
 						</div>
 						<div className='flex items-center gap-2'>
 							<p className='text-sm'>
-								{cls.spots}/{cls.maxSpots} {t('spots')}
+								{cls.nextSessionBookings}/{cls.maxSpots} {t('spots')}
 							</p>
 							<Button
 								variant='outline'

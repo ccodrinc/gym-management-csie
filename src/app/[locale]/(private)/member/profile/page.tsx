@@ -26,7 +26,7 @@ export default async function MemberProfilePage({ params }: Props) {
 			<Card>
 				<CardHeader>
 					<CardTitle>{t('accountDetails')}</CardTitle>
-					<CardDescription>Update your details in the gym app settings</CardDescription>
+					<CardDescription>{t('accountDescription')}</CardDescription>
 				</CardHeader>
 				<CardContent className='space-y-4'>
 					<div className='grid gap-4 sm:grid-cols-2'>
