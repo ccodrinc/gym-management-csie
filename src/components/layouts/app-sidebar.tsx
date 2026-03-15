@@ -1,8 +1,8 @@
 'use client'
 
 import type { LucideIcon } from 'lucide-react'
-import { Dumbbell } from 'lucide-react'
 
+import { BrandMark } from '@/components/brand-mark'
 import { SignOutButton } from '@/components/sign-out-button'
 import { UserControlsBar } from '@/components/user-controls-bar'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -29,10 +29,7 @@ export function AppSidebar({ title, navItems, basePath }: AppSidebarProps) {
 				href='/'
 				className='hover:bg-muted/50 flex h-16 items-center gap-2 border-b px-6'
 			>
-				<Dumbbell
-					className='text-primary size-5'
-					strokeWidth={2}
-				/>
+				<BrandMark />
 				<span className='font-semibold tracking-tight'>{title}</span>
 			</Link>
 			<nav className='flex-1 space-y-1 p-2'>

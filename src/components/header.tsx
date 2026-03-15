@@ -1,7 +1,7 @@
-import { Dumbbell } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
 import { getSession } from '@/auth'
+import { BrandMark } from '@/components/brand-mark'
 import { AnimatedNavLink, LogoLink, Pressable } from '@/components/motion'
 import { SignOutButton } from '@/components/sign-out-button'
 import { UserControlsBar } from '@/components/user-controls-bar'
@@ -18,10 +18,7 @@ export async function Header() {
 		<header className='border-border bg-background/80 sticky top-0 z-50 w-full border-b backdrop-blur-xl'>
 			<div className='mx-auto flex h-16 max-w-6xl items-center justify-between px-6'>
 				<LogoLink href='/'>
-					<Dumbbell
-						className='size-5'
-						strokeWidth={2}
-					/>
+					<BrandMark priority />
 					{t('brand')}
 				</LogoLink>
 			<nav className='hidden gap-8 md:flex'>

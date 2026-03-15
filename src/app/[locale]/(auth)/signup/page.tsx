@@ -1,7 +1,7 @@
-import { Dumbbell } from 'lucide-react'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { SignupForm } from '@/components/auth/signup-form'
+import { BrandMark } from '@/components/brand-mark'
 import { FadeIn, LogoLink } from '@/components/motion'
 
 type Props = {
@@ -24,10 +24,7 @@ export default async function SignupPage({ params, searchParams }: Props) {
 	return (
 		<FadeIn className='flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-12'>
 			<LogoLink href='/'>
-				<Dumbbell
-					className='size-5'
-					strokeWidth={2}
-				/>
+				<BrandMark priority />
 				{t('brand')}
 			</LogoLink>
 			<SignupForm
