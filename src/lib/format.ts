@@ -1,4 +1,4 @@
-import { MembershipStatus, MembershipType } from '@prisma/client'
+import type { MembershipStatus, MembershipType } from '@prisma/client'
 
 import { getMembershipStatusLabel, getMembershipTypeLabel } from '@/lib/membership'
 

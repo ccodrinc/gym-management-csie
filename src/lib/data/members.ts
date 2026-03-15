@@ -3,7 +3,8 @@ import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
 import { formatMembershipStatus, formatMembershipType } from '@/lib/format'
 import { getEffectiveMembershipStatus, isMembershipActive } from '@/lib/membership'
-import { MembershipStatus, MembershipType, Role } from '@prisma/client'
+import { Role } from '@prisma/client'
+import type { MembershipStatus, MembershipType } from '@prisma/client'
 
 export type Member = {
 	id: string

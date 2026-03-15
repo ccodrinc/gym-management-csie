@@ -1,13 +1,13 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { MembershipStatus, MembershipType } from '@prisma/client'
 import { CreditCard, ShieldCheck, Sparkles } from 'lucide-react'
 import { startTransition, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import type { MembershipStatus, MembershipType } from '@prisma/client'
 
 import { purchaseMembershipAction } from '@/app/actions/membership'
 import { Badge } from '@/components/ui/badge'
@@ -16,7 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useRouter } from '@/i18n/navigation'
-import { MEMBERSHIP_PLANS } from '@/lib/membership'
+import { MEMBERSHIP_PLANS, MEMBERSHIP_STATUS, MEMBERSHIP_TYPE } from '@/lib/membership'
 
 type MembershipManagerProps = {
 	member: {
@@ -34,9 +34,9 @@ type MembershipManagerProps = {
 
 function getStatusVariant(status: MembershipStatus): 'default' | 'secondary' | 'outline' {
 	switch (status) {
-		case MembershipStatus.ACTIVE:
+		case MEMBERSHIP_STATUS.ACTIVE:
 			return 'default'
-		case MembershipStatus.EXPIRED:
+		case MEMBERSHIP_STATUS.EXPIRED:
 			return 'outline'
 		default:
 			return 'secondary'
@@ -61,7 +61,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 	})
 	type PaymentValues = z.infer<typeof paymentSchema>
 	const [selectedPlan, setSelectedPlan] = useState<MembershipType>(
-		preferredPlan ?? member.membershipTypeKey ?? MembershipType.Monthly
+		preferredPlan ?? member.membershipTypeKey ?? MEMBERSHIP_TYPE.Monthly
 	)
 	const [pending, setPending] = useState(false)
 	const form = useForm<PaymentValues>({

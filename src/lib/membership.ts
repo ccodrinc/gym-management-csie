@@ -1,6 +1,18 @@
-import { MembershipStatus, MembershipType } from '@prisma/client'
+import type { MembershipStatus, MembershipType } from '@prisma/client'
 
 import { getTodayString } from '@/lib/date'
+
+export const MEMBERSHIP_TYPE = {
+	Monthly: 'Monthly',
+	Annual: 'Annual',
+	Day_Pass: 'Day_Pass'
+} as const satisfies Record<string, MembershipType>
+
+export const MEMBERSHIP_STATUS = {
+	DEACTIVATED: 'DEACTIVATED',
+	ACTIVE: 'ACTIVE',
+	EXPIRED: 'EXPIRED'
+} as const satisfies Record<string, MembershipStatus>
 
 type MembershipPlan = {
 	type: MembershipType
@@ -15,7 +27,7 @@ type MembershipPlan = {
 
 export const MEMBERSHIP_PLANS: MembershipPlan[] = [
 	{
-		type: MembershipType.Day_Pass,
+		type: MEMBERSHIP_TYPE.Day_Pass,
 		queryValue: 'dayPass',
 		title: 'Day Pass',
 		price: 15,
@@ -25,7 +37,7 @@ export const MEMBERSHIP_PLANS: MembershipPlan[] = [
 		features: ['Single-day access', 'Group class access', 'Open gym access', 'No contract']
 	},
 	{
-		type: MembershipType.Monthly,
+		type: MEMBERSHIP_TYPE.Monthly,
 		queryValue: 'monthly',
 		title: 'Monthly',
 		price: 65,
@@ -35,7 +47,7 @@ export const MEMBERSHIP_PLANS: MembershipPlan[] = [
 		features: ['Unlimited gym access', 'Up to 3 class bookings', 'Locker access', 'Cancel anytime']
 	},
 	{
-		type: MembershipType.Annual,
+		type: MEMBERSHIP_TYPE.Annual,
 		queryValue: 'annual',
 		title: 'Annual',
 		price: 650,
@@ -61,9 +73,9 @@ export function getMembershipTypeLabel(type: MembershipType | null | undefined):
 
 export function getMembershipStatusLabel(status: MembershipStatus): string {
 	switch (status) {
-		case MembershipStatus.ACTIVE:
+		case MEMBERSHIP_STATUS.ACTIVE:
 			return 'Active'
-		case MembershipStatus.EXPIRED:
+		case MEMBERSHIP_STATUS.EXPIRED:
 			return 'Expired'
 		default:
 			return 'Deactivated'
@@ -74,18 +86,18 @@ export function getEffectiveMembershipStatus(
 	status: MembershipStatus,
 	expiryDate: string | null | undefined
 ): MembershipStatus {
-	if (status === MembershipStatus.DEACTIVATED) return status
-	if (!expiryDate) return MembershipStatus.EXPIRED
+	if (status === MEMBERSHIP_STATUS.DEACTIVATED) return status
+	if (!expiryDate) return MEMBERSHIP_STATUS.EXPIRED
 	return expiryDate >= getTodayString()
-		? MembershipStatus.ACTIVE
-		: MembershipStatus.EXPIRED
+		? MEMBERSHIP_STATUS.ACTIVE
+		: MEMBERSHIP_STATUS.EXPIRED
 }
 
 export function isMembershipActive(
 	status: MembershipStatus,
 	expiryDate: string | null | undefined
 ): boolean {
-	return getEffectiveMembershipStatus(status, expiryDate) === MembershipStatus.ACTIVE
+	return getEffectiveMembershipStatus(status, expiryDate) === MEMBERSHIP_STATUS.ACTIVE
 }
 
 export function getMembershipEndDate(
