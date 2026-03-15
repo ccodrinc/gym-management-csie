@@ -15,8 +15,8 @@ export async function Footer() {
 					<FooterNavGitHubLink href={GITHUB_REPO_URL}>Codrin Caraba</FooterNavGitHubLink>
 				</p>
 				<nav className='flex gap-6'>
-					<FooterNavLink href='#'>{t('privacy')}</FooterNavLink>
-					<FooterNavLink href='#'>{t('terms')}</FooterNavLink>
+					<FooterNavLink href='/privacy'>{t('privacy')}</FooterNavLink>
+					<FooterNavLink href='/terms'>{t('terms')}</FooterNavLink>
 				</nav>
 			</div>
 		</footer>

@@ -1,4 +1,4 @@
-import { Clock, Dumbbell, Users } from 'lucide-react'
+import { Clock, Dumbbell, ShieldPlus, Users } from 'lucide-react'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { FadeIn, FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
@@ -79,7 +79,7 @@ export default async function HomePage({ params }: Props) {
 						as='div'
 					>
 						<StaggerItem hover>
-							<Card className='border-border bg-card md:col-span-2 lg:col-span-1'>
+							<Card className='border-border bg-card'>
 								<CardHeader>
 									<Clock
 										className='text-primary mb-3 size-8'
@@ -111,6 +111,18 @@ export default async function HomePage({ params }: Props) {
 									/>
 									<CardTitle className='text-xl'>{t('Amenities.groupClasses.title')}</CardTitle>
 									<CardDescription>{t('Amenities.groupClasses.description')}</CardDescription>
+								</CardHeader>
+							</Card>
+						</StaggerItem>
+						<StaggerItem hover>
+							<Card className='border-border bg-card'>
+								<CardHeader>
+									<ShieldPlus
+										className='text-primary mb-3 size-8'
+										strokeWidth={1.5}
+									/>
+									<CardTitle className='text-xl'>{t('Amenities.recoveryZone.title')}</CardTitle>
+									<CardDescription>{t('Amenities.recoveryZone.description')}</CardDescription>
 								</CardHeader>
 							</Card>
 						</StaggerItem>

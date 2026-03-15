@@ -31,7 +31,11 @@
 		},
 		"groupClasses": {
 			"title": "Group classes",
-			"description": "HIIT, strength, mobility. Included in membership. Book your spot in the app."
+			"description": "HIIT, strength, and mobility sessions are included in membership. Book your spot in the app."
+		},
+		"recoveryZone": {
+			"title": "Recovery zone",
+			"description": "Stretching area, mobility tools, and post-session space to cool down properly after training."
 		}
 	},
 	"CTA": {
@@ -331,6 +335,82 @@
 			"description": "Best value. Save 2 months.",
 			"features": ["Everything in Monthly", "~$54/month", "No contract", "Free shirt"],
 			"cta": "Get annual"
+		}
+	},
+	"Legal": {
+		"privacy": {
+			"eyebrow": "Privacy",
+			"title": "Privacy Policy",
+			"description": "This page explains how information is handled inside the gym management demo and sets expectations for an academic prototype rather than a live service.",
+			"disclaimer": "This application was created as a bachelor’s degree project and is presented strictly as a demo. It is not a production gym platform, it is not intended for real customer onboarding, and it should not be relied on as a legally complete privacy implementation.",
+			"summaryTitle": "Bachelor’s degree demo",
+			"summaryBody": "The project demonstrates authentication, memberships, classes, and admin workflows for academic review. Any records shown in the app exist to support the demo experience.",
+			"sections": [
+				{
+					"title": "Information shown in the demo",
+					"body": "The app may display member names, usernames, membership selections, class bookings, visit counts, and similar operational data so the full product flow can be evaluated.",
+					"points": [
+						"Demo member accounts and seeded records are used to illustrate the system behavior.",
+						"Membership changes and class enrollments are stored to simulate realistic workflows.",
+						"The payment card UI validates inputs but does not process real financial transactions."
+					]
+				},
+				{
+					"title": "Purpose of the data",
+					"body": "Any information stored in this project is used only to demonstrate technical functionality, interface design, and backend behavior as part of the academic deliverable.",
+					"points": [
+						"The project is intended for coursework, technical review, and demonstration.",
+						"It is not intended for marketing, profiling, or commercial customer management.",
+						"It exists to show the implementation of CRUD flows, authentication, memberships, and scheduling."
+					]
+				},
+				{
+					"title": "Non-production limitations",
+					"body": "This demo should not be interpreted as a final privacy compliance solution for a commercial application.",
+					"points": [
+						"Policies, retention rules, and consent flows would require a separate production review.",
+						"The content on this page is explanatory and demo-oriented.",
+						"Any real deployment would need proper legal, compliance, and security work before use."
+					]
+				}
+			]
+		},
+		"terms": {
+			"eyebrow": "Terms",
+			"title": "Terms of Use",
+			"description": "These terms describe the limited intended use of the demo and clarify that the application is an academic prototype, not a live membership service.",
+			"disclaimer": "This gym management platform is a bachelor’s degree project demo. It is provided for presentation, testing, and evaluation only. It does not create real memberships, real payment obligations, or binding service terms.",
+			"summaryTitle": "Prototype use only",
+			"summaryBody": "You may explore the application to review features and implementation quality, but the system should be treated entirely as a demonstration environment.",
+			"sections": [
+				{
+					"title": "Permitted use",
+					"body": "The demo may be used to navigate the interface, create test accounts, review admin and member workflows, and evaluate the application for academic or technical purposes.",
+					"points": [
+						"You may interact with memberships, classes, and seeded data as part of the demo.",
+						"You may inspect the implementation for coursework or engineering review.",
+						"You should treat all actions and results as simulated behavior."
+					]
+				},
+				{
+					"title": "No commercial reliance",
+					"body": "Nothing in the application should be interpreted as a real-world contract, subscription, or payment commitment.",
+					"points": [
+						"The payment interface is a simulation with validation only.",
+						"Membership activation inside the app does not create a legal agreement.",
+						"The project should not be used as a substitute for operational or legal documentation."
+					]
+				},
+				{
+					"title": "Availability and changes",
+					"body": "Because the project is a demo under development, data and behavior may change at any time without notice.",
+					"points": [
+						"Seeded accounts and records may be reset during testing.",
+						"Features may be modified as part of ongoing refinement.",
+						"Any production deployment would require separate legal, operational, and security review."
+					]
+				}
+			]
 		}
 	}
 }

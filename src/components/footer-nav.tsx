@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 
+import { Link } from '@/i18n/navigation'
 import { EASE } from '@/lib/motion'
 
 function AnimatedLink({
@@ -33,10 +34,18 @@ function AnimatedLink({
 
 export function FooterNavLink(props: { href: string; children: React.ReactNode }) {
 	return (
-		<AnimatedLink
-			{...props}
-			className='text-muted-foreground hover:text-foreground text-sm transition-colors'
-		/>
+		<motion.div
+			whileHover={{ y: -1 }}
+			transition={{ duration: 0.2, ease: EASE }}
+			className='inline-block'
+		>
+			<Link
+				href={props.href}
+				className='text-muted-foreground hover:text-foreground text-sm transition-colors'
+			>
+				{props.children}
+			</Link>
+		</motion.div>
 	)
 }
 
