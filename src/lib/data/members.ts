@@ -1,8 +1,8 @@
-import { getSession } from '@/auth'
 import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
 import { formatMembershipStatus, formatMembershipType } from '@/lib/format'
 import { getEffectiveMembershipStatus, isMembershipActive } from '@/lib/membership'
+import { requireMember } from '@/lib/admin'
 import { Role } from '@prisma/client'
 import type { MembershipStatus, MembershipType } from '@prisma/client'
 
@@ -48,9 +48,7 @@ export type CurrentMember = {
 }
 
 export async function getCurrentMember(): Promise<CurrentMember> {
-	const session = await getSession()
-	const userId = session?.user?.id ?? null
-	if (!userId) throw new Error('Unauthorized')
+	const userId = await requireMember()
 
 	const user = await prisma.user.findUnique({
 		where: { id: userId },
@@ -120,20 +118,22 @@ export async function getMembers(): Promise<Member[]> {
 			visits: { orderBy: [{ date: 'desc' }, { time: 'desc' }] }
 		}
 	})
-	return users.map((u) => ({
-		id: u.id,
-		name: u.name,
-		username: u.username,
-		membershipType: formatMembershipType(u.membershipType),
-		membershipTypeKey: u.membershipType,
-		membershipStatus: formatMembershipStatus(
-			getEffectiveMembershipStatus(u.membershipStatus, u.expiryDate)
-		),
-		membershipStatusKey: getEffectiveMembershipStatus(u.membershipStatus, u.expiryDate),
-		isActive: isMembershipActive(u.membershipStatus, u.expiryDate),
-		startDate: u.startDate,
-		expiryDate: u.expiryDate,
-		gymVisits: u.gymVisits,
-		visitHistory: u.visits.map((v) => ({ date: v.date, time: v.time }))
-	}))
+	return users.map((u) => {
+		const membershipStatus = getEffectiveMembershipStatus(u.membershipStatus, u.expiryDate)
+
+		return {
+			id: u.id,
+			name: u.name,
+			username: u.username,
+			membershipType: formatMembershipType(u.membershipType),
+			membershipTypeKey: u.membershipType,
+			membershipStatus: formatMembershipStatus(membershipStatus),
+			membershipStatusKey: membershipStatus,
+			isActive: isMembershipActive(u.membershipStatus, u.expiryDate),
+			startDate: u.startDate,
+			expiryDate: u.expiryDate,
+			gymVisits: u.gymVisits,
+			visitHistory: u.visits.map((v) => ({ date: v.date, time: v.time }))
+		}
+	})
 }

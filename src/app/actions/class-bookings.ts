@@ -37,6 +37,17 @@ export async function removeClassBookingAction(bookingId: string): Promise<Remov
 
 export type AddClassBookingResult = { ok: true } | { ok: false; error: string }
 
+async function createBooking(userId: string, gymClassId: string, date: string): Promise<void> {
+	const validation = await validateBookingRules(userId, gymClassId, date)
+	if (!validation.ok) {
+		throw new Error(validation.error)
+	}
+
+	await prisma.classBooking.create({
+		data: { userId, gymClassId, date, time: validation.time }
+	})
+}
+
 export async function addClassBookingAction(
 	userId: string,
 	gymClassId: string,
@@ -44,11 +55,7 @@ export async function addClassBookingAction(
 ): Promise<AddClassBookingResult> {
 	try {
 		await requireAdmin()
-		const validation = await validateBookingRules(userId, gymClassId, date)
-		if (!validation.ok) return validation
-		await prisma.classBooking.create({
-			data: { userId, gymClassId, date, time: validation.time }
-		})
+		await createBooking(userId, gymClassId, date)
 		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
@@ -69,12 +76,7 @@ export async function bookOwnClassAction(gymClassId: string): Promise<AddClassBo
 		}
 
 		const date = getNextOccurrenceString(gymClass.day as (typeof WEEKDAYS)[number])
-		const validation = await validateBookingRules(userId, gymClassId, date)
-		if (!validation.ok) return validation
-
-		await prisma.classBooking.create({
-			data: { userId, gymClassId, date, time: validation.time }
-		})
+		await createBooking(userId, gymClassId, date)
 		revalidateAppPaths(['/member/classes', '/member'])
 		return { ok: true }
 	} catch (err) {

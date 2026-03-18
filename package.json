@@ -8,6 +8,7 @@
 		"postinstall": "prisma generate",
 		"start": "next start",
 		"lint": "eslint",
+		"typecheck": "tsc --noEmit",
 		"format": "prettier --write .",
 		"db:seed": "npx tsx prisma/seed.ts",
 		"db:migrate": "prisma migrate dev"

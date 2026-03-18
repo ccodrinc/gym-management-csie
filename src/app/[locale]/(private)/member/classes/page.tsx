@@ -16,11 +16,10 @@ export default async function MemberClassesPage({ params }: Props) {
 	const { locale } = await params
 	setRequestLocale(locale)
 
-	const [classes, t] = await Promise.all([
+	const [[schedule, member], t] = await Promise.all([
 		Promise.all([getClasses(), getCurrentMember()]),
 		getTranslations('Member.classes')
 	])
-	const [schedule, member] = classes
 	const bookingMap = new Map(
 		member.upcomingClasses.map((booking) => [`${booking.gymClassId}:${booking.date}`, booking.id])
 	)
