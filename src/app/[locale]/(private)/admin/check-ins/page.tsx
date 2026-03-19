@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { PageHeader } from '@/components/ui/page-header'
@@ -13,11 +12,10 @@ type Props = {
 
 export default async function AdminCheckInsPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [checkIns, t] = await Promise.all([
 		getCheckIns(),
-		getTranslations('Admin.checkIns')
+		getTranslations({ locale, namespace: 'Admin.checkIns' })
 	])
 
 	return (

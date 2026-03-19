@@ -1,6 +1,7 @@
 'use server'
 
 import { MembershipStatus, MembershipType } from '@prisma/client'
+import { getTranslations } from 'next-intl/server'
 
 import { requireMember, revalidateAppPaths } from '@/lib/admin'
 import { prisma } from '@/lib/db'
@@ -29,9 +30,10 @@ export async function purchaseMembershipAction(
 		revalidateAppPaths(['/member', '/member/membership', '/admin/users', '/admin'])
 		return { ok: true }
 	} catch (err) {
+		const tCommon = await getTranslations('Actions.common')
 		return {
 			ok: false,
-			error: err instanceof Error ? err.message : 'Failed to activate membership'
+			error: err instanceof Error ? err.message : tCommon('failedToActivateMembership')
 		}
 	}
 }

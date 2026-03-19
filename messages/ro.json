@@ -1,0 +1,512 @@
+{
+	"Metadata": {
+		"title": "Reps",
+		"description": "Sală deschisă 24/7 în centru. Zonă completă de greutăți, turf și clase de grup."
+	},
+	"Header": {
+		"brand": "Reps",
+		"home": "Acasă",
+		"memberships": "Abonamente",
+		"logIn": "Autentificare",
+		"logOut": "Deconectare",
+		"dashboard": "Panou",
+		"admin": "Administrare"
+	},
+	"Hero": {
+		"badge": "Centru • Deschis non-stop",
+		"headline": "Antrenează-te intens. Recuperează-te și mai bine.",
+		"subheadline": "Sală completă de greutăți, zonă de turf și clase de grup. Fără contract. Intră oricând.",
+		"getDayPass": "Ia un abonament de o zi",
+		"viewSchedule": "Vezi programul claselor"
+	},
+	"Amenities": {
+		"title": "Ce găsești la noi",
+		"access24": {
+			"title": "Acces 24/7",
+			"description": "Dimineața devreme sau noaptea târziu, nu contează. Intri oricând. Membrii primesc acces cu breloc la orice oră."
+		},
+		"weightsFloor": {
+			"title": "Zonă completă de greutăți",
+			"description": "Rack-uri pentru squat, bănci, gantere până la 120. Platformă de deadlift. Turf pentru sled și carries."
+		},
+		"groupClasses": {
+			"title": "Clase de grup",
+			"description": "Ședințele de HIIT, forță și mobilitate sunt incluse în abonament. Rezervă-ți locul în aplicație."
+		},
+		"recoveryZone": {
+			"title": "Zonă de recuperare",
+			"description": "Spațiu pentru stretching, instrumente de mobilitate și relaxare după antrenament."
+		}
+	},
+	"CTA": {
+		"title": "Prima vizită este gratuită.",
+		"description": "Treci pe la noi pentru un tur. Fără presiune. Te ajutăm să te înscrii dacă vrei.",
+		"button": "Programează o vizită"
+	},
+	"Footer": {
+		"copyright": "© Reps",
+		"madeBy": "Realizat de",
+		"privacy": "Confidențialitate",
+		"terms": "Termeni"
+	},
+	"Sidebar": {
+		"open": "Deschide bara laterală",
+		"close": "Închide bara laterală"
+	},
+	"ThemeToggle": {
+		"label": "Schimbă tema",
+		"light": "Luminoasă",
+		"dark": "Întunecată",
+		"system": "Sistem"
+	},
+	"LanguageSelect": {
+		"label": "Selectează limba",
+		"english": "Engleză",
+		"romanian": "Română"
+	},
+	"Weekdays": {
+		"Mon": "Lun",
+		"Tue": "Mar",
+		"Wed": "Mie",
+		"Thu": "Joi",
+		"Fri": "Vin",
+		"Sat": "Sâm",
+		"Sun": "Dum"
+	},
+	"MembershipMeta": {
+		"types": {
+			"Day_Pass": "Abonament de o zi",
+			"Monthly": "Lunar",
+			"Annual": "Anual",
+			"none": "Fără plan"
+		},
+		"statuses": {
+			"ACTIVE": "Activ",
+			"EXPIRED": "Expirat",
+			"DEACTIVATED": "Dezactivat"
+		}
+	},
+	"Auth": {
+		"login": {
+			"title": "Autentificare",
+			"subtitle": "Bine ai revenit",
+			"username": "Nume de utilizator",
+			"password": "Parolă",
+			"submit": "Autentificare",
+			"noAccount": "Nu ai cont?",
+			"signUp": "Creează cont"
+		},
+		"signup": {
+			"title": "Creează cont",
+			"subtitle": "Alătură-te Reps",
+			"subtitleWithPlan": "Alătură-te {brand} cu {plan}",
+			"name": "Nume",
+			"username": "Nume de utilizator",
+			"password": "Parolă",
+			"confirmPassword": "Confirmă parola",
+			"submit": "Creează cont",
+			"hasAccount": "Ai deja cont?",
+			"logIn": "Autentificare"
+		},
+		"validation": {
+			"usernameRequired": "Numele de utilizator este obligatoriu",
+			"usernameMin": "Numele de utilizator trebuie să aibă cel puțin 2 caractere",
+			"usernameInvalid": "Numele de utilizator poate conține doar litere, cifre, underscore și cratimă",
+			"passwordRequired": "Parola este obligatorie",
+			"passwordMin": "Parola trebuie să aibă cel puțin 8 caractere",
+			"confirmPasswordRequired": "Te rugăm să confirmi parola",
+			"passwordMismatch": "Parolele nu coincid",
+			"nameRequired": "Numele este obligatoriu"
+		},
+		"placeholder": {
+			"username": "johndoe"
+		}
+	},
+	"Admin": {
+		"nav": {
+			"dashboard": "Panou",
+			"users": "Utilizatori",
+			"classes": "Clase",
+			"checkIns": "Check-in-uri"
+		},
+		"dashboard": {
+			"title": "Panou",
+			"description": "Privire de ansamblu asupra activității din sală și a membrilor",
+			"totalMembers": "Total membri",
+			"allTime": "Înregistrați în total",
+			"activeToday": "Activi astăzi",
+			"checkIns24h": "Check-in-uri în ultimele 24h",
+			"newThisMonth": "Noi luna aceasta",
+			"newMemberships": "Abonamente noi",
+			"avgCheckinsPerDay": "Medie check-in-uri/zi",
+			"sevenDayAvg": "Medie mobilă pe 7 zile",
+			"weeklyVisits": "Vizite săptămânale",
+			"checkInsPerDay": "Check-in-uri pe zi (ultimele 7 zile)",
+			"membershipDistribution": "Distribuția abonamentelor",
+			"byPlanType": "După tipul planului",
+			"seedData": "Încarcă date demo",
+			"seedPending": "Se încarcă…",
+			"seedSuccess": "Baza de date demo a fost încărcată cu succes"
+		},
+		"users": {
+			"title": "Utilizatori",
+			"description": "Administrează membrii, vezi statusul abonamentului și activitatea din sală",
+			"allMembers": "Toți membrii",
+			"activeTotal": "{active} activi · {total} total",
+			"active": "Activ",
+			"expired": "Expirat",
+			"searchPlaceholder": "Caută după nume sau username...",
+			"name": "Nume",
+			"username": "Nume de utilizator",
+			"membership": "Abonament",
+			"status": "Status",
+			"start": "Început",
+			"expiry": "Expirare",
+			"gymVisits": "Vizite la sală",
+			"history": "Istoric",
+			"noHistory": "Niciun check-in încă.",
+			"viewHistory": "Vezi istoricul"
+		},
+		"classes": {
+			"title": "Clase",
+			"description": "Administrează programul claselor de grup și capacitatea",
+			"schedule": "Programul acestei săptămâni",
+			"capacity": "Capacitate",
+			"nextSession": "Următoarea sesiune",
+			"day": "Zi",
+			"time": "Ora",
+			"spots": "locuri",
+			"enrollments": "Înscrieri",
+			"enrollmentsDescription": "Vezi și administrează cine este rezervat la această clasă.",
+			"enrolledMembers": "Membri înscriși",
+			"loading": "Se încarcă…",
+			"noEnrollments": "Nu există înscrieri încă.",
+			"addMember": "Adaugă membru",
+			"selectMember": "Selectează membru",
+			"date": "Dată",
+			"member": "Membru",
+			"remove": "Elimină",
+			"add": "Adaugă",
+			"adding": "Se adaugă…",
+			"bookingRemoved": "Rezervarea a fost eliminată",
+			"bookingAdded": "Rezervarea a fost adăugată",
+			"capacityForDate": "{booked}/{total} locuri rezervate pentru data selectată",
+			"fillMemberAndDate": "Selectează un membru și o dată",
+			"alreadyBooked": "Membrul este deja rezervat pentru această dată",
+			"addClass": "Adaugă clasă",
+			"editClass": "Editează clasa",
+			"addClassDescription": "Creează o nouă clasă de grup.",
+			"editClassDescription": "Actualizează detaliile acestei clase.",
+			"className": "Numele clasei",
+			"classNamePlaceholder": "ex. HIIT",
+			"maxSpots": "Număr maxim de locuri",
+			"currentEnrolled": "Înscriși în prezent",
+			"cancel": "Anulează",
+			"create": "Creează",
+			"save": "Salvează",
+			"saving": "Se salvează…",
+			"classCreated": "Clasa a fost creată",
+			"classUpdated": "Clasa a fost actualizată",
+			"classDeleted": "Clasa a fost ștearsă",
+			"deleteClassTitle": "Ștergi clasa?",
+			"deleteClassDescription": "Aceasta va șterge definitiv „{name}” și toate rezervările ei. Acțiunea nu poate fi anulată.",
+			"delete": "Șterge",
+			"deleting": "Se șterge…",
+			"edit": "Editează"
+		},
+		"checkIns": {
+			"title": "Check-in-uri",
+			"description": "Check-in-urile de astăzi",
+			"todayCheckIns": "Check-in-urile de astăzi",
+			"member": "Membru",
+			"checkIns": "Check-in-uri"
+		}
+	},
+	"Member": {
+		"nav": {
+			"dashboard": "Panou",
+			"membership": "Abonament",
+			"classes": "Clase",
+			"visits": "Vizite",
+			"profile": "Profil"
+		},
+		"dashboard": {
+			"welcomeBack": "Bine ai revenit, {name}",
+			"activityAtGlance": "Iată activitatea ta din sală pe scurt",
+			"membership": "Abonament",
+			"validUntil": "Valabil până la {date}",
+			"gymVisits": "Vizite la sală",
+			"totalThisPeriod": "Total în această perioadă de abonament",
+			"upcomingClasses": "Clase următoare",
+			"bookedThisWeek": "Rezervate pentru săptămâna aceasta",
+			"recentVisits": "Vizite recente",
+			"lastFive": "Ultimele tale 5 check-in-uri",
+			"yourBookedSessions": "Sesiunile tale rezervate",
+			"activityChart": "Activitatea ta",
+			"visitsThisWeek": "Vizite în această săptămână",
+			"noUpcomingClasses": "Nu ai încă nicio clasă rezervată."
+		},
+		"membership": {
+			"title": "Abonament",
+			"description": "Alege un plan, activează-l și păstrează-ți accesul actualizat.",
+			"plan": "Plan {type}",
+			"fullAccess": "Acces complet la zona de greutăți, turf și clase de grup",
+			"startDate": "Data începerii",
+			"expiryDate": "Data expirării",
+			"totalGymVisits": "Total vizite la sală",
+			"summaryTitle": "Abonamentul curent",
+			"summaryDescription": "Statusul activ al planului tău și perioada de acces.",
+			"currentPlan": "Plan curent",
+			"choosePlanTitle": "Alege un abonament",
+			"choosePlanDescription": "Alege unul dintre cele trei planuri și activează-l din cardul de plată.",
+			"selected": "Selectat",
+			"detailsTitle": "Beneficiile abonamentului",
+			"detailsDescription": "Abonamentele includ acces la sală plus până la trei înscrieri active la clase.",
+			"currentStatus": "Status",
+			"classLimit": "Limită înscrieri la clase",
+			"classLimitValue": "Până la 3 clase viitoare",
+			"paymentTitle": "Procesator de plăți",
+			"paymentDescription": "Checkout simulat cu validarea câmpurilor. Nu este procesată nicio plată reală.",
+			"plans": {
+				"Day_Pass": {
+					"title": "Abonament de o zi",
+					"description": "Acces pentru o zi la zona de greutăți, turf și la toate clasele din program.",
+					"period": "per vizită",
+					"features": ["Acces pentru o singură zi", "Acces la clase de grup", "Acces la sală", "Fără contract"]
+				},
+				"Monthly": {
+					"title": "Lunar",
+					"description": "Acces flexibil de la lună la lună, cu clase incluse.",
+					"period": "pe lună",
+					"features": ["Acces nelimitat la sală", "Până la 3 rezervări la clase", "Acces la vestiar", "Poți anula oricând"]
+				},
+				"Annual": {
+					"title": "Anual",
+					"description": "Cea mai bună valoare pentru membrii care se antrenează tot anul.",
+					"period": "pe an",
+					"features": ["Tot din planul Lunar", "Acces prioritar la clase", "Cel mai bun cost efectiv", "Beneficii pentru membri"]
+				}
+			},
+			"stepChoosePlan": "1. Alege abonamentul",
+			"stepPayment": "2. Plata",
+			"selectedPlan": "Plan selectat",
+			"cardholder": "Numele de pe card",
+			"cardholderPlaceholder": "Jordan Lee",
+			"cardNumber": "Numărul cardului",
+			"cardNumberPlaceholder": "4242424242424242",
+			"expiry": "Expirare",
+			"expiryPlaceholder": "09/28",
+			"cvc": "CVC",
+			"cvcPlaceholder": "123",
+			"zipCode": "Cod poștal",
+			"zipCodePlaceholder": "90210",
+			"autofillDemoPayment": "Folosește datele demo de plată",
+			"paymentNote": "Poți folosi orice date de test care arată valide. Abonamentul din aplicație se actualizează după ce validarea reușește.",
+			"continueToPayment": "Continuă către plată",
+			"backToPlans": "Înapoi la planuri",
+			"activateMembership": "Activează abonamentul",
+			"changeMembership": "Actualizează abonamentul",
+			"processing": "Se procesează…",
+			"purchaseSuccess": "Abonamentul a fost actualizat cu succes",
+			"validation": {
+				"cardholder": "Numele de pe card este obligatoriu",
+				"cardNumber": "Numărul cardului trebuie să conțină 16 cifre",
+				"expiry": "Expirarea trebuie să fie în format MM/AA",
+				"cvc": "CVC-ul trebuie să conțină 3 sau 4 cifre",
+				"zipCode": "Codul poștal trebuie să conțină 5 cifre"
+			}
+		},
+		"classes": {
+			"title": "Clase",
+			"description": "Vezi și rezervă clase de grup",
+			"schedule": "Programul acestei săptămâni",
+			"dropIn": "Clasele drop-in sunt incluse în abonamentul tău",
+			"book": "Rezervă",
+			"cancel": "Anulează rezervarea",
+			"spots": "locuri",
+			"membershipActive": "Abonament activ",
+			"membershipInactive": "Abonament inactiv",
+			"upcomingLimit": "Limită rezervări",
+			"upcomingLimitDescription": "{count} din {limit} rezervări viitoare folosite",
+			"bookedBadge": "Rezervat",
+			"availableBadge": "Disponibil",
+			"fullBadge": "Complet",
+			"nextSessionDate": "Următoarea sesiune: {date}",
+			"capacity": "{booked}/{total} locuri rezervate",
+			"processing": "Se actualizează…",
+			"bookSuccess": "Clasa a fost rezervată cu succes",
+			"cancelSuccess": "Rezervarea la clasă a fost anulată"
+		},
+		"visits": {
+			"title": "Vizite",
+			"description": "Istoricul vizitelor și orele check-in-urilor tale",
+			"visitHistory": "Istoricul vizitelor",
+			"totalCheckIns": "{count} check-in-uri în total",
+			"date": "Dată",
+			"time": "Ora"
+		},
+		"profile": {
+			"title": "Profil",
+			"description": "Detaliile contului tău",
+			"accountDetails": "Detalii cont",
+			"accountDescription": "Informațiile actuale ale contului tău.",
+			"name": "Nume",
+			"username": "Nume de utilizator",
+			"phone": "Telefon"
+		}
+	},
+	"Error": {
+		"title": "Ceva nu a mers bine",
+		"description": "Nu am putut finaliza cererea ta. Te rugăm să încerci din nou.",
+		"tryAgain": "Încearcă din nou",
+		"goHome": "Mergi acasă"
+	},
+	"Actions": {
+		"common": {
+			"unauthorized": "Neautorizat",
+			"somethingWentWrong": "Ceva nu a mers bine",
+			"somethingWentWrongRetry": "Ceva nu a mers bine. Te rugăm să încerci din nou.",
+			"failedToLoad": "Încărcarea a eșuat",
+			"failedToAdd": "Adăugarea a eșuat",
+			"failedToRemove": "Eliminarea a eșuat",
+			"failedToCreateClass": "Crearea clasei a eșuat",
+			"failedToUpdateClass": "Actualizarea clasei a eșuat",
+			"failedToDeleteClass": "Ștergerea clasei a eșuat",
+			"failedToBookClass": "Rezervarea clasei a eșuat",
+			"failedToCancelBooking": "Anularea rezervării a eșuat",
+			"failedToActivateMembership": "Activarea abonamentului a eșuat",
+			"seedFailed": "Încărcarea datelor demo a eșuat"
+		},
+		"auth": {
+			"invalidCredentials": "Numele de utilizator sau parola sunt incorecte",
+			"usernameInvalid": "Numele de utilizator poate conține doar litere, cifre, underscore și cratimă",
+			"usernameTaken": "Acest nume de utilizator este deja folosit",
+			"accountCreatedSignInFailed": "Contul a fost creat, dar autentificarea a eșuat. Te rugăm să încerci să te conectezi."
+		},
+		"classes": {
+			"classNameMin": "Numele clasei trebuie să aibă cel puțin 2 caractere",
+			"timeFormat": "Ora trebuie să folosească formatul HH:MM",
+			"maxSpotsRange": "Numărul maxim de locuri trebuie să fie între 1 și 999",
+			"invalidClassData": "Datele clasei sunt invalide",
+			"classNotFound": "Clasa nu a fost găsită",
+			"maxSpotsBelowEnrollments": "Numărul maxim de locuri nu poate fi mai mic decât numărul actual de înscrieri"
+		},
+		"classBookings": {
+			"memberNotFound": "Membrul nu a fost găsit",
+			"classNotFound": "Clasa nu a fost găsită",
+			"bookingNotFound": "Rezervarea nu a fost găsită",
+			"mustBeTodayOrLater": "Rezervările la clase trebuie programate pentru astăzi sau o dată viitoare",
+			"classScheduleInvalid": "Programul clasei este invalid",
+			"selectedDateMustMatch": "Data selectată trebuie să corespundă programului clasei din {day}",
+			"activeMembershipRequired": "Este necesar un abonament activ pentru înscrierea la clase",
+			"alreadyEnrolled": "Membrul este deja înscris la această sesiune",
+			"upcomingLimit": "Membrii pot avea simultan cel mult {count} rezervări viitoare la clase",
+			"classFull": "Clasa este completă pentru data selectată"
+		}
+	},
+	"Pricing": {
+		"title": "Abonamente",
+		"subtitle": "Alege planul potrivit. Fără taxe ascunse.",
+		"dayPass": {
+			"name": "Abonament de o zi",
+			"price": "15",
+			"period": "per vizită",
+			"description": "Încearcă sala. Acces complet pentru o zi.",
+			"features": ["Acces 24/7", "Zonă de greutăți", "Zonă de turf", "Clase de grup"],
+			"cta": "Ia abonamentul de o zi"
+		},
+		"monthly": {
+			"name": "Lunar",
+			"price": "65",
+			"period": "pe lună",
+			"description": "Flexibil. Poți anula oricând.",
+			"features": ["Tot din abonamentul de o zi", "Acces cu breloc", "Poți aduce un invitat de 2 ori/lună", "Vestiare"],
+			"cta": "Ia abonament lunar",
+			"popular": "Cel mai popular"
+		},
+		"annual": {
+			"name": "Anual",
+			"price": "650",
+			"period": "pe an",
+			"description": "Cea mai bună valoare. Economisești 2 luni.",
+			"features": ["Tot din Lunar", "~$54/lună", "Fără contract", "Tricou gratuit"],
+			"cta": "Ia abonament anual"
+		}
+	},
+	"Legal": {
+		"privacy": {
+			"eyebrow": "Confidențialitate",
+			"title": "Politica de confidențialitate",
+			"description": "Această pagină explică modul în care informațiile sunt gestionate în demo-ul aplicației de management pentru sală și stabilește așteptările pentru un prototip academic, nu pentru un serviciu live.",
+			"disclaimer": "Această aplicație a fost creată ca proiect de licență și este prezentată strict ca demo. Nu este o platformă de sală folosită în producție, nu este destinată înscrierii clienților reali și nu trebuie tratată ca o implementare juridică completă privind confidențialitatea.",
+			"summaryTitle": "Demo pentru lucrarea de licență",
+			"summaryBody": "Proiectul demonstrează autentificare, abonamente, clase și fluxuri de administrare pentru evaluare academică. Orice date afișate în aplicație există pentru a susține experiența demo.",
+			"sections": [
+				{
+					"title": "Informații afișate în demo",
+					"body": "Aplicația poate afișa nume de membri, nume de utilizator, selecții de abonament, rezervări la clase, număr de vizite și date operaționale similare pentru ca fluxul complet al produsului să poată fi evaluat.",
+					"points": [
+						"Conturile demo ale membrilor și înregistrările încărcate sunt folosite pentru a ilustra comportamentul sistemului.",
+						"Modificările de abonament și înscrierile la clase sunt stocate pentru a simula fluxuri realiste.",
+						"Interfața cardului de plată validează câmpurile, dar nu procesează tranzacții financiare reale."
+					]
+				},
+				{
+					"title": "Scopul datelor",
+					"body": "Orice informație stocată în acest proiect este utilizată doar pentru a demonstra funcționalitatea tehnică, designul interfeței și comportamentul backend-ului ca parte a livrabilului academic.",
+					"points": [
+						"Proiectul este destinat cursurilor, evaluării tehnice și demonstrațiilor.",
+						"Nu este destinat marketingului, profilării sau administrării comerciale a clienților.",
+						"Există pentru a arăta implementarea fluxurilor CRUD, autentificării, abonamentelor și programărilor."
+					]
+				},
+				{
+					"title": "Limitări de non-producție",
+					"body": "Acest demo nu trebuie interpretat ca o soluție finală de conformitate pentru confidențialitate într-o aplicație comercială.",
+					"points": [
+						"Politicile, regulile de retenție și fluxurile de consimțământ ar necesita o analiză separată pentru producție.",
+						"Conținutul acestei pagini este explicativ și orientat spre demo.",
+						"Orice implementare reală ar avea nevoie de muncă juridică, de conformitate și de securitate înainte de utilizare."
+					]
+				}
+			]
+		},
+		"terms": {
+			"eyebrow": "Termeni",
+			"title": "Termeni de utilizare",
+			"description": "Acești termeni descriu utilizarea limitată a demo-ului și clarifică faptul că aplicația este un prototip academic, nu un serviciu live de abonamente.",
+			"disclaimer": "Această platformă de management pentru sală este un demo realizat ca proiect de licență. Este oferită doar pentru prezentare, testare și evaluare. Nu creează abonamente reale, obligații reale de plată sau termeni contractuali cu caracter obligatoriu.",
+			"summaryTitle": "Doar pentru utilizarea prototipului",
+			"summaryBody": "Poți explora aplicația pentru a revizui funcționalitățile și calitatea implementării, dar sistemul trebuie tratat integral ca mediu demonstrativ.",
+			"sections": [
+				{
+					"title": "Utilizare permisă",
+					"body": "Demo-ul poate fi folosit pentru a naviga interfața, a crea conturi de test, a revizui fluxurile pentru admin și membru și a evalua aplicația în scop academic sau tehnic.",
+					"points": [
+						"Poți interacționa cu abonamentele, clasele și datele demo ca parte a prezentării.",
+						"Poți inspecta implementarea pentru cursuri sau review tehnic.",
+						"Toate acțiunile și rezultatele trebuie tratate ca simulate."
+					]
+				},
+				{
+					"title": "Fără utilizare comercială",
+					"body": "Nimic din aplicație nu trebuie interpretat ca un contract real, un abonament real sau un angajament real de plată.",
+					"points": [
+						"Interfața de plată este o simulare cu validare.",
+						"Activarea abonamentului în aplicație nu creează un acord juridic.",
+						"Proiectul nu trebuie folosit ca substitut pentru documentație operațională sau legală."
+					]
+				},
+				{
+					"title": "Disponibilitate și modificări",
+					"body": "Fiind un demo aflat în dezvoltare, datele și comportamentul se pot schimba în orice moment, fără notificare.",
+					"points": [
+						"Conturile demo și înregistrările încărcate pot fi resetate în timpul testării.",
+						"Funcționalitățile pot fi modificate ca parte a rafinării continue.",
+						"Orice implementare în producție ar necesita o analiză juridică, operațională și de securitate separată."
+					]
+				}
+			]
+		}
+	}
+}

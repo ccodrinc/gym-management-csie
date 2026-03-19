@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { SeedDataButton } from '@/components/admin/seed-data-button'
@@ -15,11 +14,10 @@ type Props = {
 
 export default async function AdminDashboardPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [analytics, t] = await Promise.all([
-		getAnalytics(),
-		getTranslations('Admin.dashboard')
+		getAnalytics(locale),
+		getTranslations({ locale, namespace: 'Admin.dashboard' })
 	])
 	const { totalMembers, activeToday, newThisMonth, avgCheckinsPerDay, visitsPerDay, membershipBreakdown } = analytics
 

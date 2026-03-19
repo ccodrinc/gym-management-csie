@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { AdminClassesContent } from '@/components/admin/admin-classes-content'
@@ -13,12 +12,11 @@ type Props = {
 
 export default async function AdminClassesPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [classes, members, t] = await Promise.all([
 		getClasses(),
-		getMembers(),
-		getTranslations('Admin.classes')
+		getMembers(locale),
+		getTranslations({ locale, namespace: 'Admin.classes' })
 	])
 
 	return (

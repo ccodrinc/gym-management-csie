@@ -61,7 +61,30 @@
 	},
 	"LanguageSelect": {
 		"label": "Select language",
-		"english": "English"
+		"english": "English",
+		"romanian": "Romanian"
+	},
+	"Weekdays": {
+		"Mon": "Mon",
+		"Tue": "Tue",
+		"Wed": "Wed",
+		"Thu": "Thu",
+		"Fri": "Fri",
+		"Sat": "Sat",
+		"Sun": "Sun"
+	},
+	"MembershipMeta": {
+		"types": {
+			"Day_Pass": "Day Pass",
+			"Monthly": "Monthly",
+			"Annual": "Annual",
+			"none": "No Plan"
+		},
+		"statuses": {
+			"ACTIVE": "Active",
+			"EXPIRED": "Expired",
+			"DEACTIVATED": "Deactivated"
+		}
 	},
 	"Auth": {
 		"login": {
@@ -175,6 +198,7 @@
 			"addClassDescription": "Create a new group class.",
 			"editClassDescription": "Update this class details.",
 			"className": "Class name",
+			"classNamePlaceholder": "e.g. HIIT",
 			"maxSpots": "Max spots",
 			"currentEnrolled": "Current enrollments",
 			"cancel": "Cancel",
@@ -243,15 +267,39 @@
 			"classLimitValue": "Up to 3 upcoming classes",
 			"paymentTitle": "Payment processor",
 			"paymentDescription": "Simulated checkout with field validation. No real payment is processed.",
+			"plans": {
+				"Day_Pass": {
+					"title": "Day Pass",
+					"description": "One-day access to the weights floor, turf zone, and every class on the schedule.",
+					"period": "per visit",
+					"features": ["Single-day access", "Group class access", "Open gym access", "No contract"]
+				},
+				"Monthly": {
+					"title": "Monthly",
+					"description": "Flexible month-to-month access with classes included.",
+					"period": "per month",
+					"features": ["Unlimited gym access", "Up to 3 class bookings", "Locker access", "Cancel anytime"]
+				},
+				"Annual": {
+					"title": "Annual",
+					"description": "Best value for members training year-round.",
+					"period": "per year",
+					"features": ["Everything in Monthly", "Priority class access", "Best effective rate", "Member perks"]
+				}
+			},
 			"stepChoosePlan": "1. Choose membership",
 			"stepPayment": "2. Payment",
 			"selectedPlan": "Selected plan",
 			"cardholder": "Cardholder name",
 			"cardholderPlaceholder": "Jordan Lee",
 			"cardNumber": "Card number",
+			"cardNumberPlaceholder": "4242424242424242",
 			"expiry": "Expiry",
+			"expiryPlaceholder": "09/28",
 			"cvc": "CVC",
+			"cvcPlaceholder": "123",
 			"zipCode": "ZIP code",
+			"zipCodePlaceholder": "90210",
 			"autofillDemoPayment": "Use demo payment details",
 			"paymentNote": "Use any valid-looking test card details. This updates the membership in the app after validation succeeds.",
 			"continueToPayment": "Continue to payment",
@@ -312,6 +360,49 @@
 		"description": "We couldn't complete your request. Please try again.",
 		"tryAgain": "Try again",
 		"goHome": "Go home"
+	},
+	"Actions": {
+		"common": {
+			"unauthorized": "Unauthorized",
+			"somethingWentWrong": "Something went wrong",
+			"somethingWentWrongRetry": "Something went wrong. Please try again.",
+			"failedToLoad": "Failed to load",
+			"failedToAdd": "Failed to add",
+			"failedToRemove": "Failed to remove",
+			"failedToCreateClass": "Failed to create class",
+			"failedToUpdateClass": "Failed to update class",
+			"failedToDeleteClass": "Failed to delete class",
+			"failedToBookClass": "Failed to book class",
+			"failedToCancelBooking": "Failed to cancel booking",
+			"failedToActivateMembership": "Failed to activate membership",
+			"seedFailed": "Seed failed"
+		},
+		"auth": {
+			"invalidCredentials": "Invalid username or password",
+			"usernameInvalid": "Username can only contain letters, numbers, underscores and hyphens",
+			"usernameTaken": "This username is already taken",
+			"accountCreatedSignInFailed": "Account created but sign in failed. Please try logging in."
+		},
+		"classes": {
+			"classNameMin": "Class name must be at least 2 characters",
+			"timeFormat": "Time must use the HH:MM format",
+			"maxSpotsRange": "Max spots must be between 1 and 999",
+			"invalidClassData": "Invalid class data",
+			"classNotFound": "Class not found",
+			"maxSpotsBelowEnrollments": "Max spots cannot be less than current enrollments"
+		},
+		"classBookings": {
+			"memberNotFound": "Member not found",
+			"classNotFound": "Class not found",
+			"bookingNotFound": "Booking not found",
+			"mustBeTodayOrLater": "Class bookings must be scheduled for today or later",
+			"classScheduleInvalid": "Class schedule is invalid",
+			"selectedDateMustMatch": "Selected date must match the {day} class schedule",
+			"activeMembershipRequired": "An active membership is required to enroll in classes",
+			"alreadyEnrolled": "Member is already enrolled in this class session",
+			"upcomingLimit": "Members can only keep {count} upcoming class bookings at a time",
+			"classFull": "Class is full for the selected date"
+		}
 	},
 	"Pricing": {
 		"title": "Memberships",

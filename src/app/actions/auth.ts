@@ -3,6 +3,7 @@
 import { hash } from 'bcryptjs'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { getTranslations } from 'next-intl/server'
 import { Prisma, Role, MembershipStatus } from '@prisma/client'
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/db'
@@ -44,14 +45,16 @@ export async function loginAction(
 		const redirectTo = isAllowedRedirect(from ?? '') ? (from ?? defaultPath) : defaultPath
 		return { ok: true, redirectTo }
 	} catch (err) {
+		const tAuth = await getTranslations('Actions.auth')
+		const tCommon = await getTranslations('Actions.common')
 		if (isRedirectError(err)) throw err
 		if (err instanceof AuthError) {
-			return { ok: false, error: 'Invalid username or password' }
+			return { ok: false, error: tAuth('invalidCredentials') }
 		}
 		if (process.env.NODE_ENV === 'development') {
 			console.error('[loginAction]', err)
 		}
-		return { ok: false, error: 'Something went wrong' }
+		return { ok: false, error: tCommon('somethingWentWrong') }
 	}
 }
 
@@ -66,17 +69,18 @@ export async function signupAction(
 	selectedPlan?: string
 ): Promise<SignupResult> {
 	try {
+		const tAuth = await getTranslations('Actions.auth')
 		const usernameNorm = username.trim().toLowerCase()
 
 		if (!/^[a-z0-9_-]+$/.test(usernameNorm)) {
-			return { ok: false, error: 'Username can only contain letters, numbers, underscores and hyphens' }
+			return { ok: false, error: tAuth('usernameInvalid') }
 		}
 
 		const existing = await prisma.user.findUnique({
 			where: { username: usernameNorm }
 		})
 		if (existing) {
-			return { ok: false, error: 'This username is already taken' }
+			return { ok: false, error: tAuth('usernameTaken') }
 		}
 
 		const hashedPassword = await hash(password, 12)
@@ -92,7 +96,7 @@ export async function signupAction(
 			})
 		} catch (error) {
 			if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-				return { ok: false, error: 'This username is already taken' }
+				return { ok: false, error: tAuth('usernameTaken') }
 			}
 			throw error
 		}
@@ -111,13 +115,15 @@ export async function signupAction(
 				: '/member/membership'
 		}
 	} catch (err) {
+		const tAuth = await getTranslations('Actions.auth')
+		const tCommon = await getTranslations('Actions.common')
 		if (isRedirectError(err)) throw err
 		if (err instanceof AuthError) {
-			return { ok: false, error: 'Account created but sign in failed. Please try logging in.' }
+			return { ok: false, error: tAuth('accountCreatedSignInFailed') }
 		}
 		if (process.env.NODE_ENV === 'development') {
 			console.error('[signupAction]', err)
 		}
-		return { ok: false, error: 'Something went wrong. Please try again.' }
+		return { ok: false, error: tCommon('somethingWentWrongRetry') }
 	}
 }

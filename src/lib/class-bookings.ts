@@ -1,4 +1,5 @@
 import { Role } from '@prisma/client'
+import { getTranslations } from 'next-intl/server'
 
 import { MAX_MEMBER_CLASS_ENROLLMENTS } from '@/lib/constants'
 import { getTodayString, WEEKDAYS } from '@/lib/date'
@@ -17,6 +18,10 @@ export async function validateBookingRules(
 	date: string
 ): Promise<{ ok: true; time: string } | { ok: false; error: string }> {
 	const today = getTodayString()
+	const [t, tWeekdays] = await Promise.all([
+		getTranslations('Actions.classBookings'),
+		getTranslations('Weekdays')
+	])
 	const [user, gymClass, upcomingBookingsCount, existingBooking, sessionBookingsCount] =
 		await Promise.all([
 			prisma.user.findUnique({
@@ -57,42 +62,42 @@ export async function validateBookingRules(
 		])
 
 	if (!user || user.role !== Role.MEMBER) {
-		return { ok: false, error: 'Member not found' }
+		return { ok: false, error: t('memberNotFound') }
 	}
 
 	if (!gymClass) {
-		return { ok: false, error: 'Class not found' }
+		return { ok: false, error: t('classNotFound') }
 	}
 
 	if (date < today) {
-		return { ok: false, error: 'Class bookings must be scheduled for today or later' }
+		return { ok: false, error: t('mustBeTodayOrLater') }
 	}
 
 	if (!WEEKDAYS.includes(gymClass.day as (typeof WEEKDAYS)[number])) {
-		return { ok: false, error: 'Class schedule is invalid' }
+		return { ok: false, error: t('classScheduleInvalid') }
 	}
 
 	if (!isBookingDateMatchingClassDay(date, gymClass.day)) {
-		return { ok: false, error: `Selected date must match the ${gymClass.day} class schedule` }
+		return { ok: false, error: t('selectedDateMustMatch', { day: tWeekdays(gymClass.day) }) }
 	}
 
 	if (!isMembershipActive(user.membershipStatus, user.expiryDate)) {
-		return { ok: false, error: 'An active membership is required to enroll in classes' }
+		return { ok: false, error: t('activeMembershipRequired') }
 	}
 
 	if (existingBooking) {
-		return { ok: false, error: 'Member is already enrolled in this class session' }
+		return { ok: false, error: t('alreadyEnrolled') }
 	}
 
 	if (upcomingBookingsCount >= MAX_MEMBER_CLASS_ENROLLMENTS) {
 		return {
 			ok: false,
-			error: `Members can only keep ${MAX_MEMBER_CLASS_ENROLLMENTS} upcoming class bookings at a time`
+			error: t('upcomingLimit', { count: MAX_MEMBER_CLASS_ENROLLMENTS })
 		}
 	}
 
 	if (sessionBookingsCount >= gymClass.maxSpots) {
-		return { ok: false, error: 'Class is full for the selected date' }
+		return { ok: false, error: t('classFull') }
 	}
 
 	return { ok: true, time: gymClass.time }

@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { MemberClassesContent } from '@/components/member/member-classes-content'
@@ -14,11 +13,10 @@ type Props = {
 
 export default async function MemberClassesPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [[schedule, member], t] = await Promise.all([
-		Promise.all([getClasses(), getCurrentMember()]),
-		getTranslations('Member.classes')
+		Promise.all([getClasses(), getCurrentMember(locale)]),
+		getTranslations({ locale, namespace: 'Member.classes' })
 	])
 	const bookingMap = new Map(
 		member.upcomingClasses.map((booking) => [`${booking.gymClassId}:${booking.date}`, booking.id])

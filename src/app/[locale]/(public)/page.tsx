@@ -1,5 +1,5 @@
 import { Clock, Dumbbell, ShieldPlus, Users } from 'lucide-react'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 import { FadeIn, FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
 import { Button } from '@/components/ui/button'
@@ -12,22 +12,21 @@ type Props = {
 
 export default async function HomePage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
-	const t = await getTranslations()
+	const t = await getTranslations({ locale })
 
 	return (
 		<>
 			<section className='relative overflow-hidden'>
 				<div className='bg-primary/20 absolute top-0 -right-32 h-96 w-96 rounded-full blur-3xl' />
 				<div className='bg-primary/10 absolute top-48 -left-32 h-64 w-64 rounded-full blur-3xl' />
-				<div className='relative mx-auto max-w-6xl px-6 pt-28 pb-36 md:pt-40 md:pb-48'>
+				<div className='relative mx-auto max-w-6xl px-6 pt-24 pb-28 md:pt-40 md:pb-48'>
 					<div className='max-w-2xl space-y-0'>
 						<FadeIn delay={0}>
 							<p className='text-primary mb-6 font-mono text-sm'>{t('Hero.badge')}</p>
 						</FadeIn>
 						<FadeIn delay={0.1}>
-							<h1 className='text-foreground font-sans text-5xl font-semibold tracking-tight md:text-6xl lg:text-7xl'>
+							<h1 className='text-foreground font-sans text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl'>
 								{t('Hero.headline')}
 							</h1>
 						</FadeIn>
@@ -35,11 +34,11 @@ export default async function HomePage({ params }: Props) {
 							<p className='text-muted-foreground mt-6 text-lg leading-relaxed'>{t('Hero.subheadline')}</p>
 						</FadeIn>
 						<FadeIn delay={0.4}>
-							<div className='mt-10 flex gap-3'>
+							<div className='mt-10 flex flex-col items-start gap-3 sm:flex-row'>
 								<Pressable>
 									<Button
 										size='lg'
-										className='px-8'
+										className='w-full px-8 sm:w-auto'
 										asChild
 									>
 										<Link href='/pricing'>{t('Hero.getDayPass')}</Link>
@@ -49,7 +48,7 @@ export default async function HomePage({ params }: Props) {
 									<Button
 										size='lg'
 										variant='ghost'
-										className='text-muted-foreground hover:text-foreground'
+										className='w-full justify-start text-muted-foreground hover:text-foreground sm:w-auto sm:justify-center'
 										asChild
 									>
 										<Link href='/member/classes'>{t('Hero.viewSchedule')}</Link>

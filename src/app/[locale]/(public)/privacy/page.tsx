@@ -1,4 +1,4 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 import { LegalPageShell } from '@/components/legal/legal-page-shell'
 
@@ -8,9 +8,8 @@ type Props = {
 
 export default async function PrivacyPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
-	const t = await getTranslations('Legal.privacy')
+	const t = await getTranslations({ locale, namespace: 'Legal.privacy' })
 
 	return (
 		<LegalPageShell

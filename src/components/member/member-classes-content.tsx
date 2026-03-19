@@ -32,6 +32,7 @@ export function MemberClassesContent({
 	maxUpcomingBookings
 }: MemberClassesContentProps) {
 	const t = useTranslations('Member.classes')
+	const tWeekdays = useTranslations('Weekdays')
 	const router = useRouter()
 	const [pendingClassId, setPendingClassId] = useState<string | null>(null)
 
@@ -99,7 +100,7 @@ export function MemberClassesContent({
 									</div>
 									<div className='text-muted-foreground flex flex-wrap items-center gap-3 text-sm'>
 										<span>
-											{gymClass.day} · {gymClass.time}
+											{tWeekdays(gymClass.day)} · {gymClass.time}
 										</span>
 										<span className='inline-flex items-center gap-1'>
 											<CalendarClock className='size-4' />

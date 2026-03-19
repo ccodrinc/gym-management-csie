@@ -1,4 +1,4 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 import { LoginForm } from '@/components/auth/login-form'
 import { BrandMark } from '@/components/brand-mark'
@@ -10,8 +10,7 @@ type Props = {
 
 export default async function LoginPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
-	const t = await getTranslations('Header')
+	const t = await getTranslations({ locale, namespace: 'Header' })
 
 	return (
 		<FadeIn className='flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-12'>

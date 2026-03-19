@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { PageHeader } from '@/components/ui/page-header'
@@ -13,11 +12,10 @@ type Props = {
 
 export default async function MemberVisitsPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [member, t] = await Promise.all([
-		getCurrentMember(),
-		getTranslations('Member.visits')
+		getCurrentMember(locale),
+		getTranslations({ locale, namespace: 'Member.visits' })
 	])
 	const visits = member.visitHistory ?? member.recentVisits
 

@@ -7,6 +7,7 @@ import { AppSidebar } from '@/components/layouts/app-sidebar'
 
 export function AdminSidebar() {
 	const t = useTranslations('Admin.nav')
+	const tHeader = useTranslations('Header')
 	const navItems = [
 		{ href: '/admin', label: t('dashboard'), icon: LayoutDashboard },
 		{ href: '/admin/users', label: t('users'), icon: Users },
@@ -16,7 +17,7 @@ export function AdminSidebar() {
 
 	return (
 		<AppSidebar
-			title='Reps Admin'
+			title={`${tHeader('brand')} ${tHeader('admin')}`}
 			navItems={navItems}
 			basePath='/admin'
 		/>

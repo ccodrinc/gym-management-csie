@@ -42,6 +42,7 @@ export function ClassFormDialog({
 	onSuccess
 }: ClassFormDialogProps) {
 	const t = useTranslations('Admin.classes')
+	const tWeekdays = useTranslations('Weekdays')
 	const [name, setName] = useState('')
 	const [day, setDay] = useState(DEFAULT_CLASS_DAY)
 	const [time, setTime] = useState(DEFAULT_CLASS_TIME)
@@ -114,7 +115,7 @@ export function ClassFormDialog({
 							id='class-name'
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							placeholder='e.g. HIIT'
+							placeholder={t('classNamePlaceholder')}
 							required
 						/>
 					</div>
@@ -128,7 +129,7 @@ export function ClassFormDialog({
 						>
 							{WEEKDAYS.map((d) => (
 								<option key={d} value={d}>
-									{d}
+									{tWeekdays(d)}
 								</option>
 							))}
 						</select>

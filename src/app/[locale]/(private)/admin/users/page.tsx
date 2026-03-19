@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { UsersTable } from '@/components/admin/users-table'
@@ -13,11 +12,10 @@ type Props = {
 
 export default async function AdminUsersPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [users, t] = await Promise.all([
-		getMembers(),
-		getTranslations('Admin.users')
+		getMembers(locale),
+		getTranslations({ locale, namespace: 'Admin.users' })
 	])
 	const activeCount = users.filter((u) => u.isActive).length
 

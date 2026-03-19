@@ -26,7 +26,7 @@ export function UserControlsBar({ layout = 'inline', authSlot, className }: User
 	return (
 		<div
 			className={cn(
-				layout === 'inline' && 'flex items-center gap-2',
+				layout === 'inline' && 'flex items-center gap-1.5 sm:gap-2',
 				layout === 'stacked' && 'flex flex-col gap-2',
 				className
 			)}

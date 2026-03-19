@@ -1,6 +1,7 @@
 'use server'
 
 import { z } from 'zod'
+import { getTranslations } from 'next-intl/server'
 
 import { prisma } from '@/lib/db'
 import { requireAdmin, revalidateClassesPath } from '@/lib/admin'
@@ -8,16 +9,14 @@ import { getTodayString, WEEKDAYS } from '@/lib/date'
 
 export type CreateClassResult = { ok: true; id: string } | { ok: false; error: string }
 
-const classSchema = z.object({
-	name: z.string().trim().min(2, 'Class name must be at least 2 characters'),
-	day: z.enum(WEEKDAYS),
-	time: z.string().regex(/^\d{2}:\d{2}$/, 'Time must use the HH:MM format'),
-	maxSpots: z
-		.number()
-		.int()
-		.min(1, 'Max spots must be between 1 and 999')
-		.max(999, 'Max spots must be between 1 and 999')
-})
+function createClassSchema(t: Awaited<ReturnType<typeof getTranslations>>) {
+	return z.object({
+		name: z.string().trim().min(2, t('classNameMin')),
+		day: z.enum(WEEKDAYS),
+		time: z.string().regex(/^\d{2}:\d{2}$/, t('timeFormat')),
+		maxSpots: z.number().int().min(1, t('maxSpotsRange')).max(999, t('maxSpotsRange'))
+	})
+}
 
 export async function createGymClassAction(
 	name: string,
@@ -26,7 +25,9 @@ export async function createGymClassAction(
 	maxSpots: number
 ): Promise<CreateClassResult> {
 	try {
+		const t = await getTranslations('Actions.classes')
 		await requireAdmin()
+		const classSchema = createClassSchema(t)
 		const payload = classSchema.safeParse({
 			name,
 			day: day.trim(),
@@ -34,7 +35,7 @@ export async function createGymClassAction(
 			maxSpots
 		})
 		if (!payload.success) {
-			return { ok: false, error: payload.error.issues[0]?.message ?? 'Invalid class data' }
+			return { ok: false, error: payload.error.issues[0]?.message ?? t('invalidClassData') }
 		}
 		const created = await prisma.gymClass.create({
 			data: payload.data
@@ -42,7 +43,8 @@ export async function createGymClassAction(
 		revalidateClassesPath()
 		return { ok: true, id: created.id }
 	} catch (err) {
-		return { ok: false, error: err instanceof Error ? err.message : 'Failed to create class' }
+		const tCommon = await getTranslations('Actions.common')
+		return { ok: false, error: err instanceof Error ? err.message : tCommon('failedToCreateClass') }
 	}
 }
 
@@ -56,12 +58,14 @@ export async function updateGymClassAction(
 	maxSpots: number
 ): Promise<UpdateClassResult> {
 	try {
+		const t = await getTranslations('Actions.classes')
 		await requireAdmin()
 		const existing = await prisma.gymClass.findUnique({ where: { id } })
-		if (!existing) return { ok: false, error: 'Class not found' }
+		if (!existing) return { ok: false, error: t('classNotFound') }
 		const currentEnrollments = await prisma.classBooking.count({
 			where: { gymClassId: id, date: { gte: getTodayString() } }
 		})
+		const classSchema = createClassSchema(t)
 		const payload = classSchema.safeParse({
 			name,
 			day: day.trim(),
@@ -69,10 +73,10 @@ export async function updateGymClassAction(
 			maxSpots
 		})
 		if (!payload.success) {
-			return { ok: false, error: payload.error.issues[0]?.message ?? 'Invalid class data' }
+			return { ok: false, error: payload.error.issues[0]?.message ?? t('invalidClassData') }
 		}
 		if (payload.data.maxSpots < currentEnrollments) {
-			return { ok: false, error: 'Max spots cannot be less than current enrollments' }
+			return { ok: false, error: t('maxSpotsBelowEnrollments') }
 		}
 		await prisma.gymClass.update({
 			where: { id },
@@ -81,7 +85,8 @@ export async function updateGymClassAction(
 		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
-		return { ok: false, error: err instanceof Error ? err.message : 'Failed to update class' }
+		const tCommon = await getTranslations('Actions.common')
+		return { ok: false, error: err instanceof Error ? err.message : tCommon('failedToUpdateClass') }
 	}
 }
 
@@ -89,13 +94,15 @@ export type DeleteClassResult = { ok: true } | { ok: false; error: string }
 
 export async function deleteGymClassAction(id: string): Promise<DeleteClassResult> {
 	try {
+		const t = await getTranslations('Actions.classes')
 		await requireAdmin()
 		const gymClass = await prisma.gymClass.findUnique({ where: { id }, select: { id: true } })
-		if (!gymClass) return { ok: false, error: 'Class not found' }
+		if (!gymClass) return { ok: false, error: t('classNotFound') }
 		await prisma.gymClass.delete({ where: { id } })
 		revalidateClassesPath()
 		return { ok: true }
 	} catch (err) {
-		return { ok: false, error: err instanceof Error ? err.message : 'Failed to delete class' }
+		const tCommon = await getTranslations('Actions.common')
+		return { ok: false, error: err instanceof Error ? err.message : tCommon('failedToDeleteClass') }
 	}
 }

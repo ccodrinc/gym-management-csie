@@ -133,6 +133,15 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 		form.reset(demoPaymentValues)
 	}
 
+	function getPlanCopy(type: MembershipType) {
+		return {
+			title: t(`plans.${type}.title`),
+			description: t(`plans.${type}.description`),
+			period: t(`plans.${type}.period`),
+			features: t.raw(`plans.${type}.features`) as string[]
+		}
+	}
+
 	return (
 		<div className='space-y-6'>
 			<Card className='overflow-hidden border-primary/20 bg-gradient-to-br from-card via-card to-primary/5'>
@@ -210,6 +219,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 								<div className='grid gap-4 md:grid-cols-3'>
 									{MEMBERSHIP_PLANS.map((plan) => {
 										const isSelected = selectedPlan === plan.type
+										const planCopy = getPlanCopy(plan.type)
 										return (
 											<button
 												key={plan.type}
@@ -223,19 +233,19 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 											>
 												<div className='mb-3 flex items-center justify-between gap-2'>
 													<div>
-														<p className='text-base font-semibold'>{plan.title}</p>
-														<p className='text-muted-foreground text-sm'>{plan.description}</p>
+														<p className='text-base font-semibold'>{planCopy.title}</p>
+														<p className='text-muted-foreground text-sm'>{planCopy.description}</p>
 													</div>
 													{isSelected && <Badge>{t('selected')}</Badge>}
 												</div>
 												<p className='text-2xl font-semibold'>
 													${plan.price}
 													<span className='text-muted-foreground ml-1 text-sm font-normal'>
-														{plan.period}
+														{planCopy.period}
 													</span>
 												</p>
 												<ul className='text-muted-foreground mt-4 space-y-2 text-sm'>
-													{plan.features.map((feature) => (
+													{planCopy.features.map((feature) => (
 														<li
 															key={feature}
 															className='flex items-center gap-2'
@@ -267,7 +277,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 									<div className='rounded-2xl border bg-background/80 p-4'>
 										<p className='text-muted-foreground text-sm'>{t('selectedPlan')}</p>
 										<p className='mt-1 text-lg font-semibold'>
-											{MEMBERSHIP_PLANS.find((plan) => plan.type === selectedPlan)?.title}
+											{getPlanCopy(selectedPlan).title}
 										</p>
 									</div>
 
@@ -303,7 +313,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 												id='cardNumber'
 												inputMode='numeric'
 												maxLength={16}
-												placeholder='4242424242424242'
+												placeholder={t('cardNumberPlaceholder')}
 												{...form.register('cardNumber')}
 											/>
 											{form.formState.errors.cardNumber && (
@@ -318,7 +328,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 												<Input
 													id='expiry'
 													maxLength={5}
-													placeholder='09/28'
+													placeholder={t('expiryPlaceholder')}
 													{...form.register('expiry')}
 												/>
 												{form.formState.errors.expiry && (
@@ -333,7 +343,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 													id='cvc'
 													inputMode='numeric'
 													maxLength={4}
-													placeholder='123'
+													placeholder={t('cvcPlaceholder')}
 													{...form.register('cvc')}
 												/>
 												{form.formState.errors.cvc && (
@@ -348,7 +358,7 @@ export function MembershipManager({ member, preferredPlan }: MembershipManagerPr
 													id='zipCode'
 													inputMode='numeric'
 													maxLength={5}
-													placeholder='90210'
+													placeholder={t('zipCodePlaceholder')}
 													{...form.register('zipCode')}
 												/>
 												{form.formState.errors.zipCode && (

@@ -19,6 +19,7 @@ type AdminClassesContentProps = {
 
 export function AdminClassesContent({ classes, members }: AdminClassesContentProps) {
 	const t = useTranslations('Admin.classes')
+	const tWeekdays = useTranslations('Weekdays')
 	const router = useRouter()
 	const [enrollmentsOpen, setEnrollmentsOpen] = useState(false)
 	const [selectedClass, setSelectedClass] = useState<GymClass | null>(null)
@@ -54,6 +55,14 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 		setDeleteOpen(true)
 	}
 
+	function handleEnrollmentsOpenChange(nextOpen: boolean) {
+		setEnrollmentsOpen(nextOpen)
+
+		if (!nextOpen) {
+			setSelectedClass(null)
+		}
+	}
+
 	return (
 		<>
 			<div className='space-y-3'>
@@ -71,7 +80,7 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 						<div>
 							<p className='font-medium'>{cls.name}</p>
 							<p className='text-muted-foreground text-sm'>
-								{cls.day} · {cls.time}
+								{tWeekdays(cls.day)} · {cls.time}
 							</p>
 							<p className='text-muted-foreground text-xs'>
 								{t('nextSession')}: {cls.nextSessionDate}
@@ -115,8 +124,9 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 			</div>
 
 			<ClassEnrollmentsDialog
+				key={`${selectedClass?.id ?? 'none'}:${enrollmentsOpen ? 'open' : 'closed'}`}
 				open={enrollmentsOpen}
-				onOpenChange={setEnrollmentsOpen}
+				onOpenChange={handleEnrollmentsOpenChange}
 				gymClassId={selectedClass?.id ?? null}
 				className={selectedClass?.name ?? ''}
 				classDay={selectedClass?.day ?? ''}

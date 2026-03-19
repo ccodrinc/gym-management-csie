@@ -1,4 +1,4 @@
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 import { SignupForm } from '@/components/auth/signup-form'
 import { BrandMark } from '@/components/brand-mark'
@@ -12,9 +12,8 @@ type Props = {
 export default async function SignupPage({ params, searchParams }: Props) {
 	const { locale } = await params
 	const { plan } = await searchParams
-	setRequestLocale(locale)
-	const t = await getTranslations('Header')
-	const tPricing = await getTranslations('Pricing')
+	const t = await getTranslations({ locale, namespace: 'Header' })
+	const tPricing = await getTranslations({ locale, namespace: 'Pricing' })
 	const planLabels: Record<string, string> = {
 		dayPass: tPricing('dayPass.name'),
 		monthly: tPricing('monthly.name'),

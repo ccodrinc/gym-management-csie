@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { MemberActivityChart } from '@/components/admin/dashboard-charts'
@@ -16,11 +15,10 @@ type Props = {
 
 export default async function MemberDashboardPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
 	const [member, t] = await Promise.all([
-		getCurrentMember(),
-		getTranslations('Member.dashboard')
+		getCurrentMember(locale),
+		getTranslations({ locale, namespace: 'Member.dashboard' })
 	])
 	const visitsData = member.visitsThisWeek
 

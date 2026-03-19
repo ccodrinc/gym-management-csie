@@ -1,5 +1,6 @@
+import { getTranslations } from 'next-intl/server'
+
 import { prisma } from '@/lib/db'
-import { formatMembershipType } from '@/lib/format'
 import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { Role } from '@prisma/client'
 
@@ -12,14 +13,15 @@ export type Analytics = {
 	membershipBreakdown: { type: string; count: number }[]
 }
 
-export async function getAnalytics(): Promise<Analytics> {
+export async function getAnalytics(locale: string): Promise<Analytics> {
 	const today = getTodayString()
 	const monthStart = new Date()
 	monthStart.setDate(1)
 	monthStart.setHours(0, 0, 0, 0)
 	const monthStartStr = toDateString(monthStart)
 
-	const [totalMembers, todayVisits, newMembers, membersByType, allVisits] = await Promise.all([
+	const [totalMembers, todayVisits, newMembers, membersByType, allVisits, tWeekdays, tMembership] =
+		await Promise.all([
 		prisma.user.count({ where: { role: Role.MEMBER } }),
 		prisma.visit.groupBy({ by: ['userId'], where: { date: today } }),
 		prisma.user.count({
@@ -33,7 +35,9 @@ export async function getAnalytics(): Promise<Analytics> {
 		prisma.visit.groupBy({
 			by: ['date'],
 			_count: { _all: true }
-		})
+		}),
+		getTranslations({ locale, namespace: 'Weekdays' }),
+		getTranslations({ locale, namespace: 'MembershipMeta' })
 	])
 
 	const activeToday = todayVisits.length
@@ -46,14 +50,14 @@ export async function getAnalytics(): Promise<Analytics> {
 		const day = dayNames[d.getDay()]
 		visitsByDay[day] = (visitsByDay[day] ?? 0) + v._count._all
 	}
-	const visitsPerDay = WEEKDAYS.map((day) => ({ day, visits: visitsByDay[day] ?? 0 }))
+	const visitsPerDay = WEEKDAYS.map((day) => ({ day: tWeekdays(day), visits: visitsByDay[day] ?? 0 }))
 
 	const totalVisits = allVisits.reduce((sum, v) => sum + v._count._all, 0)
 	const uniqueDays = allVisits.length
 	const avgCheckinsPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0
 
 	const membershipBreakdown = membersByType.map((m) => ({
-		type: formatMembershipType(m.membershipType),
+		type: m.membershipType ? tMembership(`types.${m.membershipType}`) : tMembership('types.none'),
 		count: m._count._all
 	}))
 

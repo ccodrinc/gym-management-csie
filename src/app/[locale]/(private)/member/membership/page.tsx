@@ -1,4 +1,3 @@
-import { setRequestLocale } from 'next-intl/server'
 import { getTranslations } from 'next-intl/server'
 
 import { MembershipManager } from '@/components/member/membership-manager'
@@ -15,11 +14,10 @@ type Props = {
 export default async function MemberMembershipPage({ params, searchParams }: Props) {
 	const { locale } = await params
 	const { plan } = await searchParams
-	setRequestLocale(locale)
 
 	const [member, t] = await Promise.all([
-		getCurrentMember(),
-		getTranslations('Member.membership')
+		getCurrentMember(locale),
+		getTranslations({ locale, namespace: 'Member.membership' })
 	])
 
 	return (

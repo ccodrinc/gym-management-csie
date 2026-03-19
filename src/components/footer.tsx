@@ -4,8 +4,8 @@ import { FooterNavGitHubLink, FooterNavLink } from '@/components/footer-nav'
 
 const GITHUB_REPO_URL = 'https://github.com/ccodrinc/gym-management-csie'
 
-export async function Footer() {
-	const t = await getTranslations('Footer')
+export async function Footer({ locale }: { locale: string }) {
+	const t = await getTranslations({ locale, namespace: 'Footer' })
 
 	return (
 		<footer className='border-border mt-auto w-full border-t py-8'>

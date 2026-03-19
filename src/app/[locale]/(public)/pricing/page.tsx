@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getTranslations } from 'next-intl/server'
 
 import { FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
 import { Link } from '@/i18n/navigation'
@@ -12,9 +12,8 @@ type Props = {
 
 export default async function PricingPage({ params }: Props) {
 	const { locale } = await params
-	setRequestLocale(locale)
 
-	const t = await getTranslations('Pricing')
+	const t = await getTranslations({ locale, namespace: 'Pricing' })
 
 	const plans = ['dayPass', 'monthly', 'annual'] as const
 

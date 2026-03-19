@@ -40,6 +40,23 @@ type ClassEnrollmentsDialogProps = {
 	members: Member[]
 }
 
+function getNextClassDate(day: string) {
+	const today = new Date()
+	const dayIndex = WEEKDAYS.indexOf(day as (typeof WEEKDAYS)[number])
+
+	if (dayIndex < 0) {
+		return getTodayString()
+	}
+
+	const currentDay = today.getDay()
+	const targetDay = dayIndex === 6 ? 0 : dayIndex + 1
+	const daysUntil = (targetDay - currentDay + 7) % 7 || 7
+	const nextDate = new Date(today)
+	nextDate.setDate(today.getDate() + daysUntil)
+
+	return toDateString(nextDate)
+}
+
 export function ClassEnrollmentsDialog({
 	open,
 	onOpenChange,
@@ -50,50 +67,43 @@ export function ClassEnrollmentsDialog({
 	members
 }: ClassEnrollmentsDialogProps) {
 	const t = useTranslations('Admin.classes')
+	const tWeekdays = useTranslations('Weekdays')
 	const [data, setData] = useState<ClassWithBookings | null>(null)
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(true)
 	const [addUserId, setAddUserId] = useState('')
-	const [addDate, setAddDate] = useState('')
+	const [addDate, setAddDate] = useState(() => getNextClassDate(classDay))
 	const [addPending, setAddPending] = useState(false)
 	const [removePendingId, setRemovePendingId] = useState<string | null>(null)
 
 	const fetchBookings = useCallback(async () => {
 		if (!gymClassId) return
+		setLoading(true)
 		const result = await getClassBookingsAction(gymClassId)
+		setLoading(false)
 		if (result.ok && result.data) setData(result.data)
 		else if (!result.ok) toast.error(result.error)
 	}, [gymClassId])
 
 	useEffect(() => {
-		if (!open || !gymClassId) return
+		if (!open || !gymClassId) {
+			return
+		}
+
 		let cancelled = false
-		queueMicrotask(() => {
-			if (!cancelled) setLoading(true)
-		})
-		void getClassBookingsAction(gymClassId).then((result) => {
+		const classId = gymClassId
+
+		async function loadBookings() {
+			setLoading(true)
+			const result = await getClassBookingsAction(classId)
 			if (cancelled) return
+
 			setLoading(false)
 			if (result.ok && result.data) setData(result.data)
 			else if (!result.ok) toast.error(result.error)
-		})
-		queueMicrotask(() => {
-			if (cancelled) return
-			const today = new Date()
-			const dayIndex = WEEKDAYS.indexOf(classDay as (typeof WEEKDAYS)[number])
-			const nextDateStr =
-				dayIndex >= 0
-					? (() => {
-							const currentDay = today.getDay()
-							const targetDay = dayIndex === 6 ? 0 : dayIndex + 1
-							const daysUntil = (targetDay - currentDay + 7) % 7 || 7
-							const nextDate = new Date(today)
-							nextDate.setDate(today.getDate() + daysUntil)
-							return toDateString(nextDate)
-						})()
-					: getTodayString()
-			setAddDate(nextDateStr)
-			setAddUserId('')
-		})
+		}
+
+		void loadBookings()
+
 		return () => {
 			cancelled = true
 		}
@@ -144,7 +154,7 @@ export function ClassEnrollmentsDialog({
 						{t('enrollments')} – {className}
 					</DialogTitle>
 					<DialogDescription>
-						{classDay} · {classTime}. {t('enrollmentsDescription')}
+						{tWeekdays(classDay)} · {classTime}. {t('enrollmentsDescription')}
 					</DialogDescription>
 				</DialogHeader>
 
