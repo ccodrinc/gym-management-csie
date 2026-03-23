@@ -27,17 +27,18 @@ export function SignOutButton({ variant = 'header', className }: SignOutButtonPr
 		<Button
 			type='button'
 			variant={variant === 'header' ? 'header-ghost' : 'outline'}
-			size='sm'
+			size='icon-sm'
+			aria-label={t('logOut')}
 			className={cn(
 				variant === 'sidebar' &&
-					'hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive w-full justify-start gap-2',
+					'hover:border-destructive/50 hover:bg-destructive/10 hover:text-destructive ml-auto',
 				className
 			)}
 			onClick={handleSignOut}
 			disabled={pending}
 		>
-			{variant === 'sidebar' ? <LogOut data-icon='inline-start' /> : null}
-			{t('logOut')}
+			<LogOut aria-hidden='true' />
+			<span className='sr-only'>{t('logOut')}</span>
 		</Button>
 	)
 }
