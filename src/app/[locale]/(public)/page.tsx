@@ -1,27 +1,56 @@
 import { Clock, Dumbbell, ShieldPlus, Users } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
-import { FadeIn, FadeInView, Pressable, StaggerContainer, StaggerItem } from '@/components/motion'
+import { FadeIn } from '@/components/shared/motion/fade-in'
+import { FadeInView } from '@/components/shared/motion/fade-in-view'
+import { StaggerContainer, StaggerItem } from '@/components/shared/motion/stagger'
+import { StructuredData } from '@/components/shared/structured-data'
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { createPageMetadata } from '@/lib/seo'
+import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from '@/lib/site'
 
 type Props = {
 	params: Promise<{ locale: string }>
+}
+
+export async function generateMetadata({ params }: Props) {
+	const { locale } = await params
+	const t = await getTranslations({ locale, namespace: 'Metadata' })
+
+	return createPageMetadata({
+		locale,
+		pathname: '/',
+		title: t('title'),
+		description: t('description')
+	})
 }
 
 export default async function HomePage({ params }: Props) {
 	const { locale } = await params
 
 	const t = await getTranslations({ locale })
+	const websiteUrl = getSiteUrl()
+	const homeJsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'HealthClub',
+		name: SITE_NAME,
+		description: SITE_DESCRIPTION,
+		url: websiteUrl,
+		areaServed: locale === 'ro' ? 'Romania' : 'Europe',
+		availableLanguage: ['en', 'ro'],
+		openingHours: 'Mo-Su 00:00-23:59'
+	}
 
 	return (
 		<>
+			<StructuredData data={homeJsonLd} />
 			<section className='relative overflow-hidden'>
 				<div className='bg-primary/20 absolute top-0 -right-32 h-96 w-96 rounded-full blur-3xl' />
 				<div className='bg-primary/10 absolute top-48 -left-32 h-64 w-64 rounded-full blur-3xl' />
 				<div className='relative mx-auto max-w-6xl px-6 pt-24 pb-28 md:pt-40 md:pb-48'>
-					<div className='max-w-2xl space-y-0'>
+					<div className='max-w-2xl'>
 						<FadeIn delay={0}>
 							<p className='text-primary mb-6 font-mono text-sm'>{t('Hero.badge')}</p>
 						</FadeIn>
@@ -35,25 +64,31 @@ export default async function HomePage({ params }: Props) {
 						</FadeIn>
 						<FadeIn delay={0.4}>
 							<div className='mt-10 flex flex-col items-start gap-3 sm:flex-row'>
-								<Pressable>
-									<Button
-										size='lg'
-										className='w-full px-8 sm:w-auto'
-										asChild
+								<Button
+									size='lg'
+									className='w-full px-8 sm:w-auto'
+									asChild
+								>
+									<Link
+										href='/pricing'
+										locale={locale}
 									>
-										<Link href='/pricing'>{t('Hero.getDayPass')}</Link>
-									</Button>
-								</Pressable>
-								<Pressable>
-									<Button
-										size='lg'
-										variant='ghost'
-										className='w-full justify-start text-muted-foreground hover:text-foreground sm:w-auto sm:justify-center'
-										asChild
+										{t('Hero.getDayPass')}
+									</Link>
+								</Button>
+								<Button
+									size='lg'
+									variant='ghost'
+									className='text-muted-foreground hover:text-foreground w-full justify-start sm:w-auto sm:justify-center'
+									asChild
+								>
+									<Link
+										href='/member/classes'
+										locale={locale}
 									>
-										<Link href='/member/classes'>{t('Hero.viewSchedule')}</Link>
-									</Button>
-								</Pressable>
+										{t('Hero.viewSchedule')}
+									</Link>
+								</Button>
 							</div>
 						</FadeIn>
 					</div>
@@ -143,15 +178,18 @@ export default async function HomePage({ params }: Props) {
 							delay={0.15}
 							as='div'
 						>
-							<Pressable>
-								<Button
-									size='lg'
-									className='shrink-0 px-8'
-									asChild
+							<Button
+								size='lg'
+								className='shrink-0 px-8'
+								asChild
+							>
+								<Link
+									href='/signup'
+									locale={locale}
 								>
-									<Link href='/signup'>{t('CTA.button')}</Link>
-								</Button>
-							</Pressable>
+									{t('CTA.button')}
+								</Link>
+							</Button>
 						</FadeInView>
 					</div>
 				</div>

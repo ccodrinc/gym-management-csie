@@ -1,13 +1,13 @@
 import { getTranslations } from 'next-intl/server'
 
-import { MemberActivityChart } from '@/components/admin/dashboard-charts'
-import { PageHeader } from '@/components/ui/page-header'
-import { StatCard } from '@/components/ui/stat-card'
-import { ListRow } from '@/components/ui/list-row'
+import { MemberActivityChart } from '@/app/[locale]/(private)/_components/charts'
+import { ListRow } from '@/components/shared/list-row'
+import { PageHeader } from '@/components/shared/page-header'
+import { StatCard } from '@/components/shared/stat-card'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCurrentMember } from '@/lib/data'
-import { FadeIn } from '@/components/motion'
+import { formatDate, formatNumber } from '@/lib/format'
 
 type Props = {
 	params: Promise<{ locale: string }>
@@ -23,7 +23,7 @@ export default async function MemberDashboardPage({ params }: Props) {
 	const visitsData = member.visitsThisWeek
 
 	return (
-		<FadeIn className='space-y-8'>
+		<div className='flex flex-col gap-8'>
 			<PageHeader
 				title={t('welcomeBack', { name: member.name?.split(' ')[0] ?? 'Member' })}
 				description={t('activityAtGlance')}
@@ -38,12 +38,12 @@ export default async function MemberDashboardPage({ params }: Props) {
 				/>
 				<StatCard
 					title={t('gymVisits')}
-					value={member.gymVisits}
+					value={formatNumber(member.gymVisits, locale)}
 					subtitle={t('totalThisPeriod')}
 				/>
 				<StatCard
 					title={t('upcomingClasses')}
-					value={member.upcomingClasses.length}
+					value={formatNumber(member.upcomingClasses.length, locale)}
 					subtitle={t('bookedThisWeek')}
 				/>
 			</div>
@@ -65,10 +65,10 @@ export default async function MemberDashboardPage({ params }: Props) {
 						<CardDescription>{t('lastFive')}</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className='space-y-2'>
+						<ul className='flex flex-col gap-2'>
 							{member.recentVisits.map((visit) => (
 								<ListRow key={`${visit.date}-${visit.time}`}>
-									<span>{visit.date}</span>
+									<span>{formatDate(visit.date, locale)}</span>
 									<span className='text-muted-foreground'>{visit.time}</span>
 								</ListRow>
 							))}
@@ -82,13 +82,13 @@ export default async function MemberDashboardPage({ params }: Props) {
 						<CardDescription>{t('yourBookedSessions')}</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<ul className='space-y-2'>
+						<ul className='flex flex-col gap-2'>
 							{member.upcomingClasses.length > 0 ? (
 								member.upcomingClasses.map((cls) => (
 									<ListRow key={cls.id}>
 										<div>
 											<span className='font-medium'>{cls.name}</span>
-											<span className='text-muted-foreground ml-2'>{cls.date}</span>
+											<span className='text-muted-foreground ml-2'>{formatDate(cls.date, locale)}</span>
 										</div>
 										<span className='text-muted-foreground'>{cls.time}</span>
 									</ListRow>
@@ -100,6 +100,6 @@ export default async function MemberDashboardPage({ params }: Props) {
 					</CardContent>
 				</Card>
 			</div>
-		</FadeIn>
+		</div>
 	)
 }

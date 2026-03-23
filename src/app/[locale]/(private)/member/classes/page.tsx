@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 
-import { MemberClassesContent } from '@/components/member/member-classes-content'
-import { PageHeader } from '@/components/ui/page-header'
+import { MemberClassesContent } from '@/app/[locale]/(private)/member/_components/member-classes-content'
+import { PageHeader } from '@/components/shared/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FadeIn } from '@/components/motion'
 import { MAX_MEMBER_CLASS_ENROLLMENTS } from '@/lib/constants'
 import { getClasses, getCurrentMember } from '@/lib/data'
 
@@ -27,8 +26,11 @@ export default async function MemberClassesPage({ params }: Props) {
 	}))
 
 	return (
-		<FadeIn className='space-y-6'>
-			<PageHeader title={t('title')} description={t('description')} />
+		<div className='flex flex-col gap-6'>
+			<PageHeader
+				title={t('title')}
+				description={t('description')}
+			/>
 
 			<Card>
 				<CardHeader>
@@ -44,6 +46,6 @@ export default async function MemberClassesPage({ params }: Props) {
 					/>
 				</CardContent>
 			</Card>
-		</FadeIn>
+		</div>
 	)
 }

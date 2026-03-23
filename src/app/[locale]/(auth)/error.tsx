@@ -1,6 +1,6 @@
 'use client'
 
-import { ErrorFallback } from '@/components/error-fallback'
+import { ErrorFallback } from '@/components/shared/error-fallback'
 
 export default function AuthError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
 	return (

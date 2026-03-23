@@ -1,6 +1,5 @@
-import { Footer } from '@/components/footer'
-import { Header } from '@/components/header'
-import { FadeIn } from '@/components/motion'
+import { SiteFooter } from '@/app/[locale]/(public)/_components/site-footer'
+import { SiteHeader } from '@/app/[locale]/(public)/_components/site-header'
 
 export default async function PublicLayout({
 	children,
@@ -13,13 +12,14 @@ export default async function PublicLayout({
 
 	return (
 		<div className='flex min-h-screen flex-col'>
-			<FadeIn>
-				<Header locale={locale} />
-			</FadeIn>
-			<main className='flex-1'>{children}</main>
-			<FadeIn>
-				<Footer locale={locale} />
-			</FadeIn>
+			<SiteHeader locale={locale} />
+			<main
+				id='main-content'
+				className='flex-1'
+			>
+				{children}
+			</main>
+			<SiteFooter locale={locale} />
 		</div>
 	)
 }

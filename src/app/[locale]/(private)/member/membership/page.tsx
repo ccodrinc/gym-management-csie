@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 
-import { MembershipManager } from '@/components/member/membership-manager'
-import { PageHeader } from '@/components/ui/page-header'
+import { MembershipManager } from '@/app/[locale]/(private)/member/_components/membership-manager'
+import { PageHeader } from '@/components/shared/page-header'
 import { getCurrentMember } from '@/lib/data'
-import { FadeIn } from '@/components/motion'
 import { getMembershipTypeFromQuery } from '@/lib/membership'
 
 type Props = {
@@ -21,12 +20,15 @@ export default async function MemberMembershipPage({ params, searchParams }: Pro
 	])
 
 	return (
-		<FadeIn className='space-y-6'>
-			<PageHeader title={t('title')} description={t('description')} />
+		<div className='flex flex-col gap-6'>
+			<PageHeader
+				title={t('title')}
+				description={t('description')}
+			/>
 			<MembershipManager
 				member={member}
 				preferredPlan={getMembershipTypeFromQuery(plan)}
 			/>
-		</FadeIn>
+		</div>
 	)
 }

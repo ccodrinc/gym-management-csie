@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 
-import { PageHeader } from '@/components/ui/page-header'
+import { PageHeader } from '@/components/shared/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCurrentMember } from '@/lib/data'
-import { FadeIn } from '@/components/motion'
 
 type Props = {
 	params: Promise<{ locale: string }>
@@ -18,15 +17,18 @@ export default async function MemberProfilePage({ params }: Props) {
 	])
 
 	return (
-		<FadeIn className='space-y-6'>
-			<PageHeader title={t('title')} description={t('description')} />
+		<div className='flex flex-col gap-6'>
+			<PageHeader
+				title={t('title')}
+				description={t('description')}
+			/>
 
 			<Card>
 				<CardHeader>
 					<CardTitle>{t('accountDetails')}</CardTitle>
 					<CardDescription>{t('accountDescription')}</CardDescription>
 				</CardHeader>
-				<CardContent className='space-y-4'>
+				<CardContent className='flex flex-col gap-4'>
 					<div className='grid gap-4 sm:grid-cols-2'>
 						<div>
 							<p className='text-muted-foreground text-sm'>{t('name')}</p>
@@ -43,6 +45,6 @@ export default async function MemberProfilePage({ params }: Props) {
 					</div>
 				</CardContent>
 			</Card>
-		</FadeIn>
+		</div>
 	)
 }
