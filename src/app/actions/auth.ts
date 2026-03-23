@@ -4,7 +4,8 @@ import { hash } from 'bcryptjs'
 import { AuthError } from 'next-auth'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { getTranslations } from 'next-intl/server'
-import { Prisma, Role, MembershipStatus } from '@prisma/client'
+
+import { MembershipStatus, Prisma, Role } from '@/generated/prisma/client'
 import { signIn } from '@/auth'
 import { prisma } from '@/lib/db'
 import { getMembershipTypeFromQuery } from '@/lib/membership'
@@ -23,11 +24,7 @@ function isAllowedRedirect(path: string): boolean {
 
 export type LoginResult = { ok: true; redirectTo: string } | { ok: false; error: string }
 
-export async function loginAction(
-	username: string,
-	password: string,
-	from?: string
-): Promise<LoginResult> {
+export async function loginAction(username: string, password: string, from?: string): Promise<LoginResult> {
 	try {
 		const usernameNorm = username.trim().toLowerCase()
 
@@ -58,9 +55,7 @@ export async function loginAction(
 	}
 }
 
-export type SignupResult =
-	| { ok: true; redirectTo: string }
-	| { ok: false; error: string }
+export type SignupResult = { ok: true; redirectTo: string } | { ok: false; error: string }
 
 export async function signupAction(
 	name: string,
@@ -110,9 +105,7 @@ export async function signupAction(
 		const preferredPlan = getMembershipTypeFromQuery(selectedPlan)
 		return {
 			ok: true,
-			redirectTo: preferredPlan
-				? `/member/membership?plan=${selectedPlan}`
-				: '/member/membership'
+			redirectTo: preferredPlan ? `/member/membership?plan=${selectedPlan}` : '/member/membership'
 		}
 	} catch (err) {
 		const tAuth = await getTranslations('Actions.auth')

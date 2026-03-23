@@ -92,9 +92,7 @@ export async function bookOwnClassAction(gymClassId: string): Promise<AddClassBo
 	}
 }
 
-export async function cancelOwnClassBookingAction(
-	bookingId: string
-): Promise<RemoveClassBookingResult> {
+export async function cancelOwnClassBookingAction(bookingId: string): Promise<RemoveClassBookingResult> {
 	try {
 		const t = await getTranslations('Actions.classBookings')
 		const userId = await requireMember()

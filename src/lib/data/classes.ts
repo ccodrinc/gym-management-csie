@@ -46,15 +46,13 @@ export async function getClasses(): Promise<GymClass[]> {
 				time: c.time,
 				maxSpots: c.maxSpots,
 				nextSessionDate,
-				nextSessionBookings: c.bookings.filter((booking) => booking.date === nextSessionDate)
-					.length,
+				nextSessionBookings: c.bookings.filter((booking) => booking.date === nextSessionDate).length,
 				totalUpcomingBookings: c.bookings.length
 			}
 		})
 		.sort((a, b) => {
 			const dayDiff =
-				WEEKDAYS.indexOf(a.day as (typeof WEEKDAYS)[number]) -
-				WEEKDAYS.indexOf(b.day as (typeof WEEKDAYS)[number])
+				WEEKDAYS.indexOf(a.day as (typeof WEEKDAYS)[number]) - WEEKDAYS.indexOf(b.day as (typeof WEEKDAYS)[number])
 			return dayDiff !== 0 ? dayDiff : a.time.localeCompare(b.time)
 		})
 }
@@ -80,8 +78,7 @@ export async function getClassWithBookings(gymClassId: string): Promise<ClassWit
 		time: gymClass.time,
 		maxSpots: gymClass.maxSpots,
 		nextSessionDate,
-		nextSessionBookings: gymClass.bookings.filter((booking) => booking.date === nextSessionDate)
-			.length,
+		nextSessionBookings: gymClass.bookings.filter((booking) => booking.date === nextSessionDate).length,
 		totalUpcomingBookings: gymClass.bookings.length,
 		bookings: gymClass.bookings.map((b) => ({
 			id: b.id,

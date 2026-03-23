@@ -1,6 +1,6 @@
-import { Role } from '@prisma/client'
 import { getTranslations } from 'next-intl/server'
 
+import { Role } from '@/generated/prisma/client'
 import { MAX_MEMBER_CLASS_ENROLLMENTS } from '@/lib/constants'
 import { getTodayString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
@@ -18,48 +18,44 @@ export async function validateBookingRules(
 	date: string
 ): Promise<{ ok: true; time: string } | { ok: false; error: string }> {
 	const today = getTodayString()
-	const [t, tWeekdays] = await Promise.all([
-		getTranslations('Actions.classBookings'),
-		getTranslations('Weekdays')
-	])
-	const [user, gymClass, upcomingBookingsCount, existingBooking, sessionBookingsCount] =
-		await Promise.all([
-			prisma.user.findUnique({
-				where: { id: userId },
-				select: {
-					id: true,
-					role: true,
-					membershipStatus: true,
-					expiryDate: true
-				}
-			}),
-			prisma.gymClass.findUnique({
-				where: { id: gymClassId },
-				select: { id: true, day: true, time: true, maxSpots: true }
-			}),
-			prisma.classBooking.count({
-				where: {
+	const [t, tWeekdays] = await Promise.all([getTranslations('Actions.classBookings'), getTranslations('Weekdays')])
+	const [user, gymClass, upcomingBookingsCount, existingBooking, sessionBookingsCount] = await Promise.all([
+		prisma.user.findUnique({
+			where: { id: userId },
+			select: {
+				id: true,
+				role: true,
+				membershipStatus: true,
+				expiryDate: true
+			}
+		}),
+		prisma.gymClass.findUnique({
+			where: { id: gymClassId },
+			select: { id: true, day: true, time: true, maxSpots: true }
+		}),
+		prisma.classBooking.count({
+			where: {
+				userId,
+				date: { gte: today }
+			}
+		}),
+		prisma.classBooking.findUnique({
+			where: {
+				userId_gymClassId_date: {
 					userId,
-					date: { gte: today }
-				}
-			}),
-			prisma.classBooking.findUnique({
-				where: {
-					userId_gymClassId_date: {
-						userId,
-						gymClassId,
-						date
-					}
-				},
-				select: { id: true }
-			}),
-			prisma.classBooking.count({
-				where: {
 					gymClassId,
 					date
 				}
-			})
-		])
+			},
+			select: { id: true }
+		}),
+		prisma.classBooking.count({
+			where: {
+				gymClassId,
+				date
+			}
+		})
+	])
 
 	if (!user || user.role !== Role.MEMBER) {
 		return { ok: false, error: t('memberNotFound') }

@@ -11,7 +11,8 @@ export async function getCheckIns(): Promise<CheckIn[]> {
 	const today = getTodayString()
 	const visits = await prisma.visit.findMany({
 		where: { date: today },
-		include: { user: true }
+		include: { user: true },
+		orderBy: [{ time: 'desc' }, { id: 'desc' }]
 	})
 	return visits.map((v) => ({
 		id: v.id,

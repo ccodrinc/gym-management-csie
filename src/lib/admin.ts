@@ -1,7 +1,7 @@
-import { Role } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
 import { auth } from '@/auth'
+import { Role } from '@/generated/prisma/client'
 import { routing } from '@/i18n/routing'
 
 async function requireRole(role: Role): Promise<string> {

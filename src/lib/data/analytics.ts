@@ -1,8 +1,8 @@
 import { getTranslations } from 'next-intl/server'
 
+import { Role } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
-import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
-import { Role } from '@prisma/client'
+import { getRecentDateStrings, getTodayString, parseStoredDate, toDateString } from '@/lib/date'
 
 export type Analytics = {
 	totalMembers: number
@@ -15,46 +15,45 @@ export type Analytics = {
 
 export async function getAnalytics(locale: string): Promise<Analytics> {
 	const today = getTodayString()
+	const recentDates = getRecentDateStrings(7)
 	const monthStart = new Date()
 	monthStart.setDate(1)
 	monthStart.setHours(0, 0, 0, 0)
 	const monthStartStr = toDateString(monthStart)
 
-	const [totalMembers, todayVisits, newMembers, membersByType, allVisits, tWeekdays, tMembership] =
+	const [totalMembers, todayVisits, newMembers, membersByType, recentVisits, tWeekdays, tMembership] =
 		await Promise.all([
-		prisma.user.count({ where: { role: Role.MEMBER } }),
-		prisma.visit.groupBy({ by: ['userId'], where: { date: today } }),
-		prisma.user.count({
-			where: { role: Role.MEMBER, startDate: { gte: monthStartStr } }
-		}),
-		prisma.user.groupBy({
-			by: ['membershipType'],
-			where: { role: Role.MEMBER },
-			_count: { _all: true }
-		}),
-		prisma.visit.groupBy({
-			by: ['date'],
-			_count: { _all: true }
-		}),
-		getTranslations({ locale, namespace: 'Weekdays' }),
-		getTranslations({ locale, namespace: 'MembershipMeta' })
-	])
+			prisma.user.count({ where: { role: Role.MEMBER } }),
+			prisma.visit.groupBy({ by: ['userId'], where: { date: today } }),
+			prisma.user.count({
+				where: { role: Role.MEMBER, startDate: { gte: monthStartStr } }
+			}),
+			prisma.user.groupBy({
+				by: ['membershipType'],
+				where: { role: Role.MEMBER },
+				_count: { _all: true }
+			}),
+			prisma.visit.groupBy({
+				by: ['date'],
+				where: { date: { in: recentDates } },
+				_count: { _all: true }
+			}),
+			getTranslations({ locale, namespace: 'Weekdays' }),
+			getTranslations({ locale, namespace: 'MembershipMeta' })
+		])
 
 	const activeToday = todayVisits.length
 
-	const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-	const visitsByDay: Record<string, number> = Object.fromEntries(WEEKDAYS.map((d) => [d, 0]))
-
-	for (const v of allVisits) {
-		const d = new Date(v.date + 'T12:00:00')
-		const day = dayNames[d.getDay()]
-		visitsByDay[day] = (visitsByDay[day] ?? 0) + v._count._all
-	}
-	const visitsPerDay = WEEKDAYS.map((day) => ({ day: tWeekdays(day), visits: visitsByDay[day] ?? 0 }))
-
-	const totalVisits = allVisits.reduce((sum, v) => sum + v._count._all, 0)
-	const uniqueDays = allVisits.length
-	const avgCheckinsPerDay = uniqueDays > 0 ? Math.round(totalVisits / uniqueDays) : 0
+	const visitsByDate = Object.fromEntries(recentVisits.map((visit) => [visit.date, visit._count._all]))
+	const visitsPerDay = recentDates.map((date) => {
+		const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(parseStoredDate(date))
+		return {
+			day: tWeekdays(weekday),
+			visits: visitsByDate[date] ?? 0
+		}
+	})
+	const totalVisits = visitsPerDay.reduce((sum, day) => sum + day.visits, 0)
+	const avgCheckinsPerDay = Math.round(totalVisits / recentDates.length)
 
 	const membershipBreakdown = membersByType.map((m) => ({
 		type: m.membershipType ? tMembership(`types.${m.membershipType}`) : tMembership('types.none'),

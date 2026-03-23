@@ -1,7 +1,8 @@
 'use server'
 
-import { Role } from '@prisma/client'
 import { getTranslations } from 'next-intl/server'
+
+import { Role } from '@/generated/prisma/client'
 import { auth } from '@/auth'
 import { runSeed } from '@/lib/seed'
 

@@ -1,10 +1,11 @@
 import { getTranslations } from 'next-intl/server'
+import { redirect } from 'next/navigation'
+
+import { getSession } from '@/auth'
+import { Role, type MembershipStatus, type MembershipType } from '@/generated/prisma/client'
 import { getTodayString, toDateString, WEEKDAYS } from '@/lib/date'
 import { prisma } from '@/lib/db'
 import { getEffectiveMembershipStatus, isMembershipActive } from '@/lib/membership'
-import { requireMember } from '@/lib/admin'
-import { Role } from '@prisma/client'
-import type { MembershipStatus, MembershipType } from '@prisma/client'
 
 export type Member = {
 	id: string
@@ -48,7 +49,17 @@ export type CurrentMember = {
 }
 
 export async function getCurrentMember(locale: string): Promise<CurrentMember> {
-	const userId = await requireMember()
+	const session = await getSession()
+
+	if (!session?.user) {
+		redirect(`/${locale}/login`)
+	}
+
+	if (session.user.role !== Role.MEMBER) {
+		redirect(`/${locale}/admin`)
+	}
+
+	const userId = session.user.id
 
 	const [user, tActions, tWeekdays, tMembership] = await Promise.all([
 		prisma.user.findUnique({
@@ -100,9 +111,7 @@ export async function getCurrentMember(locale: string): Promise<CurrentMember> {
 		name: user.name,
 		username: user.username,
 		phone: user.phone,
-		membershipType: user.membershipType
-			? tMembership(`types.${user.membershipType}`)
-			: tMembership('types.none'),
+		membershipType: user.membershipType ? tMembership(`types.${user.membershipType}`) : tMembership('types.none'),
 		membershipTypeKey: user.membershipType,
 		membershipStatus: tMembership(`statuses.${membershipStatus}`),
 		membershipStatusKey: membershipStatus,
@@ -135,9 +144,7 @@ export async function getMembers(locale: string): Promise<Member[]> {
 			id: u.id,
 			name: u.name,
 			username: u.username,
-			membershipType: u.membershipType
-				? tMembership(`types.${u.membershipType}`)
-				: tMembership('types.none'),
+			membershipType: u.membershipType ? tMembership(`types.${u.membershipType}`) : tMembership('types.none'),
 			membershipTypeKey: u.membershipType,
 			membershipStatus: tMembership(`statuses.${membershipStatus}`),
 			membershipStatusKey: membershipStatus,

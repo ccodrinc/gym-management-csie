@@ -1,6 +1,6 @@
 import { compare, hash } from 'bcryptjs'
-import { MembershipStatus, MembershipType, Role } from '@prisma/client'
 
+import { MembershipStatus, MembershipType, Role } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
 import { getTodayString, toDateString } from '@/lib/date'
 

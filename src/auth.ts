@@ -4,9 +4,9 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { compare } from 'bcryptjs'
 import { cookies } from 'next/headers'
 
+import { Role } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
 import { SESSION_MAX_AGE_SECONDS } from '@/lib/constants'
-import { Role } from '@prisma/client'
 
 declare module 'next-auth' {
 	interface User {
@@ -33,17 +33,15 @@ declare module '@auth/core/jwt' {
 
 // Dev fallback only; AUTH_SECRET must be set in production
 const authSecret =
-	process.env.AUTH_SECRET ||
-	(process.env.NODE_ENV === 'development' ? 'dev-secret-min-32-chars-for-local' : undefined)
+	process.env.AUTH_SECRET || (process.env.NODE_ENV === 'development' ? 'dev-secret-min-32-chars-for-local' : undefined)
 
 if (!authSecret) {
-	throw new Error(
-		'AUTH_SECRET is required. Add it to .env or run: npx auth secret'
-	)
+	throw new Error('AUTH_SECRET is required. Add it to .env or run: npx auth secret')
 }
 
 const authConfig = NextAuth({
 	secret: authSecret,
+	trustHost: true,
 	adapter: PrismaAdapter(prisma),
 	session: {
 		strategy: 'jwt',
@@ -93,8 +91,7 @@ const authConfig = NextAuth({
 		async session({ session, token }) {
 			if (session.user) {
 				session.user.id = token.sub ?? ''
-				session.user.role =
-					token.role === Role.ADMIN || token.role === Role.MEMBER ? token.role : Role.MEMBER
+				session.user.role = token.role === Role.ADMIN || token.role === Role.MEMBER ? token.role : Role.MEMBER
 			}
 			return session
 		}

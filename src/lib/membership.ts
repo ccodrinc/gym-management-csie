@@ -1,4 +1,4 @@
-import type { MembershipStatus, MembershipType } from '@prisma/client'
+import type { MembershipStatus, MembershipType } from '@/generated/prisma/client'
 
 import { getTodayString } from '@/lib/date'
 
@@ -58,9 +58,10 @@ export const MEMBERSHIP_PLANS: MembershipPlan[] = [
 	}
 ]
 
-export const MEMBERSHIP_PLAN_MAP = Object.fromEntries(
-	MEMBERSHIP_PLANS.map((plan) => [plan.type, plan])
-) as Record<MembershipType, MembershipPlan>
+export const MEMBERSHIP_PLAN_MAP = Object.fromEntries(MEMBERSHIP_PLANS.map((plan) => [plan.type, plan])) as Record<
+	MembershipType,
+	MembershipPlan
+>
 
 export const MEMBERSHIP_QUERY_MAP = Object.fromEntries(
 	MEMBERSHIP_PLANS.map((plan) => [plan.queryValue, plan.type])
@@ -88,31 +89,21 @@ export function getEffectiveMembershipStatus(
 ): MembershipStatus {
 	if (status === MEMBERSHIP_STATUS.DEACTIVATED) return status
 	if (!expiryDate) return MEMBERSHIP_STATUS.EXPIRED
-	return expiryDate >= getTodayString()
-		? MEMBERSHIP_STATUS.ACTIVE
-		: MEMBERSHIP_STATUS.EXPIRED
+	return expiryDate >= getTodayString() ? MEMBERSHIP_STATUS.ACTIVE : MEMBERSHIP_STATUS.EXPIRED
 }
 
-export function isMembershipActive(
-	status: MembershipStatus,
-	expiryDate: string | null | undefined
-): boolean {
+export function isMembershipActive(status: MembershipStatus, expiryDate: string | null | undefined): boolean {
 	return getEffectiveMembershipStatus(status, expiryDate) === MEMBERSHIP_STATUS.ACTIVE
 }
 
-export function getMembershipEndDate(
-	type: MembershipType,
-	startDate: Date
-): string {
+export function getMembershipEndDate(type: MembershipType, startDate: Date): string {
 	const plan = MEMBERSHIP_PLAN_MAP[type]
 	const endDate = new Date(startDate)
 	endDate.setDate(startDate.getDate() + plan.durationDays - 1)
 	return endDate.toISOString().slice(0, 10)
 }
 
-export function getMembershipTypeFromQuery(
-	value: string | null | undefined
-): MembershipType | null {
+export function getMembershipTypeFromQuery(value: string | null | undefined): MembershipType | null {
 	if (!value) return null
 	return MEMBERSHIP_QUERY_MAP[value as keyof typeof MEMBERSHIP_QUERY_MAP] ?? null
 }
