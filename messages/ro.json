@@ -1,7 +1,7 @@
 {
 	"Metadata": {
-		"title": "Reps",
-		"description": "Sală deschisă 24/7 în centru. Zonă completă de greutăți, turf și clase de grup."
+		"title": "Sală 24/7 în centru",
+		"description": "Sală din centru cu acces 24/7, zonă completă de greutăți, turf, clase de grup și portal bilingv pentru membri."
 	},
 	"Header": {
 		"brand": "Reps",
@@ -93,6 +93,7 @@
 			"username": "Nume de utilizator",
 			"password": "Parolă",
 			"submit": "Autentificare",
+			"submitPending": "Se autentifică…",
 			"noAccount": "Nu ai cont?",
 			"signUp": "Creează cont"
 		},
@@ -105,6 +106,7 @@
 			"password": "Parolă",
 			"confirmPassword": "Confirmă parola",
 			"submit": "Creează cont",
+			"submitPending": "Se creează contul…",
 			"hasAccount": "Ai deja cont?",
 			"logIn": "Autentificare"
 		},
@@ -155,7 +157,9 @@
 			"activeTotal": "{active} activi · {total} total",
 			"active": "Activ",
 			"expired": "Expirat",
-			"searchPlaceholder": "Caută după nume sau username...",
+			"searchPlaceholder": "Caută după nume sau username…",
+			"searchLabel": "Caută membri",
+			"resultsCount": "{count} din {total} membri afișați",
 			"name": "Nume",
 			"username": "Nume de utilizator",
 			"membership": "Abonament",
@@ -164,14 +168,18 @@
 			"expiry": "Expirare",
 			"gymVisits": "Vizite la sală",
 			"history": "Istoric",
+			"historyCaption": "Privire de ansamblu asupra abonamentului și a activității fiecărui membru.",
+			"historyDescription": "Check-in-urile recente și istorice pentru acest membru.",
 			"noHistory": "Niciun check-in încă.",
-			"viewHistory": "Vezi istoricul"
+			"viewHistory": "Vezi istoricul",
+			"emptySearch": "Nu există membri care să corespundă căutării."
 		},
 		"classes": {
 			"title": "Clase",
 			"description": "Administrează programul claselor de grup și capacitatea",
 			"schedule": "Programul acestei săptămâni",
 			"capacity": "Capacitate",
+			"noClasses": "Nu există încă clase programate.",
 			"nextSession": "Următoarea sesiune",
 			"day": "Zi",
 			"time": "Ora",
@@ -218,6 +226,7 @@
 			"title": "Check-in-uri",
 			"description": "Check-in-urile de astăzi",
 			"todayCheckIns": "Check-in-urile de astăzi",
+			"todayCheckInsSummary": "{count} în total astăzi",
 			"member": "Membru",
 			"checkIns": "Check-in-uri"
 		}
@@ -278,13 +287,23 @@
 					"title": "Lunar",
 					"description": "Acces flexibil de la lună la lună, cu clase incluse.",
 					"period": "pe lună",
-					"features": ["Acces nelimitat la sală", "Până la 3 rezervări la clase", "Acces la vestiar", "Poți anula oricând"]
+					"features": [
+						"Acces nelimitat la sală",
+						"Până la 3 rezervări la clase",
+						"Acces la vestiar",
+						"Poți anula oricând"
+					]
 				},
 				"Annual": {
 					"title": "Anual",
 					"description": "Cea mai bună valoare pentru membrii care se antrenează tot anul.",
 					"period": "pe an",
-					"features": ["Tot din planul Lunar", "Acces prioritar la clase", "Cel mai bun cost efectiv", "Beneficii pentru membri"]
+					"features": [
+						"Tot din planul Lunar",
+						"Acces prioritar la clase",
+						"Cel mai bun cost efectiv",
+						"Beneficii pentru membri"
+					]
 				}
 			},
 			"stepChoosePlan": "1. Alege abonamentul",
@@ -326,11 +345,14 @@
 			"spots": "locuri",
 			"membershipActive": "Abonament activ",
 			"membershipInactive": "Abonament inactiv",
+			"membershipRequired": "Activează un abonament ca să poți rezerva clase.",
 			"upcomingLimit": "Limită rezervări",
 			"upcomingLimitDescription": "{count} din {limit} rezervări viitoare folosite",
 			"bookedBadge": "Rezervat",
 			"availableBadge": "Disponibil",
 			"fullBadge": "Complet",
+			"fullHelper": "Următoarea sesiune este deja completă.",
+			"bookingLimitReached": "Ai atins limita de {limit} clase rezervate.",
 			"nextSessionDate": "Următoarea sesiune: {date}",
 			"capacity": "{booked}/{total} locuri rezervate",
 			"processing": "Se actualizează…",
@@ -360,6 +382,12 @@
 		"description": "Nu am putut finaliza cererea ta. Te rugăm să încerci din nou.",
 		"tryAgain": "Încearcă din nou",
 		"goHome": "Mergi acasă"
+	},
+	"NotFound": {
+		"eyebrow": "Pagina nu a fost găsită",
+		"title": "Această pagină nu este disponibilă.",
+		"description": "Linkul poate fi învechit, ruta poate fi schimbată sau limba solicitată nu este disponibilă.",
+		"cta": "Înapoi acasă"
 	},
 	"Actions": {
 		"common": {

@@ -1,7 +1,7 @@
 {
 	"Metadata": {
-		"title": "Reps",
-		"description": "24/7 gym downtown. Full weights, turf, group classes."
+		"title": "24/7 Downtown Gym",
+		"description": "Downtown gym with 24/7 access, full weights, turf training, group classes, and a bilingual member portal."
 	},
 	"Header": {
 		"brand": "Reps",
@@ -93,6 +93,7 @@
 			"username": "Username",
 			"password": "Password",
 			"submit": "Log in",
+			"submitPending": "Logging in…",
 			"noAccount": "Don't have an account?",
 			"signUp": "Sign up"
 		},
@@ -105,6 +106,7 @@
 			"password": "Password",
 			"confirmPassword": "Confirm password",
 			"submit": "Create account",
+			"submitPending": "Creating account…",
 			"hasAccount": "Already have an account?",
 			"logIn": "Log in"
 		},
@@ -155,7 +157,9 @@
 			"activeTotal": "{active} active · {total} total",
 			"active": "Active",
 			"expired": "Expired",
-			"searchPlaceholder": "Search by name or username...",
+			"searchPlaceholder": "Search by name or username…",
+			"searchLabel": "Search members",
+			"resultsCount": "{count} of {total} members shown",
 			"name": "Name",
 			"username": "Username",
 			"membership": "Membership",
@@ -164,14 +168,18 @@
 			"expiry": "Expiry",
 			"gymVisits": "Gym Visits",
 			"history": "History",
+			"historyCaption": "Membership overview and visit activity for every member.",
+			"historyDescription": "Recent and historical check-ins for this member.",
 			"noHistory": "No check-ins yet.",
-			"viewHistory": "View history"
+			"viewHistory": "View history",
+			"emptySearch": "No members match your search."
 		},
 		"classes": {
 			"title": "Classes",
 			"description": "Manage group class schedule and capacity",
 			"schedule": "This Week's Schedule",
 			"capacity": "Capacity",
+			"noClasses": "No classes are scheduled yet.",
 			"nextSession": "Next session",
 			"day": "Day",
 			"time": "Time",
@@ -218,6 +226,7 @@
 			"title": "Check-ins",
 			"description": "Today's check-ins",
 			"todayCheckIns": "Today's Check-ins",
+			"todayCheckInsSummary": "{count} total today",
 			"member": "Member",
 			"checkIns": "Check-ins"
 		}
@@ -326,11 +335,14 @@
 			"spots": "spots",
 			"membershipActive": "Membership active",
 			"membershipInactive": "Membership inactive",
+			"membershipRequired": "Activate a membership to start booking classes.",
 			"upcomingLimit": "Booking limit",
 			"upcomingLimitDescription": "{count} of {limit} upcoming class bookings in use",
 			"bookedBadge": "Booked",
 			"availableBadge": "Available",
 			"fullBadge": "Full",
+			"fullHelper": "The next session is already full.",
+			"bookingLimitReached": "You've reached the {limit}-class booking limit.",
 			"nextSessionDate": "Next session: {date}",
 			"capacity": "{booked}/{total} spots booked",
 			"processing": "Updating…",
@@ -360,6 +372,12 @@
 		"description": "We couldn't complete your request. Please try again.",
 		"tryAgain": "Try again",
 		"goHome": "Go home"
+	},
+	"NotFound": {
+		"eyebrow": "Page not found",
+		"title": "This page isn't available.",
+		"description": "The link may be outdated, the route may have changed, or the requested locale may be unavailable.",
+		"cta": "Return home"
 	},
 	"Actions": {
 		"common": {

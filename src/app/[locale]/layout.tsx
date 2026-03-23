@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { hasLocale } from 'next-intl'
 import { NextIntlClientProvider } from 'next-intl'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 
 import { routing } from '@/i18n/routing'
+import { SITE_NAME } from '@/lib/site'
 
 type Props = {
 	children: React.ReactNode
@@ -25,7 +26,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const t = await getTranslations({ locale, namespace: 'Metadata' })
 
 	return {
-		title: t('title'),
+		title: {
+			default: t('title'),
+			template: `%s | ${SITE_NAME}`
+		},
 		description: t('description')
 	}
 }
@@ -37,10 +41,15 @@ export default async function LocaleLayout({ children, params }: Props) {
 		notFound()
 	}
 
+	setRequestLocale(locale)
+
 	const messages = (await import(`../../../messages/${locale}.json`)).default
 
 	return (
-		<NextIntlClientProvider locale={locale} messages={messages}>
+		<NextIntlClientProvider
+			locale={locale}
+			messages={messages}
+		>
 			{children}
 		</NextIntlClientProvider>
 	)
