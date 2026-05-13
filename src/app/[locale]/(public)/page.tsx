@@ -1,4 +1,5 @@
 import { Clock, Dumbbell, ShieldPlus, Users } from 'lucide-react'
+import Image from 'next/image'
 import { getTranslations } from 'next-intl/server'
 
 import { FadeIn } from '@/components/shared/motion/fade-in'
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { createPageMetadata } from '@/lib/seo'
+import { PUBLIC_PAGE_IMAGES } from '@/lib/public-images'
 import { getSiteUrl, SITE_DESCRIPTION, SITE_NAME } from '@/lib/site'
 
 type Props = {
@@ -31,6 +33,32 @@ export default async function HomePage({ params }: Props) {
 	const { locale } = await params
 
 	const t = await getTranslations({ locale })
+	const amenities = [
+		{
+			key: 'access24',
+			Icon: Clock,
+			image: PUBLIC_PAGE_IMAGES.amenities.access24,
+			cardClassName: 'border-border bg-card'
+		},
+		{
+			key: 'weightsFloor',
+			Icon: Dumbbell,
+			image: PUBLIC_PAGE_IMAGES.amenities.weightsFloor,
+			cardClassName: 'border-border bg-card'
+		},
+		{
+			key: 'groupClasses',
+			Icon: Users,
+			image: PUBLIC_PAGE_IMAGES.amenities.groupClasses,
+			cardClassName: 'border-primary/20 bg-primary/5'
+		},
+		{
+			key: 'recoveryZone',
+			Icon: ShieldPlus,
+			image: PUBLIC_PAGE_IMAGES.amenities.recoveryZone,
+			cardClassName: 'border-border bg-card'
+		}
+	] as const
 	const websiteUrl = getSiteUrl()
 	const homeJsonLd = {
 		'@context': 'https://schema.org',
@@ -46,27 +74,35 @@ export default async function HomePage({ params }: Props) {
 	return (
 		<>
 			<StructuredData data={homeJsonLd} />
-			<section className='relative overflow-hidden'>
-				<div className='bg-primary/20 absolute top-0 -right-32 h-96 w-96 rounded-full blur-3xl' />
-				<div className='bg-primary/10 absolute top-48 -left-32 h-64 w-64 rounded-full blur-3xl' />
-				<div className='relative mx-auto max-w-6xl px-6 pt-24 pb-28 md:pt-40 md:pb-48'>
-					<div className='max-w-2xl'>
+			<section className='relative isolate overflow-hidden border-b bg-neutral-950 text-white'>
+				<Image
+					src={PUBLIC_PAGE_IMAGES.homeHero}
+					alt=''
+					fill
+					priority
+					sizes='100vw'
+					className='object-cover opacity-85'
+				/>
+				<div className='absolute inset-0 bg-[linear-gradient(90deg,rgba(3,8,5,0.86)_0%,rgba(3,8,5,0.58)_48%,rgba(3,8,5,0.16)_100%)]' />
+				<div className='from-background pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t via-transparent to-transparent' />
+				<div className='relative mx-auto max-w-6xl px-6 py-24 md:py-36 lg:py-40'>
+					<div className='max-w-3xl'>
 						<FadeIn delay={0}>
-							<p className='text-primary mb-6 font-mono text-sm'>{t('Hero.badge')}</p>
+							<p className='mb-6 font-mono text-sm text-emerald-200/90'>{t('Hero.badge')}</p>
 						</FadeIn>
 						<FadeIn delay={0.1}>
-							<h1 className='text-foreground font-sans text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl'>
+							<h1 className='font-sans text-4xl font-semibold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl'>
 								{t('Hero.headline')}
 							</h1>
 						</FadeIn>
 						<FadeIn delay={0.25}>
-							<p className='text-muted-foreground mt-6 text-lg leading-relaxed'>{t('Hero.subheadline')}</p>
+							<p className='mt-6 max-w-2xl text-lg leading-relaxed text-white/80'>{t('Hero.subheadline')}</p>
 						</FadeIn>
 						<FadeIn delay={0.4}>
 							<div className='mt-10 flex flex-col items-start gap-3 sm:flex-row'>
 								<Button
 									size='lg'
-									className='w-full px-8 sm:w-auto'
+									className='w-full bg-white px-8 text-neutral-950 shadow-lg shadow-black/20 hover:bg-white/90 sm:w-auto'
 									asChild
 								>
 									<Link
@@ -79,7 +115,7 @@ export default async function HomePage({ params }: Props) {
 								<Button
 									size='lg'
 									variant='ghost'
-									className='text-muted-foreground hover:text-foreground w-full justify-start sm:w-auto sm:justify-center'
+									className='w-full justify-start border border-white/25 bg-white/10 text-white hover:bg-white/20 hover:text-white sm:w-auto sm:justify-center'
 									asChild
 								>
 									<Link
@@ -112,54 +148,33 @@ export default async function HomePage({ params }: Props) {
 						className='grid gap-6 md:grid-cols-2 md:gap-8'
 						as='div'
 					>
-						<StaggerItem hover>
-							<Card className='border-border bg-card'>
-								<CardHeader>
-									<Clock
-										className='text-primary mb-3 size-8'
-										strokeWidth={1.5}
-									/>
-									<CardTitle className='text-xl'>{t('Amenities.access24.title')}</CardTitle>
-									<CardDescription>{t('Amenities.access24.description')}</CardDescription>
-								</CardHeader>
-							</Card>
-						</StaggerItem>
-						<StaggerItem hover>
-							<Card className='border-border bg-card'>
-								<CardHeader>
-									<Dumbbell
-										className='text-primary mb-3 size-8'
-										strokeWidth={1.5}
-									/>
-									<CardTitle className='text-xl'>{t('Amenities.weightsFloor.title')}</CardTitle>
-									<CardDescription>{t('Amenities.weightsFloor.description')}</CardDescription>
-								</CardHeader>
-							</Card>
-						</StaggerItem>
-						<StaggerItem hover>
-							<Card className='border-primary/20 bg-primary/5'>
-								<CardHeader>
-									<Users
-										className='text-primary mb-3 size-8'
-										strokeWidth={1.5}
-									/>
-									<CardTitle className='text-xl'>{t('Amenities.groupClasses.title')}</CardTitle>
-									<CardDescription>{t('Amenities.groupClasses.description')}</CardDescription>
-								</CardHeader>
-							</Card>
-						</StaggerItem>
-						<StaggerItem hover>
-							<Card className='border-border bg-card'>
-								<CardHeader>
-									<ShieldPlus
-										className='text-primary mb-3 size-8'
-										strokeWidth={1.5}
-									/>
-									<CardTitle className='text-xl'>{t('Amenities.recoveryZone.title')}</CardTitle>
-									<CardDescription>{t('Amenities.recoveryZone.description')}</CardDescription>
-								</CardHeader>
-							</Card>
-						</StaggerItem>
+						{amenities.map(({ key, Icon, image, cardClassName }) => (
+							<StaggerItem
+								key={key}
+								hover
+							>
+								<Card className={`group h-full overflow-hidden py-0 ${cardClassName}`}>
+									<div className='relative aspect-[16/10] overflow-hidden'>
+										<Image
+											src={image}
+											alt=''
+											fill
+											sizes='(min-width: 768px) 50vw, 100vw'
+											className='object-cover transition duration-700 group-hover:scale-105'
+										/>
+										<div className='absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent' />
+									</div>
+									<CardHeader className='p-6'>
+										<Icon
+											className='text-primary mb-3 size-8'
+											strokeWidth={1.5}
+										/>
+										<CardTitle className='text-xl'>{t(`Amenities.${key}.title`)}</CardTitle>
+										<CardDescription>{t(`Amenities.${key}.description`)}</CardDescription>
+									</CardHeader>
+								</Card>
+							</StaggerItem>
+						))}
 					</StaggerContainer>
 				</div>
 			</FadeInView>

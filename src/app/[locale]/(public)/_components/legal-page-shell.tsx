@@ -1,6 +1,8 @@
 import { FileText, GraduationCap, ShieldCheck } from 'lucide-react'
+import Image from 'next/image'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { PUBLIC_PAGE_IMAGES } from '@/lib/public-images'
 
 type LegalSection = {
 	title: string
@@ -28,38 +30,50 @@ export function LegalPageShell({
 	variant
 }: LegalPageShellProps) {
 	const Icon = variant === 'privacy' ? ShieldCheck : FileText
+	const heroImage = PUBLIC_PAGE_IMAGES.legal[variant]
 
 	return (
 		<div className='relative overflow-hidden px-6 py-20'>
-			<div className='pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(64,153,92,0.14),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(64,153,92,0.08),transparent_32%)]' />
 			<article className='relative mx-auto flex max-w-6xl flex-col gap-8'>
-				<section className='from-card via-card to-muted/40 rounded-[2rem] border bg-gradient-to-br p-8 shadow-sm md:p-12'>
-					<div className='grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start'>
-						<header className='flex max-w-3xl flex-col gap-4'>
-							<div className='flex items-center gap-3'>
-								<div className='bg-primary/10 text-primary flex size-12 items-center justify-center rounded-2xl'>
-									<Icon
-										aria-hidden='true'
-										className='size-6'
-									/>
+				<section className='bg-card overflow-hidden rounded-[2rem] border shadow-sm'>
+					<div className='grid lg:grid-cols-[minmax(0,1fr)_22rem]'>
+						<div className='p-8 md:p-12'>
+							<header className='flex max-w-3xl flex-col gap-4'>
+								<div className='flex items-center gap-3'>
+									<div className='bg-primary/10 text-primary flex size-12 items-center justify-center rounded-2xl'>
+										<Icon
+											aria-hidden='true'
+											className='size-6'
+										/>
+									</div>
+									<h1 className='text-4xl font-semibold tracking-tight text-balance md:text-5xl'>{title}</h1>
 								</div>
-								<h1 className='text-4xl font-semibold tracking-tight text-balance md:text-5xl'>{title}</h1>
-							</div>
-							<p className='text-muted-foreground max-w-3xl text-lg leading-8'>{description}</p>
-						</header>
+								<p className='text-muted-foreground max-w-3xl text-lg leading-8'>{description}</p>
+							</header>
 
-						<Card className='border-primary/20 bg-background/80 w-full shadow-none'>
-							<CardHeader className='flex flex-col gap-3'>
-								<div className='flex items-center gap-2 text-sm font-medium'>
-									<GraduationCap
-										aria-hidden='true'
-										className='text-primary size-4'
-									/>
-									{summaryTitle}
-								</div>
-								<CardDescription className='text-sm leading-6'>{summaryBody}</CardDescription>
-							</CardHeader>
-						</Card>
+							<Card className='border-primary/20 bg-background/80 mt-8 max-w-2xl shadow-none'>
+								<CardHeader className='flex flex-col gap-3'>
+									<div className='flex items-center gap-2 text-sm font-medium'>
+										<GraduationCap
+											aria-hidden='true'
+											className='text-primary size-4'
+										/>
+										{summaryTitle}
+									</div>
+									<CardDescription className='text-sm leading-6'>{summaryBody}</CardDescription>
+								</CardHeader>
+							</Card>
+						</div>
+						<div className='relative min-h-64 overflow-hidden lg:min-h-full'>
+							<Image
+								src={heroImage}
+								alt=''
+								fill
+								sizes='(min-width: 1024px) 22rem, 100vw'
+								className='object-cover'
+							/>
+							<div className='absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent lg:bg-gradient-to-l' />
+						</div>
 					</div>
 				</section>
 
