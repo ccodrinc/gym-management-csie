@@ -390,7 +390,15 @@
 			"accountDescription": "Informațiile actuale ale contului tău.",
 			"name": "Nume",
 			"username": "Nume de utilizator",
-			"phone": "Telefon"
+			"phone": "Telefon",
+			"communication": {
+				"title": "Preferințe de comunicare",
+				"description": "Alege cum vrei să primești actualizări despre cont și programări.",
+				"emailTitle": "Actualizări prin email",
+				"emailDescription": "Primește notificări mock despre rezervări, abonament și modificări de program. Emailurile promoționale nu sunt implementate.",
+				"enabledMock": "Activat pentru acest mock. Într-o versiune viitoare, aici se pot salva preferințele reale.",
+				"disabledMock": "Dezactivat pentru acest mock. Nu se trimite nimic, iar alegerea nu este salvată încă."
+			}
 		}
 	},
 	"Error": {

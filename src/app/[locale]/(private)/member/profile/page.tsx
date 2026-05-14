@@ -4,6 +4,8 @@ import { PageHeader } from '@/components/shared/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getCurrentMember } from '@/lib/data'
 
+import { CommunicationPreferences } from '../_components/communication-preferences'
+
 type Props = {
 	params: Promise<{ locale: string }>
 }
@@ -43,6 +45,16 @@ export default async function MemberProfilePage({ params }: Props) {
 							<p className='font-medium'>{member.phone ?? '—'}</p>
 						</div>
 					</div>
+				</CardContent>
+			</Card>
+
+			<Card>
+				<CardHeader>
+					<CardTitle>{t('communication.title')}</CardTitle>
+					<CardDescription>{t('communication.description')}</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<CommunicationPreferences />
 				</CardContent>
 			</Card>
 		</div>

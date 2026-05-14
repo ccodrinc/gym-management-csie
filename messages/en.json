@@ -380,7 +380,15 @@
 			"accountDescription": "Your current account information on file.",
 			"name": "Name",
 			"username": "Username",
-			"phone": "Phone"
+			"phone": "Phone",
+			"communication": {
+				"title": "Communication preferences",
+				"description": "Choose how you want to receive account and schedule updates.",
+				"emailTitle": "Email updates",
+				"emailDescription": "Receive mock notifications about bookings, membership, and schedule changes. Promotional emails are not implemented.",
+				"enabledMock": "Enabled for this mock. A future version can persist the real preference here.",
+				"disabledMock": "Disabled for this mock. Nothing is sent, and this choice is not persisted yet."
+			}
 		}
 	},
 	"Error": {
