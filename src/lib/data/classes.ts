@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { getTodayString, getNextOccurrenceString, WEEKDAYS } from '@/lib/date'
+import { Role } from '@/generated/prisma/client'
 
 export type GymClass = {
 	id: string
@@ -7,9 +8,18 @@ export type GymClass = {
 	day: string
 	time: string
 	maxSpots: number
+	trainerId: string | null
+	trainerName: string | null
+	trainerUsername: string | null
 	nextSessionDate: string
 	nextSessionBookings: number
 	totalUpcomingBookings: number
+}
+
+export type Trainer = {
+	id: string
+	name: string | null
+	username: string
 }
 
 export type ClassBookingWithUser = {
@@ -26,10 +36,34 @@ export type ClassWithBookings = GymClass & {
 	bookings: ClassBookingWithUser[]
 }
 
-export async function getClasses(): Promise<GymClass[]> {
+type GetClassesOptions = {
+	trainerId?: string
+}
+
+export async function getTrainers(): Promise<Trainer[]> {
+	return prisma.user.findMany({
+		where: { role: Role.TRAINER },
+		select: {
+			id: true,
+			name: true,
+			username: true
+		},
+		orderBy: [{ name: 'asc' }, { username: 'asc' }]
+	})
+}
+
+export async function getClasses(options: GetClassesOptions = {}): Promise<GymClass[]> {
 	const today = getTodayString()
 	const classes = await prisma.gymClass.findMany({
+		where: options.trainerId ? { trainerId: options.trainerId } : undefined,
 		include: {
+			trainer: {
+				select: {
+					id: true,
+					name: true,
+					username: true
+				}
+			},
 			bookings: {
 				where: { date: { gte: today } },
 				select: { id: true, userId: true, date: true }
@@ -45,6 +79,9 @@ export async function getClasses(): Promise<GymClass[]> {
 				day: c.day,
 				time: c.time,
 				maxSpots: c.maxSpots,
+				trainerId: c.trainerId,
+				trainerName: c.trainer?.name ?? null,
+				trainerUsername: c.trainer?.username ?? null,
 				nextSessionDate,
 				nextSessionBookings: c.bookings.filter((booking) => booking.date === nextSessionDate).length,
 				totalUpcomingBookings: c.bookings.length
@@ -62,6 +99,13 @@ export async function getClassWithBookings(gymClassId: string): Promise<ClassWit
 	const gymClass = await prisma.gymClass.findUnique({
 		where: { id: gymClassId },
 		include: {
+			trainer: {
+				select: {
+					id: true,
+					name: true,
+					username: true
+				}
+			},
 			bookings: {
 				where: { date: { gte: today } },
 				include: { user: true },
@@ -77,6 +121,9 @@ export async function getClassWithBookings(gymClassId: string): Promise<ClassWit
 		day: gymClass.day,
 		time: gymClass.time,
 		maxSpots: gymClass.maxSpots,
+		trainerId: gymClass.trainerId,
+		trainerName: gymClass.trainer?.name ?? null,
+		trainerUsername: gymClass.trainer?.username ?? null,
 		nextSessionDate,
 		nextSessionBookings: gymClass.bookings.filter((booking) => booking.date === nextSessionDate).length,
 		totalUpcomingBookings: gymClass.bookings.length,

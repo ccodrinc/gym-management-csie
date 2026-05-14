@@ -4,7 +4,9 @@ export { getCurrentMember, getMembers, type Member, type CurrentMember } from '.
 export {
 	getClasses,
 	getClassWithBookings,
+	getTrainers,
 	type GymClass,
+	type Trainer,
 	type ClassWithBookings,
 	type ClassBookingWithUser
 } from './classes'

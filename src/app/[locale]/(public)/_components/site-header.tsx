@@ -38,7 +38,8 @@ function SiteNavLink({ href, locale, children, className }: NavLinkProps) {
 export async function SiteHeader({ locale }: SiteHeaderProps) {
 	const [t, session] = await Promise.all([getTranslations({ locale, namespace: 'Header' }), getSession()])
 	const isAdmin = session?.user?.role === Role.ADMIN
-	const dashboardHref = isAdmin ? '/admin' : '/member'
+	const isTrainer = session?.user?.role === Role.TRAINER
+	const dashboardHref = isAdmin ? '/admin' : isTrainer ? '/trainer/classes' : '/member'
 
 	return (
 		<header className='border-border bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur-md'>
@@ -63,7 +64,7 @@ export async function SiteHeader({ locale }: SiteHeaderProps) {
 							>
 								{t('home')}
 							</SiteNavLink>
-							{!isAdmin ? (
+							{!isAdmin && !isTrainer ? (
 								<SiteNavLink
 									href='/pricing'
 									locale={locale}
@@ -122,7 +123,7 @@ export async function SiteHeader({ locale }: SiteHeaderProps) {
 					>
 						{t('home')}
 					</SiteNavLink>
-					{!isAdmin ? (
+					{!isAdmin && !isTrainer ? (
 						<SiteNavLink
 							href='/pricing'
 							locale={locale}

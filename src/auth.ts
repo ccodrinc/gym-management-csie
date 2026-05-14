@@ -91,7 +91,10 @@ const authConfig = NextAuth({
 		async session({ session, token }) {
 			if (session.user) {
 				session.user.id = token.sub ?? ''
-				session.user.role = token.role === Role.ADMIN || token.role === Role.MEMBER ? token.role : Role.MEMBER
+				session.user.role =
+					token.role === Role.ADMIN || token.role === Role.TRAINER || token.role === Role.MEMBER
+						? token.role
+						: Role.MEMBER
 			}
 			return session
 		}

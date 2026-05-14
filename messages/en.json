@@ -183,6 +183,9 @@
 			"nextSession": "Next session",
 			"day": "Day",
 			"time": "Time",
+			"trainer": "Trainer",
+			"unassignedTrainer": "Unassigned",
+			"trainerAssignmentHelper": "Only admins can assign or change the trainer for a class.",
 			"spots": "spots",
 			"enrollments": "Enrollments",
 			"enrollmentsDescription": "View and manage who is booked for this class.",
@@ -229,6 +232,17 @@
 			"todayCheckInsSummary": "{count} total today",
 			"member": "Member",
 			"checkIns": "Check-ins"
+		}
+	},
+	"Trainer": {
+		"nav": {
+			"title": "Trainer",
+			"classes": "Classes"
+		},
+		"classes": {
+			"title": "Trainer classes",
+			"description": "Manage the class sessions assigned to you.",
+			"assignedSchedule": "Your assigned schedule"
 		}
 	},
 	"Member": {
@@ -344,6 +358,8 @@
 			"fullHelper": "The next session is already full.",
 			"bookingLimitReached": "You've reached the {limit}-class booking limit.",
 			"nextSessionDate": "Next session: {date}",
+			"trainer": "Trainer: {name}",
+			"unassignedTrainer": "Unassigned",
 			"capacity": "{booked}/{total} spots booked",
 			"processing": "Updating…",
 			"bookSuccess": "Class booked successfully",
@@ -407,6 +423,7 @@
 			"maxSpotsRange": "Max spots must be between 1 and 999",
 			"invalidClassData": "Invalid class data",
 			"classNotFound": "Class not found",
+			"trainerNotFound": "Selected trainer was not found",
 			"maxSpotsBelowEnrollments": "Max spots cannot be less than current enrollments"
 		},
 		"classBookings": {

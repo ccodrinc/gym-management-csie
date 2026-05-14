@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { DEFAULT_CLASS_DAY, DEFAULT_CLASS_MAX_SPOTS, DEFAULT_CLASS_TIME } from '@/lib/constants'
-import type { GymClass } from '@/lib/data'
+import type { GymClass, Trainer } from '@/lib/data'
 import { WEEKDAYS } from '@/lib/date'
 
 type ClassFormDialogProps = {
@@ -18,19 +18,30 @@ type ClassFormDialogProps = {
 	onOpenChange: (open: boolean) => void
 	mode: 'create' | 'edit'
 	class?: GymClass | null
+	trainers?: Trainer[]
+	canAssignTrainer?: boolean
 	onSuccess?: () => void
 }
 
 const selectClassName =
 	'border-input bg-background focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 block h-9 w-full rounded-md border px-3 py-2 text-sm outline-none transition-[border-color,box-shadow]'
 
-export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass, onSuccess }: ClassFormDialogProps) {
+export function ClassFormDialog({
+	open,
+	onOpenChange,
+	mode,
+	class: initialClass,
+	trainers = [],
+	canAssignTrainer = false,
+	onSuccess
+}: ClassFormDialogProps) {
 	const t = useTranslations('Admin.classes')
 	const tWeekdays = useTranslations('Weekdays')
 	const [name, setName] = useState('')
 	const [day, setDay] = useState(DEFAULT_CLASS_DAY)
 	const [time, setTime] = useState(DEFAULT_CLASS_TIME)
 	const [maxSpots, setMaxSpots] = useState(DEFAULT_CLASS_MAX_SPOTS)
+	const [trainerId, setTrainerId] = useState('')
 	const [pending, setPending] = useState(false)
 
 	useEffect(() => {
@@ -43,6 +54,7 @@ export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass,
 			setDay(initialClass.day)
 			setTime(initialClass.time)
 			setMaxSpots(initialClass.maxSpots)
+			setTrainerId(initialClass.trainerId ?? '')
 			return
 		}
 
@@ -50,6 +62,7 @@ export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass,
 		setDay(DEFAULT_CLASS_DAY)
 		setTime(DEFAULT_CLASS_TIME)
 		setMaxSpots(DEFAULT_CLASS_MAX_SPOTS)
+		setTrainerId('')
 	}, [initialClass, mode, open])
 
 	async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -58,7 +71,7 @@ export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass,
 
 		try {
 			if (mode === 'create') {
-				const result = await createGymClassAction(name, day, time, maxSpots)
+				const result = await createGymClassAction(name, day, time, maxSpots, canAssignTrainer ? trainerId : undefined)
 				if (!result.ok) {
 					toast.error(result.error)
 					return
@@ -66,7 +79,14 @@ export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass,
 
 				toast.success(t('classCreated'))
 			} else if (initialClass) {
-				const result = await updateGymClassAction(initialClass.id, name, day, time, maxSpots)
+				const result = await updateGymClassAction(
+					initialClass.id,
+					name,
+					day,
+					time,
+					maxSpots,
+					canAssignTrainer ? trainerId : undefined
+				)
 				if (!result.ok) {
 					toast.error(result.error)
 					return
@@ -165,6 +185,31 @@ export function ClassFormDialog({ open, onOpenChange, mode, class: initialClass,
 							</p>
 						) : null}
 					</div>
+
+					{canAssignTrainer ? (
+						<div className='flex flex-col gap-2'>
+							<Label htmlFor='class-trainer'>{t('trainer')}</Label>
+							<select
+								id='class-trainer'
+								name='classTrainer'
+								className={selectClassName}
+								value={trainerId}
+								onChange={(event) => setTrainerId(event.target.value)}
+								autoComplete='off'
+							>
+								<option value=''>{t('unassignedTrainer')}</option>
+								{trainers.map((trainer) => (
+									<option
+										key={trainer.id}
+										value={trainer.id}
+									>
+										{trainer.name ?? trainer.username}
+									</option>
+								))}
+							</select>
+							<p className='text-muted-foreground text-xs leading-5'>{t('trainerAssignmentHelper')}</p>
+						</div>
+					) : null}
 
 					<div className='flex flex-wrap justify-end gap-2 pt-2'>
 						<Button

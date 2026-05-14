@@ -3,8 +3,9 @@
 import { z } from 'zod'
 import { getTranslations } from 'next-intl/server'
 
+import { Role } from '@/generated/prisma/client'
 import { prisma } from '@/lib/db'
-import { requireAdmin, revalidateClassesPath } from '@/lib/admin'
+import { requireAdmin, requireClassManager, revalidateClassesPath } from '@/lib/admin'
 import { getTodayString, WEEKDAYS } from '@/lib/date'
 
 export type CreateClassResult = { ok: true; id: string } | { ok: false; error: string }
@@ -14,15 +15,38 @@ function createClassSchema(t: Awaited<ReturnType<typeof getTranslations>>) {
 		name: z.string().trim().min(2, t('classNameMin')),
 		day: z.enum(WEEKDAYS),
 		time: z.string().regex(/^\d{2}:\d{2}$/, t('timeFormat')),
-		maxSpots: z.number().int().min(1, t('maxSpotsRange')).max(999, t('maxSpotsRange'))
+		maxSpots: z.number().int().min(1, t('maxSpotsRange')).max(999, t('maxSpotsRange')),
+		trainerId: z.string().trim().optional().nullable()
 	})
+}
+
+async function normalizeTrainerId(
+	trainerId: string | null | undefined,
+	t: Awaited<ReturnType<typeof getTranslations>>
+) {
+	const normalizedTrainerId = trainerId?.trim() || null
+	if (!normalizedTrainerId) {
+		return null
+	}
+
+	const trainer = await prisma.user.findUnique({
+		where: { id: normalizedTrainerId },
+		select: { id: true, role: true }
+	})
+
+	if (!trainer || trainer.role !== Role.TRAINER) {
+		throw new Error(t('trainerNotFound'))
+	}
+
+	return trainer.id
 }
 
 export async function createGymClassAction(
 	name: string,
 	day: string,
 	time: string,
-	maxSpots: number
+	maxSpots: number,
+	trainerId?: string | null
 ): Promise<CreateClassResult> {
 	try {
 		const t = await getTranslations('Actions.classes')
@@ -32,13 +56,21 @@ export async function createGymClassAction(
 			name,
 			day: day.trim(),
 			time: time.trim().slice(0, 5),
-			maxSpots
+			maxSpots,
+			trainerId
 		})
 		if (!payload.success) {
 			return { ok: false, error: payload.error.issues[0]?.message ?? t('invalidClassData') }
 		}
+		const normalizedTrainerId = await normalizeTrainerId(payload.data.trainerId, t)
 		const created = await prisma.gymClass.create({
-			data: payload.data
+			data: {
+				name: payload.data.name,
+				day: payload.data.day,
+				time: payload.data.time,
+				maxSpots: payload.data.maxSpots,
+				trainerId: normalizedTrainerId
+			}
 		})
 		revalidateClassesPath()
 		return { ok: true, id: created.id }
@@ -55,11 +87,12 @@ export async function updateGymClassAction(
 	name: string,
 	day: string,
 	time: string,
-	maxSpots: number
+	maxSpots: number,
+	trainerId?: string | null
 ): Promise<UpdateClassResult> {
 	try {
 		const t = await getTranslations('Actions.classes')
-		await requireAdmin()
+		const manager = await requireClassManager(id)
 		const existing = await prisma.gymClass.findUnique({ where: { id } })
 		if (!existing) return { ok: false, error: t('classNotFound') }
 		const currentEnrollments = await prisma.classBooking.count({
@@ -70,7 +103,8 @@ export async function updateGymClassAction(
 			name,
 			day: day.trim(),
 			time: time.trim().slice(0, 5),
-			maxSpots
+			maxSpots,
+			trainerId
 		})
 		if (!payload.success) {
 			return { ok: false, error: payload.error.issues[0]?.message ?? t('invalidClassData') }
@@ -78,9 +112,17 @@ export async function updateGymClassAction(
 		if (payload.data.maxSpots < currentEnrollments) {
 			return { ok: false, error: t('maxSpotsBelowEnrollments') }
 		}
+		const normalizedTrainerId =
+			manager.role === Role.ADMIN ? await normalizeTrainerId(payload.data.trainerId, t) : existing.trainerId
 		await prisma.gymClass.update({
 			where: { id },
-			data: payload.data
+			data: {
+				name: payload.data.name,
+				day: payload.data.day,
+				time: payload.data.time,
+				maxSpots: payload.data.maxSpots,
+				trainerId: normalizedTrainerId
+			}
 		})
 		revalidateClassesPath()
 		return { ok: true }

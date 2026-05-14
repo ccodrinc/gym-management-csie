@@ -18,7 +18,7 @@ export default async function MemberLayout({ children, params }: Props) {
 	}
 
 	if (session.user.role !== Role.MEMBER) {
-		redirect(`/${locale}/admin`)
+		redirect(session.user.role === Role.TRAINER ? `/${locale}/trainer/classes` : `/${locale}/admin`)
 	}
 
 	return <PrivateLayout variant='member'>{children}</PrivateLayout>

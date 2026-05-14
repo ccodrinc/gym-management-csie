@@ -12,6 +12,7 @@ datasource db {
 
 enum Role {
   MEMBER
+  TRAINER
   ADMIN
 }
 
@@ -28,22 +29,23 @@ enum MembershipStatus {
 }
 
 model User {
-  id             String         @id @default(cuid())
-  name           String?
-  username       String         @unique
-  image          String?
-  password       String?
-  role           Role           @default(MEMBER)
-  phone          String?
-  membershipType MembershipType?
+  id               String           @id @default(cuid())
+  name             String?
+  username         String           @unique
+  image            String?
+  password         String?
+  role             Role             @default(MEMBER)
+  phone            String?
+  membershipType   MembershipType?
   membershipStatus MembershipStatus @default(DEACTIVATED)
-  startDate      String?
-  expiryDate     String?
-  gymVisits      Int            @default(0)
-  accounts       Account[]
-  sessions       Session[]
-  visits         Visit[]
-  classBookings  ClassBooking[]
+  startDate        String?
+  expiryDate       String?
+  gymVisits        Int              @default(0)
+  accounts         Account[]
+  sessions         Session[]
+  visits           Visit[]
+  classBookings    ClassBooking[]
+  trainedClasses   GymClass[]       @relation("GymClassTrainer")
 
   @@map("users")
 }
@@ -59,27 +61,30 @@ model Visit {
 }
 
 model GymClass {
-  id       String   @id @default(cuid())
-  name     String
-  day      String
-  time     String
-  maxSpots Int
-  bookings ClassBooking[]
+  id        String         @id @default(cuid())
+  name      String
+  day       String
+  time      String
+  maxSpots  Int
+  trainerId String?        @map("trainer_id")
+  trainer   User?          @relation("GymClassTrainer", fields: [trainerId], references: [id], onDelete: SetNull)
+  bookings  ClassBooking[]
 
+  @@index([trainerId])
   @@map("gym_classes")
 }
 
 model ClassBooking {
-  id        String    @id @default(cuid())
-  userId    String    @map("user_id")
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
   gymClassId String   @map("gym_class_id")
-  date      String
-  time      String
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gymClass  GymClass  @relation(fields: [gymClassId], references: [id], onDelete: Cascade)
+  date       String
+  time       String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gymClass   GymClass @relation(fields: [gymClassId], references: [id], onDelete: Cascade)
 
-  @@map("class_bookings")
   @@unique([userId, gymClassId, date])
+  @@map("class_bookings")
 }
 
 model Account {

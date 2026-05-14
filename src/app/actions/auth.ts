@@ -12,8 +12,10 @@ import { getMembershipTypeFromQuery } from '@/lib/membership'
 
 const ALLOWED_REDIRECT_PATTERNS = [
 	/^\/member(\/|$)/,
+	/^\/trainer(\/|$)/,
 	/^\/admin(\/|$)/,
 	/^\/[a-z]{2}\/member(\/|$)/,
+	/^\/[a-z]{2}\/trainer(\/|$)/,
 	/^\/[a-z]{2}\/admin(\/|$)/
 ]
 
@@ -38,7 +40,8 @@ export async function loginAction(username: string, password: string, from?: str
 			where: { username: usernameNorm },
 			select: { role: true }
 		})
-		const defaultPath = user?.role === Role.ADMIN ? '/admin' : '/member'
+		const defaultPath =
+			user?.role === Role.ADMIN ? '/admin' : user?.role === Role.TRAINER ? '/trainer/classes' : '/member'
 		const redirectTo = isAllowedRedirect(from ?? '') ? (from ?? defaultPath) : defaultPath
 		return { ok: true, redirectTo }
 	} catch (err) {

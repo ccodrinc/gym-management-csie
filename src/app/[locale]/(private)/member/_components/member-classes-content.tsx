@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarClock, TicketCheck, TicketX } from 'lucide-react'
+import { CalendarClock, TicketCheck, TicketX, UserRound } from 'lucide-react'
 import { startTransition, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { toast } from 'sonner'
@@ -48,6 +48,10 @@ function getDisabledReason(
 	}
 
 	return null
+}
+
+function getTrainerLabel(gymClass: MemberClass) {
+	return gymClass.trainerName ?? gymClass.trainerUsername
 }
 
 export function MemberClassesContent({
@@ -125,6 +129,13 @@ export function MemberClassesContent({
 									<div className='text-muted-foreground flex flex-wrap items-center gap-3 text-sm'>
 										<span>
 											{tWeekdays(gymClass.day)} · {gymClass.time}
+										</span>
+										<span className='inline-flex items-center gap-1'>
+											<UserRound
+												aria-hidden='true'
+												className='size-4'
+											/>
+											{t('trainer', { name: getTrainerLabel(gymClass) ?? t('unassignedTrainer') })}
 										</span>
 										<span className='inline-flex items-center gap-1'>
 											<CalendarClock

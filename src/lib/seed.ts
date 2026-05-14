@@ -33,8 +33,36 @@ export async function runSeed(): Promise<void> {
 	if (!adminPasswordOk) throw new Error('Admin password verification failed after seed')
 
 	await prisma.user.deleteMany({
-		where: { role: Role.MEMBER }
+		where: { role: { in: [Role.MEMBER, Role.TRAINER] } }
 	})
+
+	const trainerPasswordHash = await hash('Trainer123!', 12)
+	const trainers = [
+		{
+			username: 'trainerana',
+			name: 'Ana Stoica',
+			phone: '+40 722 200 101'
+		},
+		{
+			username: 'trainervlad',
+			name: 'Vlad Dumitrescu',
+			phone: '+40 722 200 102'
+		}
+	]
+
+	const trainerIds: Record<string, string> = {}
+	for (const trainer of trainers) {
+		const user = await prisma.user.create({
+			data: {
+				username: trainer.username,
+				name: trainer.name,
+				phone: trainer.phone,
+				password: trainerPasswordHash,
+				role: Role.TRAINER
+			}
+		})
+		trainerIds[trainer.username] = user.id
+	}
 
 	const memberPasswordHash = await hash('Member123!', 12)
 	const members = [
@@ -151,17 +179,23 @@ export async function runSeed(): Promise<void> {
 	await prisma.classBooking.deleteMany({})
 	await prisma.gymClass.deleteMany({})
 	const classes = [
-		{ name: 'HIIT', day: 'Mon', time: '08:00', maxSpots: 20 },
-		{ name: 'Strength', day: 'Tue', time: '09:30', maxSpots: 16 },
-		{ name: 'Mobility', day: 'Wed', time: '18:00', maxSpots: 20 },
-		{ name: 'HIIT', day: 'Thu', time: '08:00', maxSpots: 20 },
-		{ name: 'Strength', day: 'Fri', time: '17:30', maxSpots: 16 }
+		{ name: 'HIIT', day: 'Mon', time: '08:00', maxSpots: 20, trainerUsername: 'trainerana' },
+		{ name: 'Strength', day: 'Tue', time: '09:30', maxSpots: 16, trainerUsername: 'trainervlad' },
+		{ name: 'Mobility', day: 'Wed', time: '18:00', maxSpots: 20, trainerUsername: 'trainerana' },
+		{ name: 'HIIT', day: 'Thu', time: '08:00', maxSpots: 20, trainerUsername: 'trainervlad' },
+		{ name: 'Strength', day: 'Fri', time: '17:30', maxSpots: 16, trainerUsername: 'trainerana' }
 	]
 
 	const classIds: string[] = []
 	for (const c of classes) {
 		const gc = await prisma.gymClass.create({
-			data: { name: c.name, day: c.day, time: c.time, maxSpots: c.maxSpots }
+			data: {
+				name: c.name,
+				day: c.day,
+				time: c.time,
+				maxSpots: c.maxSpots,
+				trainerId: trainerIds[c.trainerUsername] ?? null
+			}
 		})
 		classIds.push(gc.id)
 	}

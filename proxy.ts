@@ -8,7 +8,7 @@ import { routing } from '@/i18n/routing'
 const intlMiddleware = createIntlMiddleware(routing)
 
 function isPrivatePath(pathname: string): boolean {
-	return /^\/([a-z]{2}\/)?(member|admin)(\/|$)/.test(pathname)
+	return /^\/([a-z]{2}\/)?(member|trainer|admin)(\/|$)/.test(pathname)
 }
 
 function isAdminPath(pathname: string): boolean {
@@ -17,6 +17,16 @@ function isAdminPath(pathname: string): boolean {
 
 function isMemberPath(pathname: string): boolean {
 	return /^\/([a-z]{2}\/)?member(\/|$)/.test(pathname)
+}
+
+function isTrainerPath(pathname: string): boolean {
+	return /^\/([a-z]{2}\/)?trainer(\/|$)/.test(pathname)
+}
+
+function getRoleHome(role: unknown, locale: string): string {
+	if (role === 'ADMIN') return `/${locale}/admin`
+	if (role === 'TRAINER') return `/${locale}/trainer/classes`
+	return `/${locale}/member`
 }
 
 function getLocale(pathname: string): string {
@@ -39,13 +49,15 @@ export default async function middleware(req: NextRequest) {
 			loginUrl.searchParams.set('from', pathname)
 			return NextResponse.redirect(loginUrl)
 		}
+		const locale = getLocale(pathname)
 		if (isAdminPath(pathname) && token.role !== 'ADMIN') {
-			const locale = getLocale(pathname)
-			return NextResponse.redirect(new URL(`/${locale}/member`, req.url))
+			return NextResponse.redirect(new URL(getRoleHome(token.role, locale), req.url))
 		}
-		if (isMemberPath(pathname) && token.role === 'ADMIN') {
-			const locale = getLocale(pathname)
-			return NextResponse.redirect(new URL(`/${locale}/admin`, req.url))
+		if (isTrainerPath(pathname) && token.role !== 'TRAINER') {
+			return NextResponse.redirect(new URL(getRoleHome(token.role, locale), req.url))
+		}
+		if (isMemberPath(pathname) && token.role !== 'MEMBER') {
+			return NextResponse.redirect(new URL(getRoleHome(token.role, locale), req.url))
 		}
 	}
 

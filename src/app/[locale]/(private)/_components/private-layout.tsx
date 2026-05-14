@@ -8,15 +8,16 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { AdminSidebar } from '@/app/[locale]/(private)/admin/_components/admin-sidebar'
 import { MemberSidebar } from '@/app/[locale]/(private)/member/_components/member-sidebar'
+import { TrainerSidebar } from '@/app/[locale]/(private)/trainer/_components/trainer-sidebar'
 
 type PrivateLayoutProps = {
 	children: React.ReactNode
-	variant: 'admin' | 'member'
+	variant: 'admin' | 'trainer' | 'member'
 }
 
 export function PrivateLayout({ children, variant }: PrivateLayoutProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(false)
-	const Sidebar = variant === 'admin' ? AdminSidebar : MemberSidebar
+	const Sidebar = variant === 'admin' ? AdminSidebar : variant === 'trainer' ? TrainerSidebar : MemberSidebar
 	const t = useTranslations('Sidebar')
 
 	return (

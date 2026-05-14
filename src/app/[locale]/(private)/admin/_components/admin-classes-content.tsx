@@ -1,6 +1,6 @@
 'use client'
 
-import { Pencil, Plus, Trash2, Users } from 'lucide-react'
+import { Pencil, Plus, Trash2, UserRound, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -9,15 +9,21 @@ import { ClassEnrollmentsDialog } from '@/app/[locale]/(private)/admin/_componen
 import { ClassFormDialog } from '@/app/[locale]/(private)/admin/_components/class-form-dialog'
 import { Button } from '@/components/ui/button'
 import { useRouter } from '@/i18n/navigation'
-import type { GymClass, Member } from '@/lib/data'
+import type { GymClass, Member, Trainer } from '@/lib/data'
 import { formatDate } from '@/lib/format'
 
 type AdminClassesContentProps = {
 	classes: GymClass[]
 	members: Member[]
+	trainers?: Trainer[]
+	mode?: 'admin' | 'trainer'
 }
 
-export function AdminClassesContent({ classes, members }: AdminClassesContentProps) {
+function getTrainerLabel(gymClass: GymClass) {
+	return gymClass.trainerName ?? gymClass.trainerUsername
+}
+
+export function AdminClassesContent({ classes, members, trainers = [], mode = 'admin' }: AdminClassesContentProps) {
 	const locale = useLocale()
 	const t = useTranslations('Admin.classes')
 	const tWeekdays = useTranslations('Weekdays')
@@ -59,16 +65,18 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 	return (
 		<>
 			<div className='flex flex-col gap-3'>
-				<div className='flex justify-end'>
-					<Button
-						type='button'
-						onClick={openAddClass}
-						size='sm'
-					>
-						<Plus data-icon='inline-start' />
-						{t('addClass')}
-					</Button>
-				</div>
+				{mode === 'admin' ? (
+					<div className='flex justify-end'>
+						<Button
+							type='button'
+							onClick={openAddClass}
+							size='sm'
+						>
+							<Plus data-icon='inline-start' />
+							{t('addClass')}
+						</Button>
+					</div>
+				) : null}
 
 				{classes.length ? (
 					<div className='flex flex-col gap-3'>
@@ -84,6 +92,13 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 									</p>
 									<p className='text-muted-foreground text-xs leading-5'>
 										{t('nextSession')}: {formatDate(gymClass.nextSessionDate, locale)}
+									</p>
+									<p className='text-muted-foreground inline-flex items-center gap-1 text-xs leading-5'>
+										<UserRound
+											aria-hidden='true'
+											className='size-3.5'
+										/>
+										{t('trainer')}: {getTrainerLabel(gymClass) ?? t('unassignedTrainer')}
 									</p>
 								</div>
 
@@ -114,17 +129,19 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 										{t('edit')}
 									</Button>
 
-									<Button
-										type='button'
-										variant='outline'
-										size='sm'
-										onClick={() => openDeleteClass(gymClass)}
-										aria-label={`${t('delete')} ${gymClass.name}`}
-										className='text-destructive hover:text-destructive'
-									>
-										<Trash2 data-icon='inline-start' />
-										{t('delete')}
-									</Button>
+									{mode === 'admin' ? (
+										<Button
+											type='button'
+											variant='outline'
+											size='sm'
+											onClick={() => openDeleteClass(gymClass)}
+											aria-label={`${t('delete')} ${gymClass.name}`}
+											className='text-destructive hover:text-destructive'
+										>
+											<Trash2 data-icon='inline-start' />
+											{t('delete')}
+										</Button>
+									) : null}
 								</div>
 							</div>
 						))}
@@ -155,6 +172,8 @@ export function AdminClassesContent({ classes, members }: AdminClassesContentPro
 				onOpenChange={setFormOpen}
 				mode={formMode}
 				class={formClass}
+				trainers={trainers}
+				canAssignTrainer={mode === 'admin'}
 				onSuccess={refresh}
 			/>
 

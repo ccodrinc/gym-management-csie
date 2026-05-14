@@ -56,7 +56,7 @@ export async function getCurrentMember(locale: string): Promise<CurrentMember> {
 	}
 
 	if (session.user.role !== Role.MEMBER) {
-		redirect(`/${locale}/admin`)
+		redirect(session.user.role === Role.TRAINER ? `/${locale}/trainer/classes` : `/${locale}/admin`)
 	}
 
 	const userId = session.user.id

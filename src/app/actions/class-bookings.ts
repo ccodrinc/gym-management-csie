@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { getClassWithBookings } from '@/lib/data'
 import { prisma } from '@/lib/db'
 import { getNextOccurrenceString, WEEKDAYS } from '@/lib/date'
-import { requireAdmin, requireMember, revalidateAppPaths, revalidateClassesPath } from '@/lib/admin'
+import { requireClassManager, requireMember, revalidateAppPaths, revalidateClassesPath } from '@/lib/admin'
 import { validateBookingRules } from '@/lib/class-bookings'
 
 export type GetClassBookingsResult =
@@ -14,7 +14,7 @@ export type GetClassBookingsResult =
 
 export async function getClassBookingsAction(gymClassId: string): Promise<GetClassBookingsResult> {
 	try {
-		await requireAdmin()
+		await requireClassManager(gymClassId)
 		const data = await getClassWithBookings(gymClassId)
 		return { ok: true, data }
 	} catch (err) {
@@ -28,9 +28,9 @@ export type RemoveClassBookingResult = { ok: true } | { ok: false; error: string
 export async function removeClassBookingAction(bookingId: string): Promise<RemoveClassBookingResult> {
 	try {
 		const t = await getTranslations('Actions.classBookings')
-		await requireAdmin()
 		const booking = await prisma.classBooking.findUnique({ where: { id: bookingId } })
 		if (!booking) return { ok: false, error: t('bookingNotFound') }
+		await requireClassManager(booking.gymClassId)
 		await prisma.classBooking.delete({ where: { id: bookingId } })
 		revalidateClassesPath()
 		return { ok: true }
@@ -59,7 +59,7 @@ export async function addClassBookingAction(
 	date: string
 ): Promise<AddClassBookingResult> {
 	try {
-		await requireAdmin()
+		await requireClassManager(gymClassId)
 		await createBooking(userId, gymClassId, date)
 		revalidateClassesPath()
 		return { ok: true }

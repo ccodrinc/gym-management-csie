@@ -9,7 +9,7 @@ type Props = {
 	params: Promise<{ locale: string }>
 }
 
-export default async function AdminLayout({ children, params }: Props) {
+export default async function TrainerLayout({ children, params }: Props) {
 	const { locale } = await params
 	const session = await getSession()
 
@@ -17,9 +17,9 @@ export default async function AdminLayout({ children, params }: Props) {
 		redirect(`/${locale}/login`)
 	}
 
-	if (session.user.role !== Role.ADMIN) {
-		redirect(session.user.role === Role.TRAINER ? `/${locale}/trainer/classes` : `/${locale}/member`)
+	if (session.user.role !== Role.TRAINER) {
+		redirect(session.user.role === Role.ADMIN ? `/${locale}/admin` : `/${locale}/member`)
 	}
 
-	return <PrivateLayout variant='admin'>{children}</PrivateLayout>
+	return <PrivateLayout variant='trainer'>{children}</PrivateLayout>
 }

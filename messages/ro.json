@@ -183,6 +183,9 @@
 			"nextSession": "Următoarea sesiune",
 			"day": "Zi",
 			"time": "Ora",
+			"trainer": "Trainer",
+			"unassignedTrainer": "Neatribuit",
+			"trainerAssignmentHelper": "Doar administratorii pot atribui sau schimba trainerul unei clase.",
 			"spots": "locuri",
 			"enrollments": "Înscrieri",
 			"enrollmentsDescription": "Vezi și administrează cine este rezervat la această clasă.",
@@ -229,6 +232,17 @@
 			"todayCheckInsSummary": "{count} în total astăzi",
 			"member": "Membru",
 			"checkIns": "Check-in-uri"
+		}
+	},
+	"Trainer": {
+		"nav": {
+			"title": "Trainer",
+			"classes": "Clase"
+		},
+		"classes": {
+			"title": "Clase trainer",
+			"description": "Administrează sesiunile de clasă care ți-au fost atribuite.",
+			"assignedSchedule": "Programul tău atribuit"
 		}
 	},
 	"Member": {
@@ -354,6 +368,8 @@
 			"fullHelper": "Următoarea sesiune este deja completă.",
 			"bookingLimitReached": "Ai atins limita de {limit} clase rezervate.",
 			"nextSessionDate": "Următoarea sesiune: {date}",
+			"trainer": "Trainer: {name}",
+			"unassignedTrainer": "Neatribuit",
 			"capacity": "{booked}/{total} locuri rezervate",
 			"processing": "Se actualizează…",
 			"bookSuccess": "Clasa a fost rezervată cu succes",
@@ -417,6 +433,7 @@
 			"maxSpotsRange": "Numărul maxim de locuri trebuie să fie între 1 și 999",
 			"invalidClassData": "Datele clasei sunt invalide",
 			"classNotFound": "Clasa nu a fost găsită",
+			"trainerNotFound": "Trainerul selectat nu a fost găsit",
 			"maxSpotsBelowEnrollments": "Numărul maxim de locuri nu poate fi mai mic decât numărul actual de înscrieri"
 		},
 		"classBookings": {

@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { AdminClassesContent } from '@/app/[locale]/(private)/admin/_components/admin-classes-content'
 import { PageHeader } from '@/components/shared/page-header'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getClasses, getMembers } from '@/lib/data'
+import { getClasses, getMembers, getTrainers } from '@/lib/data'
 
 type Props = {
 	params: Promise<{ locale: string }>
@@ -12,9 +12,10 @@ type Props = {
 export default async function AdminClassesPage({ params }: Props) {
 	const { locale } = await params
 
-	const [classes, members, t] = await Promise.all([
+	const [classes, members, trainers, t] = await Promise.all([
 		getClasses(),
 		getMembers(locale),
+		getTrainers(),
 		getTranslations({ locale, namespace: 'Admin.classes' })
 	])
 
@@ -37,6 +38,7 @@ export default async function AdminClassesPage({ params }: Props) {
 					<AdminClassesContent
 						classes={classes}
 						members={members}
+						trainers={trainers}
 					/>
 				</CardContent>
 			</Card>
