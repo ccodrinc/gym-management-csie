@@ -61,6 +61,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 		<html
 			lang={locale}
 			className='dark'
+			data-scroll-behavior='smooth'
 			suppressHydrationWarning
 		>
 			<body className={`${bricolage.variable} ${jetbrains.variable} antialiased`}>
