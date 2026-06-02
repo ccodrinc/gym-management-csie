@@ -150,6 +150,10 @@ export function ClassEnrollmentsDialog({
 	const availableMembers = members.filter((member) => member.isActive && !enrolledIdsForSelectedDate.has(member.id))
 	const selectedDateBookings = sessionBookings.length
 	const selectedDateIsFull = selectedDateBookings >= (data?.maxSpots ?? 0)
+	const classDayLabel = WEEKDAYS.includes(classDay as (typeof WEEKDAYS)[number])
+		? tWeekdays(classDay as (typeof WEEKDAYS)[number])
+		: ''
+	const classScheduleLabel = [classDayLabel, classTime].filter(Boolean).join(' · ')
 
 	return (
 		<Dialog
@@ -162,7 +166,8 @@ export function ClassEnrollmentsDialog({
 						{t('enrollments')} · {className}
 					</DialogTitle>
 					<DialogDescription>
-						{tWeekdays(classDay)} · {classTime}. {t('enrollmentsDescription')}
+						{classScheduleLabel ? `${classScheduleLabel}. ` : null}
+						{t('enrollmentsDescription')}
 					</DialogDescription>
 				</DialogHeader>
 
